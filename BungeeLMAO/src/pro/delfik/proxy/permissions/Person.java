@@ -13,7 +13,6 @@ import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.U;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -39,16 +38,7 @@ public class Person {
 		String password = info.password;
 		Mutes.MuteInfo mute = Mutes.get(name);
 		
-		
-		if (p != null)
-			if (info.ip.equals(p.getServer().getAddress().getHostName())) {
-				auth = true;
-			} else {
-				if (!info.ip.equals("")) {
-					U.msg(p, "§6Ваш IP-адрес изменился с последнего захода.");
-					U.msg(p, "§6Автоматическая авторизация переключится на новый IP при следующем входе.");
-				}
-			}
+		System.out.println(info.getIP());
 		
 		return new Person(name, password, rank, online, money, auth, mute);
 	}
@@ -57,6 +47,7 @@ public class Person {
 		if (p == null) return;
 		list.remove(p.definition().hashCode());
 		if (!p.authorized) return;
+		PlayerDataManager.save(p.getInfo());
 		try {
 			PlayerDataManager.save(p.getInfo());
 		} catch (RuntimeException e) {

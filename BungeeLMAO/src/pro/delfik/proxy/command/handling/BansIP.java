@@ -70,19 +70,11 @@ public class BansIP extends Command {
 	}
 	
 	public static void clearNick(String nick) {
-		try {
-			Database.sendUpdate("DELETE FROM BanIP WHERE name = '" + nick + "'");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("DELETE FROM BanIP WHERE name = '" + nick + "'");
 	}
 	
 	public static void clearIP(String ip) {
-		try {
-			Database.sendUpdate("DELETE FROM BanIP WHERE ip = '" + ip + "'");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("DELETE FROM BanIP WHERE ip = '" + ip + "'");
 	}
 	
 	public static void banPlayer(String player, String reason, String moderator) {
@@ -96,12 +88,8 @@ public class BansIP extends Command {
 			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
-		try {
-			Database.sendUpdate("INSERT INTO BanIP (name, ip, moderator, reason) " +
-										"VALUES ('" + player + "', '" + ip + "', '" + moderator + "', '" + reason + "')");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("INSERT INTO BanIP (name, ip, moderator, reason) " +
+									"VALUES ('" + player + "', '" + ip + "', '" + moderator + "', '" + reason + "')");
 	}
 	public static void banIP(String ip, String reason, String moderator) {
 		try {
@@ -112,12 +100,8 @@ public class BansIP extends Command {
 			Proxy.i().broadcast("§c§lПри бане IP-адреса §e" + ip + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
-		try {
-			Database.sendUpdate("INSERT INTO BanIP (ip, moderator, reason) " +
-										"VALUES ('" + ip + "', '" + moderator + "', '" + reason + "')");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("INSERT INTO BanIP (ip, moderator, reason) " +
+									"VALUES ('" + ip + "', '" + moderator + "', '" + reason + "')");
 	}
 	
 	public static BanIPInfo getByName(String playername) {
