@@ -35,7 +35,7 @@ public class Scheduler extends Thread{
 			public void run(){
 				try{
 					runnable.run();
-				}catch (Throwable ex){}
+				}catch (Throwable ignored){}
 				this.stop();
 			}
 		}.start();
