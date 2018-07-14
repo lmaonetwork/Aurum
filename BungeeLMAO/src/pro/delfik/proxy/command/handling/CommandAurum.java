@@ -20,7 +20,6 @@ import pro.delfik.vk.LongPoll;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 public class CommandAurum extends Command {
@@ -174,7 +173,8 @@ public class CommandAurum extends Command {
 			CommandProcessor function = functions.get(args[0].toLowerCase());
 			if (function == null) msg(sender, "prefix", "§cПодкомана §f/aurum " + args[0] + "§c не найдена.");
 			else try {
-					msg(sender, function.process(sender, this, a));
+				Object[] os = function.process(sender, this, a);
+				if (os != null && os.length != 0) msg(sender, os);
 			} catch (NotEnoughArgumentsException e) {
 				throw new NotEnoughArgumentsException(args[0] + " " + e.getMessage());
 			}
