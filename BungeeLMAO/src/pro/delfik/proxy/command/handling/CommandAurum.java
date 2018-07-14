@@ -10,6 +10,7 @@ import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CommandProcessor;
 import pro.delfik.proxy.command.NotEnoughArgumentsException;
 import pro.delfik.proxy.data.Database;
+import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.ArrayUtils;
@@ -128,11 +129,7 @@ public class CommandAurum extends Command {
 		Rank rank = requireRank(args[1]);
 		if (sender instanceof ProxiedPlayer && !Person.get(sender).hasRank(rank))
 			return new Object[] {"prefix", "§cВы не можете выдавать ранги выше собственного."};
-		try {
-			PermissionManager.setRank(args[0], rank);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		PlayerDataManager.setRank(args[0], rank);
 		return new Object[] {"prefix", "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent()};
 	}
 	

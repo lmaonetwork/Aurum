@@ -71,7 +71,6 @@ public class AurumPlugin extends Plugin implements Runnable {
 		CryptoUtils.Keccak.Parameters.class.getCanonicalName();
 		Converter.class.getCanonicalName();
 		StringUtils.class.getCanonicalName();
-		PermissionManager.class.getCanonicalName();
 		ArrayIterator.class.getCanonicalName();
 		TimedList.class.getCanonicalName();
 		VK.class.getCanonicalName();
