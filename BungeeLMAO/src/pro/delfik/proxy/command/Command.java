@@ -54,21 +54,8 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 		} catch (Throwable t) {
 			Throwable cause = t;
 			while (cause.getCause() != null) cause = cause.getCause();
-			if (cause instanceof NotEnoughArgumentsException) {
-				U.msg(commandSender, "§cНедостаточно аргументов.");
-				U.msg(commandSender, "§cИспользование: §e/" + getCommand() + ' ' + ((NotEnoughArgumentsException) cause).getUsage());
-				return;
-			}
-			if (cause instanceof NotEnoughPermissionsException) {
-				U.msg(commandSender, "§cДля этого действия необходим статус §e" + ((NotEnoughPermissionsException) cause).getRequiredRank().represent());
-				return;
-			}
-			if (cause instanceof PersonNotFoundException) {
-				U.msg(commandSender, "§cИгрок с ником §f" + ((PersonNotFoundException) cause).getPersonname() + "§c не найден.");
-				return;
-			}
-			if (cause instanceof ServerNotFoundException) {
-				U.msg(commandSender, "§сСервер с названием §f" + ((ServerNotFoundException) cause).getServer() + "§c не найден.");
+			if (cause instanceof CustomException) {
+				((CustomException)cause).execute(commandSender, line);
 				return;
 			}
 			if (cause instanceof NumberFormatException) {

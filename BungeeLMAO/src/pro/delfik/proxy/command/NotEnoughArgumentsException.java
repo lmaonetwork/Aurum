@@ -1,14 +1,16 @@
 package pro.delfik.proxy.command;
 
-public class NotEnoughArgumentsException extends RuntimeException {
-	
-	private final String usage;
-	public NotEnoughArgumentsException(String s) {
-		super(s);
-		this.usage = s;
+import net.md_5.bungee.api.CommandSender;
+import pro.delfik.util.U;
+
+public class NotEnoughArgumentsException extends CustomException {
+	public NotEnoughArgumentsException(String usage) {
+		super(usage);
 	}
-	
-	public String getUsage() {
-		return usage;
+
+	@Override
+	public void execute(CommandSender sender, String command) {
+		U.msg(sender, "§cНедостаточно аргументов.");
+		U.msg(sender, "§cИспользование: §e/" + command + "' '" + getMessage());
 	}
 }

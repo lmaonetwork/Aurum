@@ -11,11 +11,10 @@ public class PrivateMessages extends Command {
 		super(reply ? "reply" : "tell", Rank.PLAYER, reply ? "Ответ на последнее личное сообщение" : "Личное сообщение игроку",
 				reply ? new String[] {"r"} : new String[] {"t", "w", "pm", "msg", "m"});
 	}
-//	public static String consoleLastConversation = null;
+
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		Person p = Person.get(sender);
-//		boolean console = p == null;
 		Person dest;
 		String msg;
 		if (getCommand().charAt(0) == 'r') {
