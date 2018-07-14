@@ -63,7 +63,9 @@ public class CommandAurum extends Command {
 			msg(sender, "§aПоследний пир: §f" + LongPoll.lastPeer);
 			return new Object[0];
 		}
-		return new Object[0];
+		String msg = Converter.mergeArray(args, 0, " ");
+		LongPoll.msg(msg, LongPoll.lastPeer);
+		return new Object[] {"§aСообщение успешно отправлено пиру §f" + LongPoll.lastPeer};
 	}
 	
 	private static Object[] resetPassword(CommandSender commandSender, Command command, String[] args) {
@@ -186,7 +188,7 @@ public class CommandAurum extends Command {
 			else try {
 					msg(sender, function.process(sender, this, a));
 			} catch (NotEnoughArgumentsException e) {
-				throw new NotEnoughArgumentsException(args[0] + " " + e.getUsage());
+				throw new NotEnoughArgumentsException(args[0] + " " + e.getMessage());
 			}
 		}
 	}
