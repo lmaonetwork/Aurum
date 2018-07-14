@@ -15,6 +15,7 @@ import pro.delfik.util.U;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class Person {
 	
@@ -56,6 +57,12 @@ public class Person {
 		list.remove(p.definition().hashCode());
 		if (!p.authorized) return;
 		PlayerDataManager.save(p.getInfo());
+		try {
+			PlayerDataManager.save(p.getInfo());
+		} catch (RuntimeException e) {
+			Proxy.log(Level.SEVERE, "Player " + name + " §cwasn't saved properly.");
+			e.printStackTrace();
+		}
 	}
 	
 	
