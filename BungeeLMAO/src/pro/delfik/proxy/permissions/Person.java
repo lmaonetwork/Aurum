@@ -38,16 +38,7 @@ public class Person {
 		String password = info.password;
 		Mutes.MuteInfo mute = Mutes.get(name);
 		
-		
-		if (p != null)
-			if (info.ip.equals(p.getServer().getAddress().getHostName())) {
-				auth = true;
-			} else {
-				if (!info.ip.equals("")) {
-					U.msg(p, "§6Ваш IP-адрес изменился с последнего захода.");
-					U.msg(p, "§6Автоматическая авторизация переключится на новый IP при следующем входе.");
-				}
-			}
+		System.out.println(info.getIP());
 		
 		return new Person(name, password, rank, online, money, auth, mute);
 	}
