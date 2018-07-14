@@ -1,6 +1,5 @@
 package pro.delfik.vk;
 
-import main.java.stroum.HTTP.Requests;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +28,11 @@ public class LongPoll {
 	public static String getServer() {
 		return server;
 	}
+
 	public static String getKey() {
 		return key;
 	}
+
 	public static int getTs() {
 		return ts;
 	}
@@ -40,12 +41,14 @@ public class LongPoll {
 		return (server.startsWith("http") ? "" : "https://") + server + "?act=a_check&key=" + key +
 					   "&ts=" + ts + "&wait=25&mode=2";
 	}
+
 	private static boolean failed = false;
+
 	public static void run() {
 		requestLongPollServer();
 		while (true) {
 			String lp = getConnectUrl(ts);
-			String data = Requests.get(lp);
+			String data = VK.get(lp);
 			try {
 				JSONObject response = new JSONObject(data);
 				int _ts = response.getInt("ts");
