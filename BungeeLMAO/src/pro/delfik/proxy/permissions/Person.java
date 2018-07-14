@@ -28,7 +28,7 @@ public class Person {
 	
 	public static Person load(String name) {
 		PersonInfo info = PlayerDataManager.load(Converter.smartLowercase(name));
-		if (info == null) return new Person(name, "", Rank.PLAYER, 0L, 0, false, null);
+		if (info == null) return new Person(name, "", Rank.PLAYER, 0L, 0, false, null, false);
 		ProxiedPlayer p = Proxy.getPlayer(name);
 		
 		boolean auth = false;
@@ -37,10 +37,19 @@ public class Person {
 		int money = info.money;
 		String password = info.password;
 		Mutes.MuteInfo mute = Mutes.get(name);
+		String lastSeenIP = info.getIP();
+		boolean ipbound = info.ipbound;
 		
-		System.out.println(info.getIP());
+		if (lastSeenIP != null && info.ipbound) {
+			if (lastSeenIP.equals(p.getAddress().getHostName())) {
+				auth = true;
+				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
+			} else {
+				throw new DifferentIPException(name);
+			}
+		}
 		
-		return new Person(name, password, rank, online, money, auth, mute);
+		return new Person(name, password, rank, online, money, auth, mute, ipbound);
 	}
 	public static void unload(String name) {
 		Person p = get(name);
@@ -72,13 +81,13 @@ public class Person {
 	private int money; // Баланс игрока
 	private Rank rank; // Ранг игрока
 	private String server = ""; // Сервер, на котором находится игрок
-	private boolean saveThisIP = false;
+	private boolean ipbound;
 	
 	private Mutes.MuteInfo mute;
 	
 	public String lastWriter = null;
 	
-	public Person(String name, String password, Rank rank, long online, int money, boolean auth, Mutes.MuteInfo mute) {
+	public Person(String name, String password, Rank rank, long online, int money, boolean auth, Mutes.MuteInfo mute, boolean ipbound) {
 		this.name = name;
 		this.definition = Converter.smartLowercase(name);
 		this.rank = rank;
@@ -86,6 +95,7 @@ public class Person {
 		this.online = online;
 		this.money = money;
 		this.mute = mute;
+		this.ipbound = ipbound;
 		if (auth) this.authorize();
 		
 		this.connectedAt = System.currentTimeMillis();
@@ -152,7 +162,7 @@ public class Person {
 	
 	
 	public PersonInfo getInfo() {
-		return new PersonInfo(name, password, money, rank, getOnline(), getIP());
+		return new PersonInfo(name, password, money, rank, getOnline(), getIP(), ipbound);
 	}
 	
 	public Mutes.MuteInfo getActiveMute() {
@@ -169,5 +179,9 @@ public class Person {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public boolean isIPBound() {
+		return ipbound;
 	}
 }

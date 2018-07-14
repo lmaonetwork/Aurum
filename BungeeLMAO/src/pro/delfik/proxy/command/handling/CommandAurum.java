@@ -136,7 +136,7 @@ public class CommandAurum extends Command {
 	private static Object[] sqlquery(CommandSender sender, Command command, String[] args) {
 		try {
 			requireRank(sender, Rank.ADMIN);
-			Database.Result res = Database.sendQuery(ArrayUtils.toString(args)); // "SELECT * FROM PlayerData WHERE BALANCE = 0;"
+			Database.Result res = Database.sendQuery(ArrayUtils.toString(args));
 			ResultSet result = res.set;
 			ResultSetMetaData metadata = result.getMetaData();
 			int columnCount = metadata.getColumnCount();

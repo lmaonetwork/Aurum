@@ -8,16 +8,18 @@ public class PersonInfo {
 	public Rank rank = Rank.PLAYER;
 	public long online = 0;
 	public String ip;
+	public boolean ipbound;
 	
 	public PersonInfo(String name) {this.name = name;}
 	
-	public PersonInfo(String name, String password, int money, Rank rank, long online, String ip) {
+	public PersonInfo(String name, String password, int money, Rank rank, long online, String ip, boolean ipbound) {
 		this.name = name;
 		this.password = password;
 		this.money = money;
 		this.rank = rank;
 		this.online = online;
 		this.ip = ip;
+		this.ipbound = ipbound;
 	}
 	
 	public Rank getRank() {
@@ -42,5 +44,9 @@ public class PersonInfo {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public boolean isIPBound() {
+		return ipbound;
 	}
 }

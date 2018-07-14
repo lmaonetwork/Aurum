@@ -9,7 +9,6 @@ import pro.delfik.proxy.permissions.PersonInfo;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.CryptoUtils;
 
-import java.sql.SQLException;
 import java.util.HashSet;
 
 public class Authorization extends Command {
@@ -56,7 +55,7 @@ public class Authorization extends Command {
 	}
 	
 	public static boolean registerNewPlayer(String name, String passhash) {
-		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, ""));
+		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", ipbound));
 		return true;
 	}
 	

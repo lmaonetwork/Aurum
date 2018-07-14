@@ -56,7 +56,8 @@ public class PlayerDataManager {
 		PASSHASH("passhash", PersonInfo::getPassword, (u, o) -> u.password = o.getString("passhash")),
 		ONLINE("online", PersonInfo::getOnline, (u, o) -> u.online = o.getLong("online")),
 		IP("ip", PersonInfo::getIP, (u, o) -> u.ip = o.getString("ip")),
-		MONEY("money", PersonInfo::getMoney, (u, o) -> u.money = o.getInt("money"));
+		MONEY("money", PersonInfo::getMoney, (u, o) -> u.money = o.getInt("money")),
+		IPBOUND("ipbound", PersonInfo::isIPBound, (u, o) -> u.ipbound = o.getBoolean("ipbound"));
 		
 		private final String string;
 		private final Extractor extractor;
