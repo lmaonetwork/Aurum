@@ -5,6 +5,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
+import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.Rank;
@@ -28,10 +29,7 @@ public class Mutes extends Command {
 		if (getCommand().equalsIgnoreCase("unmute")) {
 			requireArgs(args, 1, "[Игрок]");
 			Mutes.MuteInfo i = get(args[0]);
-			if (i == null) {
-				msg(sender, "§eИгрок §f" + args[0] + "§e не замучен.");
-				return;
-			}
+			if (i == null) throw new CustomException("§eИгрок §f" + args[0] + "§e не замучен.");
 			unmute(args[0], sender.getName());
 		} else {
 			requireArgs(args, 3, "[Игрок] [Время] [Причина]");

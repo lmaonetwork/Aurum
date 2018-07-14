@@ -39,7 +39,7 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 		if (!(this instanceof Authorization)) {
 			if (!user.isAuthorized()) {
 				U.msg(commandSender, "§eДля использования команд вам необходимо авторизоваться.");
-				U.msg(commandSender, U.run("§eНе знаете, что это такое? §nНажмите сюда§e.", "§e> §fГайд по авторизации §e<", "guide a"));
+				U.msg(commandSender, U.run("§eНе знаете, что это такое? §nНажмите сюда§e.", "§e> §fГайд по авторизации §e<", "guide a"));//TODO
 				return;
 			}
 			if (!user.hasRank(getRequiredRank())) {
@@ -93,13 +93,16 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 	public static void requireArgs(String[] args, int required, String usage) {
 		if (args.length < required) throw new NotEnoughArgumentsException(usage);
 	}
+
 	public static void requireRank(CommandSender sender, Rank rank) {
 		if (!Person.get(sender).hasRank(rank)) throw new NotEnoughPermissionsException(rank);
 	}
+
 	public static Person requirePerson(String arg) {
 		Person u = Person.get(arg);
 		if (u == null) throw new PersonNotFoundException(arg); else return u;
 	}
+
 	public static ProxiedPlayer requirePlayer(String arg) {
 		ProxiedPlayer p = Proxy.getPlayer(arg);
 		if (p == null) throw new PersonNotFoundException(arg); else return p;
