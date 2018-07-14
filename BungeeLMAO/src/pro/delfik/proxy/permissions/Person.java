@@ -59,7 +59,7 @@ public class Person {
 		if (!p.authorized) return;
 		try {
 			PlayerDataManager.save(p.getInfo());
-		} catch (SQLException e) {
+		} catch (RuntimeException e) {
 			Proxy.log(Level.SEVERE, "Player " + name + " §cwasn't saved properly.");
 			e.printStackTrace();
 		}
