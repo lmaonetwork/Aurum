@@ -35,6 +35,7 @@ import pro.delfik.util.ArrayIterator;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
+import pro.delfik.util.Scheduler;
 import pro.delfik.util.StringUtils;
 import pro.delfik.util.TimedList;
 import pro.delfik.vk.VKBot;
@@ -110,6 +111,7 @@ public class AurumPlugin extends Plugin implements Runnable {
 		
 		SkinApplier.init();
 		SkinStorage.init(new File("Core/SkinsHandler"));
+		Scheduler.init();
 		
 		VKBot.start();
 		

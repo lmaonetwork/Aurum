@@ -11,25 +11,25 @@ import pro.delfik.proxy.command.handling.BansIP;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.skins.SkinApplier;
+import pro.delfik.util.Scheduler;
 import pro.delfik.util.StringUtils;
 
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
-public class OnlineHandler extends Thread implements Listener {
+public class OnlineHandler extends Scheduler.Task implements Listener {
 	private static volatile int connections = 0;
 	
 	public OnlineHandler() {
-		this.start();
+		super(1);
+		Scheduler.addTask(this);
 	}
-	
+
+	@Override
 	public void run() {
-		while (true) {
-			try {sleep(100L);} catch (InterruptedException ignored) {}
-			connections = 0;
-		}
+		connections = 0;
 	}
-	
+
 	@EventHandler
 	public void event(ServerConnectEvent event) {
 		Person.get(event.getPlayer()).setServer(event.getTarget().getName());

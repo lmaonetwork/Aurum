@@ -42,17 +42,25 @@ public class Database {
 		}, 0, TimeUnit.SECONDS);
 	}
 	
-	public static Result sendQuery(String query) throws SQLException {
-		Statement statement = connection.createStatement();
-		ResultSet set = statement.executeQuery(query);
-		return new Result(statement, set);
+	public static Result sendQuery(String query) {
+		try{
+			Statement statement = connection.createStatement();
+			ResultSet set = statement.executeQuery(query);
+			return new Result(statement, set);
+		}catch (SQLException ex){
+			throw new RuntimeException(ex);
+		}
 	}
 	
-	public static int sendUpdate(String update) throws SQLException {
-		Statement statement = connection.createStatement();
-		int result = statement.executeUpdate(update);
-		statement.close();
-		return result;
+	public static int sendUpdate(String update) {
+		try{
+			Statement statement = connection.createStatement();
+			int result = statement.executeUpdate(update);
+			statement.close();
+			return result;
+		}catch (SQLException ex){
+			throw new RuntimeException(ex);
+		}
 	}
 	
 	public static class Result {
