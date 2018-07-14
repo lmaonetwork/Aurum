@@ -14,7 +14,7 @@ public class CommandPing extends Command{
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		ProxiedPlayer victim = args.length == 0 ? ((ProxiedPlayer) sender) : requirePlayer(args[0]);
-		msg(sender, "§a[§f", victim, "§a] Пинг до прокси - §f" + victim.getPing() + "§aмс.");
+		msg(sender, "§a[§f", victim, "§a] Пинг до прокси - §f" + victim.getPing() + " §aмс.");
 		msg(sender, "§a[§f", victim, "§a] Пинг до @" + victim.getServer().getInfo().getName() + " - §fнеизвестен§a.");
 	}
 }
