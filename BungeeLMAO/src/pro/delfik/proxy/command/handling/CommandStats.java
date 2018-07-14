@@ -10,7 +10,7 @@ import pro.delfik.util.U;
 
 public class CommandStats extends Command{
 	public CommandStats() {
-		super("stats", Rank.PLAYER, "Просмотр статистики");//TODO
+		super("stats", Rank.PLAYER, "Просмотр статистики");
 	}
 
 	@Override
