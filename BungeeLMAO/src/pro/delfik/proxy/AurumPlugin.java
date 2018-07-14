@@ -14,6 +14,7 @@ import pro.delfik.proxy.command.handling.CommandHub;
 import pro.delfik.proxy.command.handling.CommandKick;
 import pro.delfik.proxy.command.handling.CommandOnline;
 import pro.delfik.proxy.command.handling.CommandPassChange;
+import pro.delfik.proxy.command.handling.CommandPing;
 import pro.delfik.proxy.command.handling.CommandSkin;
 import pro.delfik.proxy.command.handling.CommandStp;
 import pro.delfik.proxy.command.handling.Mutes;
@@ -101,7 +102,8 @@ public class AurumPlugin extends Plugin implements Runnable {
 		new CommandKick();
 		new Mutes(false);
 		new Mutes(true);
-		
+
+		new CommandPing();
 		new CommandHub();
 		new CommandSkin();
 		new CommandPassChange();
