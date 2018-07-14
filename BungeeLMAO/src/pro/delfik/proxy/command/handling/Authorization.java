@@ -55,7 +55,7 @@ public class Authorization extends Command {
 	}
 	
 	public static boolean registerNewPlayer(String name, String passhash) {
-		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", ipbound));
+		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false));
 		return true;
 	}
 	
