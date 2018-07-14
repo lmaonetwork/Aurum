@@ -2,6 +2,7 @@ package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
+import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.PersonInfo;
@@ -39,21 +40,18 @@ public class Authorization extends Command {
 				u.authorize();
 				msg(sender, "§aАвторизация прошла успешно!");
 			}
-		} else if (getCommand().equals("register")) {
+		} else if (getCommand().equals("register")){
 			requireArgs(args, 0, "[Пароль]");
 			String input = args[0];
 			String pass = u.getPassword();
-			if (!pass.equals("")) {
-				msg(sender,"Вы уже зарегистрированы, пожалуйста, авторизуйтесь командой §e/login [Пароль]§c.");
-			} else if (input.length() < 3) {
-				msg(sender, "§cДлина пароля не может быть меньше трёх символов.");
-			} else {
-				u.setPassword(input);
-				registerNewPlayer(sender.getName(), u.getPassword());
-				
-				u.authorize();
-				msg(sender, "§aВы успешно зарегистрировались!");
-			}
+			if(!pass.equals(""))
+				throw new CustomException("Вы уже зарегистрированы, пожалуйста, авторизуйтесь командой §e/login [Пароль]§c.");
+			if(input.length() < 3) throw new CustomException("§cДлина пароля не может быть меньше трёх символов.");
+			u.setPassword(input);
+			registerNewPlayer(sender.getName(), u.getPassword());
+
+			u.authorize();
+			msg(sender, "§aВы успешно зарегистрировались!");
 		}
 	}
 	

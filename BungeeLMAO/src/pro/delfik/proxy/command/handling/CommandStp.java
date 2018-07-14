@@ -21,12 +21,10 @@ public class CommandStp extends Command {
 		requireArgs(args, 1, "[Сервер]");
 		ProxiedPlayer p = (ProxiedPlayer) sender;
 		ServerInfo i = requireServer(args[0]);
-		if (args[0].startsWith("TEST_") || args[0].startsWith("B_")) {
-			if (!Person.get(sender).hasRank(Rank.BUILDER)) {
-				msg(sender, "§cТебе нельзя заходить на сервер @§f" + args[0] + "§c.");
-				msg(sender, "§cТребуемый ранг - " + Rank.BUILDER.represent());
-				return;
-			}
+		if ((args[0].startsWith("TEST_") || args[0].startsWith("B_")) && !Person.get(sender).hasRank(Rank.BUILDER)){
+			msg(sender, "§cТебе нельзя заходить на сервер @§f" + args[0] + "§c.");
+			msg(sender, "§cТребуемый ранг - " + Rank.BUILDER.represent());
+			return;
 		}
 		p.connect(i);
 		msg(sender, "§aВы были телепортированы на сервер §f" + i);

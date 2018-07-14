@@ -6,6 +6,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
+import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.Converter;
@@ -29,17 +30,11 @@ public class Bans extends Command {
 		if (getCommand().equalsIgnoreCase("unban")) {
 			requireArgs(args, 1, "[Игрок]");
 			BanInfo i = get(args[0]);
-			if (i == null) {
-				msg(sender, "§eИгрок §f" + args[0] + "§e не заблокирован.");
-				return;
-			}
+			if (i == null) throw new CustomException("§eИгрок §f" + args[0] + "§e не заблокирован.");
 			unban(args[0], sender.getName());
 		} else {
 			requireArgs(args, 2, "[Игрок] {Время} [Причина]");
-			if (args[0].length() == 0) {
-				msg(sender, "§cПроверьте количество пробелов в этом месте: §e/ban__" + args[1] + "...");
-				return;
-			}
+			if (args[0].length() == 0) throw new CustomException("§cПроверьте количество пробелов в этом месте: §e/ban__" + args[1] + "...");
 			int time = 0;
 			boolean skiptime = false;
 			try {
@@ -87,9 +82,7 @@ public class Bans extends Command {
 			Server server = p == null ? moder == null ? null : moder.getServer() : p.getServer();
 			U.bc(server, "§7[§e" + moderator + "§7]§c Игрок §e" + player + " §cзабанен §eна" +
 					representTime(minutes) + "§c Причина:§e " + reason);
-			if (p != null) {
-				p.disconnect(kickMessage(player, reason, start, until, moderator));
-			}
+			if (p != null) p.disconnect(kickMessage(player, reason, start, until, moderator));
 		} catch (Throwable t) {
 			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();

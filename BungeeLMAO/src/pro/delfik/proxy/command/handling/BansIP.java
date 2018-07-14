@@ -6,6 +6,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
+import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.command.PersonNotFoundException;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.permissions.Rank;
@@ -29,18 +30,12 @@ public class BansIP extends Command {
 			requireArgs(args, 1, "[Игрок]");
 			boolean ip = args[0].contains(".");
 			BanIPInfo i = ip ? getByAddress(args[0]) : getByName(args[0]);
-			if (i == null) {
-				msg(sender, (ip ? "§eIP-адрес §f" : "§eИгрок §f") + args[0] + "§e не заблокирован.");
-				return;
-			}
+			if (i == null) throw new CustomException((ip ? "§eIP-адрес §f" : "§eИгрок §f") + args[0] + "§e не заблокирован.");
 			if (ip) unbanIP(args[0], sender.getName());
 			else unbanNickname(args[0], sender.getName());
 		} else {
 			requireArgs(args, 2, "[Игрок|IP-адрес] [Причина]");
-			if (args[0].length() == 0) {
-				msg(sender, "§cПроверьте количество пробелов в этом месте: §e/ban__" + args[1] + "...");
-				return;
-			}
+			if (args[0].length() == 0) throw new CustomException("§cПроверьте количество пробелов в этом месте: §e/ban__" + args[1] + "...");
 			String toBan = args[0];
 			String reason = Converter.mergeArray(args, 1, " ");
 			if (toBan.contains(".")) {
@@ -160,8 +155,6 @@ public class BansIP extends Command {
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
 	
 	public static class BanIPInfo {

@@ -2,6 +2,7 @@ package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
+import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.Converter;
@@ -19,15 +20,9 @@ public class PrivateMessages extends Command {
 		String msg;
 		if (getCommand().charAt(0) == 'r') {
 			requireArgs(args, 1, "[Сообщение]");
-			if (p.lastWriter == null) {
-				msg(sender, "§cВы ещё никому не написали.");
-				return;
-			}
+			if (p.lastWriter == null) throw new CustomException("§cВы ещё никому не написали.");
 			dest = Person.get(p.lastWriter);
-			if (dest == null) {
-				msg(sender, "§6Игрок, с которым вы общались, вышел с сервера.");
-				return;
-			}
+			if (dest == null) throw new CustomException("§6Игрок, с которым вы общались, вышел с сервера.");
 			msg = Converter.mergeArray(args, 0, " ");
 			dest.lastWriter = p.name;
 		} else {
