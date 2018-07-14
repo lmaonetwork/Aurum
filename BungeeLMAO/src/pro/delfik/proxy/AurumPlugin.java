@@ -1,13 +1,9 @@
 package pro.delfik.proxy;
 
-import main.java.stroum.HTTP.Requests;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
@@ -20,6 +16,7 @@ import pro.delfik.proxy.command.handling.CommandOnline;
 import pro.delfik.proxy.command.handling.CommandPassChange;
 import pro.delfik.proxy.command.handling.CommandPing;
 import pro.delfik.proxy.command.handling.CommandSkin;
+import pro.delfik.proxy.command.handling.CommandStats;
 import pro.delfik.proxy.command.handling.CommandStp;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.command.handling.PrivateMessages;
@@ -78,10 +75,6 @@ public class AurumPlugin extends Plugin implements Runnable {
 		PermissionManager.class.getCanonicalName();
 		ArrayIterator.class.getCanonicalName();
 		TimedList.class.getCanonicalName();
-		JSONObject.class.getCanonicalName();
-		JSONArray.class.getCanonicalName();
-		JSONException.class.getCanonicalName();
-		Requests.class.getCanonicalName();
 		VK.class.getCanonicalName();
 		VKBot.class.getCanonicalName();
 		LongPoll.class.getCanonicalName();
@@ -120,6 +113,7 @@ public class AurumPlugin extends Plugin implements Runnable {
 		new Mutes(true);
 
 		new CommandPing();
+		new CommandStats();
 		new CommandHub();
 		new CommandSkin();
 		new CommandPassChange();
