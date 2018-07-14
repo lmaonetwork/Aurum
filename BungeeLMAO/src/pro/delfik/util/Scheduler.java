@@ -29,6 +29,18 @@ public class Scheduler extends Thread{
 		tasks.add(task);
 	}
 
+	public static void runThr(Runnable runnable){
+		new Thread(){
+			@Override
+			public void run(){
+				try{
+					runnable.run();
+				}catch (Throwable ex){}
+				this.stop();
+			}
+		}.start();
+	}
+
 	public static abstract class Task implements Runnable{
 		private final int times;
 
