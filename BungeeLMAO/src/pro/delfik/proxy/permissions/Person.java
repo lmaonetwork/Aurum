@@ -13,10 +13,8 @@ import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.U;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 public class Person {
 	
@@ -57,12 +55,7 @@ public class Person {
 		if (p == null) return;
 		list.remove(p.definition().hashCode());
 		if (!p.authorized) return;
-		try {
-			PlayerDataManager.save(p.getInfo());
-		} catch (SQLException e) {
-			Proxy.log(Level.SEVERE, "Player " + name + " §cwasn't saved properly.");
-			e.printStackTrace();
-		}
+		PlayerDataManager.save(p.getInfo());
 	}
 	
 	

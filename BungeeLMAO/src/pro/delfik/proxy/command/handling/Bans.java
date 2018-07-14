@@ -57,20 +57,12 @@ public class Bans extends Command {
 		clear(player);
 	}
 	public static void clear(String nick) {
-		try {
-			Database.sendUpdate("DELETE FROM Bans WHERE name = '" + nick + "'");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("DELETE FROM Bans WHERE name = '" + nick + "'");
 	}
 	
 	public static void advban(String player, String uuid, String reason) {
-		try {
-			Database.sendUpdate("INSERT INTO AdvBans (name, uuid, reason) " +
-					"VALUES (" + player + ", " + uuid + ", " + reason + ")");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		Database.sendUpdate("INSERT INTO AdvBans (name, uuid, reason) " +
+				"VALUES (" + player + ", " + uuid + ", " + reason + ")");
 	}
 	
 	public static void ban(String player, String reason, int minutes, String moderator) {
@@ -87,13 +79,9 @@ public class Bans extends Command {
 			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
-		try {
-			Database.sendUpdate("INSERT INTO Bans (name, moderator, time, until, reason) " +
-					"VALUES ('" + player + "', '" + moderator + "', " + start + ", " + until + ", '" + reason + "')" +
-					"ON DUPLICATE KEY UPDATE moderator = '" + moderator + "', time = " + start + ", until = " + until + ", reason = '" + reason + "'");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("INSERT INTO Bans (name, moderator, time, until, reason) " +
+				"VALUES ('" + player + "', '" + moderator + "', " + start + ", " + until + ", '" + reason + "')" +
+				"ON DUPLICATE KEY UPDATE moderator = '" + moderator + "', time = " + start + ", until = " + until + ", reason = '" + reason + "'");
 	}
 	
 	public static BanInfo get(String playername) {

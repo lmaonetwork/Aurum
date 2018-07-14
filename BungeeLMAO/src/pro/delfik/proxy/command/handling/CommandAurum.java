@@ -74,11 +74,7 @@ public class CommandAurum extends Command {
 		if (p != null) p.setPassword("");
 		else {
 			int i;
-			try {
-				i = Database.sendUpdate("UPDATE Users SET passhash = '' WHERE name = '" + args[0] + "'");
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
+			i = Database.sendUpdate("UPDATE Users SET passhash = '' WHERE name = '" + args[0] + "'");
 			if (i == 0) return new Object[] {"prefix", "§eУ игрока §f" + args[0] + "§e итак нет пароля."};
 		}
 		return new Object[] {"prefix", "§aПароль игрока §e", p == null ? args[0] : p, "§a сброшен."};
@@ -168,12 +164,8 @@ public class CommandAurum extends Command {
 	}
 	
 	private static Object[] sqlupdate(CommandSender commandSender, Command command, String[] args) {
-		try {
-			requireRank(commandSender, Rank.ADMIN);
-			return new Object[] {"prefix", "§aОбновлено §e" + Database.sendUpdate(ArrayUtils.toString(args)) + "§a записей."};
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		requireRank(commandSender, Rank.ADMIN);
+		return new Object[] {"prefix", "§aОбновлено §e" + Database.sendUpdate(ArrayUtils.toString(args)) + "§a записей."};
 	}
 	
 	

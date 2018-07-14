@@ -54,11 +54,7 @@ public class Mutes extends Command {
 		clear(player);
 	}
 	public static void clear(String nick) {
-		try {
-			Database.sendUpdate("DELETE FROM Mutes WHERE player = '" + nick + "'");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("DELETE FROM Mutes WHERE player = '" + nick + "'");
 	}
 	
 	public static void mute(String player, String reason, int minutes, String moderator) {
@@ -76,13 +72,9 @@ public class Mutes extends Command {
 			Proxy.i().broadcast("§c§lПри муте ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
-		try {
-			Database.sendUpdate("INSERT INTO Mutes (player, moderator, until, reason) " +
-										"VALUES ('" + player + "', '" + moderator + "', " + until + ", '" + reason + "')" +
-										"ON DUPLICATE KEY UPDATE moderator = '" + moderator + "', until = " + until + ", reason = '" + reason + "'");
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		Database.sendUpdate("INSERT INTO Mutes (player, moderator, until, reason) " +
+									"VALUES ('" + player + "', '" + moderator + "', " + until + ", '" + reason + "')" +
+									"ON DUPLICATE KEY UPDATE moderator = '" + moderator + "', until = " + until + ", reason = '" + reason + "'");
 	}
 	
 	public static Mutes.MuteInfo get(String playername) {
