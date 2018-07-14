@@ -1,5 +1,6 @@
 package pro.delfik.proxy.data;
 
+import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.PersonInfo;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.Converter;
@@ -89,5 +90,14 @@ public class PlayerDataManager {
 			void set(PersonInfo u, ResultSet set) throws SQLException;
 		}
 	}
-	
+
+	public static void setRank(String username, Rank rank) {
+		Person user = Person.get(username);
+		if (user == null) {
+			Database.sendUpdate("UPDATE Users SET rank = '" + rank + "' WHERE name = '" + Converter.smartLowercase(username) + "'");
+		} else {
+			user.setRank(rank);
+			DataEvent.event(user.getServerInfo(), "pex", username + "/" + rank);
+		}
+	}
 }

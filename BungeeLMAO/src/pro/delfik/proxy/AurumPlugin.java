@@ -28,7 +28,6 @@ import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.SocketCommunicator;
 import pro.delfik.proxy.data.SocketEvent;
 import pro.delfik.proxy.games.SfTop;
-import pro.delfik.proxy.permissions.PermissionManager;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;

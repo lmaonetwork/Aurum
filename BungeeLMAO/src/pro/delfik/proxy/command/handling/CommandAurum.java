@@ -10,7 +10,6 @@ import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CommandProcessor;
 import pro.delfik.proxy.command.NotEnoughArgumentsException;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.permissions.PermissionManager;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.ArrayUtils;
