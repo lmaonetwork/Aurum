@@ -39,15 +39,16 @@ public class Person {
 		String password = info.password;
 		Mutes.MuteInfo mute = Mutes.get(name);
 		
-//		if (p != null)
-//			if (info.ip.equals(p.getServer().getAddress().getHostName())) {
-//				auth = true;
-//			} else {
-//				if (!info.ip.equals("")) {
-//					U.msg(p, "§6Ваш IP-адрес изменился с последнего захода.");
-//					U.msg(p, "§6Автоматическая авторизация переключится на новый IP при следующем входе.");
-//				}
-//			}
+		
+		if (p != null)
+			if (info.ip.equals(p.getServer().getAddress().getHostName())) {
+				auth = true;
+			} else {
+				if (!info.ip.equals("")) {
+					U.msg(p, "§6Ваш IP-адрес изменился с последнего захода.");
+					U.msg(p, "§6Автоматическая авторизация переключится на новый IP при следующем входе.");
+				}
+			}
 		
 		return new Person(name, password, rank, online, money, auth, mute);
 	}
@@ -148,11 +149,7 @@ public class Person {
 	}
 	
 	private void updateMoney() {
-		try {
-			Database.sendUpdate("UPDATE Users SET money = " + money + " WHERE name = " + definition());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		Database.sendUpdate("UPDATE Users SET money = " + money + " WHERE name = " + definition());
 	}
 	
 	public long getMoney() {return money;}

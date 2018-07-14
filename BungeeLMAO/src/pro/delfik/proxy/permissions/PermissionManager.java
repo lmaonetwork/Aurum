@@ -11,9 +11,6 @@ public class PermissionManager {
 		Person user = Person.get(username);
 		if (user == null) {
 			Database.sendUpdate("UPDATE Users SET rank = '" + rank + "' WHERE name = '" + Converter.smartLowercase(username) + "'");
-//			user = Person.load(username);
-//			user.setRank(rank);
-//			Person.unload(username);
 		} else {
 			user.setRank(rank);
 			DataEvent.event(user.getServerInfo(), "pex", username + "/" + rank);
