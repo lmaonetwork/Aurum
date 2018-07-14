@@ -53,6 +53,7 @@ public class Mutes extends Command {
 		}
 		clear(player);
 	}
+
 	public static void clear(String nick) {
 		Database.sendUpdate("DELETE FROM Mutes WHERE player = '" + nick + "'");
 	}
@@ -143,6 +144,7 @@ public class Mutes extends Command {
 				(seconds == 0 ? "" : (" " + seconds + Converter.plural(seconds, " секунду", " секунды", " секунд")));
 		return result.equals("") ? null : result;
 	}
+
 	@Override
 	protected Iterable<String> tabComplete(CommandSender sender, String arg, int number) {
 		if (number == 0) return super.tabComplete(sender, arg, number);
