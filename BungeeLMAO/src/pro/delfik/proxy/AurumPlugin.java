@@ -1,9 +1,13 @@
 package pro.delfik.proxy;
 
+import main.java.stroum.HTTP.Requests;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
@@ -38,6 +42,9 @@ import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.Scheduler;
 import pro.delfik.util.StringUtils;
 import pro.delfik.util.TimedList;
+import pro.delfik.vk.LongPoll;
+import pro.delfik.vk.MessageHandler;
+import pro.delfik.vk.VK;
 import pro.delfik.vk.VKBot;
 
 import java.io.File;
@@ -71,6 +78,14 @@ public class AurumPlugin extends Plugin implements Runnable {
 		PermissionManager.class.getCanonicalName();
 		ArrayIterator.class.getCanonicalName();
 		TimedList.class.getCanonicalName();
+		JSONObject.class.getCanonicalName();
+		JSONArray.class.getCanonicalName();
+		JSONException.class.getCanonicalName();
+		Requests.class.getCanonicalName();
+		VK.class.getCanonicalName();
+		VKBot.class.getCanonicalName();
+		LongPoll.class.getCanonicalName();
+		MessageHandler.class.getCanonicalName();
 	}
 	
 	public void onLoad() {
