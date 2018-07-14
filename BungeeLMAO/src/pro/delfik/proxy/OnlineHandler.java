@@ -3,17 +3,18 @@ package pro.delfik.proxy;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.event.*;
+import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
-import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.util.StringUtils;
 
-import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class OnlineHandler extends Thread implements Listener {
