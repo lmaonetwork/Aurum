@@ -9,12 +9,14 @@ import java.sql.SQLException;
 
 public class PlayerDataManager {
 	
-	public static boolean update(String player, Field field, Object value) throws SQLException {
+	public static boolean update(String player, Field field, Object value) {
 		int i = Database.sendUpdate("UPDATE Users SET " + field + " = " + adjust(value) + " WHERE name = \'" + player.toLowerCase() + "\'");
 		return i != 0;
 	}
+
 	public static String parameters = null;
-	public static boolean save(PersonInfo info) throws SQLException {
+
+	public static boolean save(PersonInfo info) {
 		if (parameters == null) parameters = Converter.merge(Field.values(), Field::toString, ", ");
 		String values = Converter.merge(Field.values(), (f) -> adjust(f.extractFrom(info)), ", ");
 		String replace = Converter.merge(Field.values(), f -> f.string + " = " + adjust(f.extractFrom(info)), ", ");
@@ -22,6 +24,7 @@ public class PlayerDataManager {
 				"UPDATE " + replace);
 		return true;
 	}
+
 	public static PersonInfo load(String username) {
 		PersonInfo i = new PersonInfo(username);
 		try {
@@ -71,6 +74,7 @@ public class PlayerDataManager {
 		public Object extractFrom(PersonInfo u) {
 			return extractor.extract(u);
 		}
+
 		public void applyTo(PersonInfo p, ResultSet r) throws SQLException {
 			applier.set(p, r);
 		}

@@ -17,9 +17,6 @@ import java.util.Map;
 public class DataIO {
 	private static String prefix = System.getProperty("user.dir") + "/Core/";
 	
-	public DataIO() {
-	}
-	
 	public static List<String> read(String path) {
 		String in = readFile(path);
 		if (in != null && in.length() != 0) {
