@@ -11,6 +11,7 @@ import pro.delfik.proxy.command.handling.CommandAlert;
 import pro.delfik.proxy.command.handling.CommandAurum;
 import pro.delfik.proxy.command.handling.CommandEnd;
 import pro.delfik.proxy.command.handling.CommandFM;
+import pro.delfik.proxy.command.handling.CommandGuide;
 import pro.delfik.proxy.command.handling.CommandHub;
 import pro.delfik.proxy.command.handling.CommandKick;
 import pro.delfik.proxy.command.handling.CommandOnline;
@@ -19,6 +20,7 @@ import pro.delfik.proxy.command.handling.CommandPing;
 import pro.delfik.proxy.command.handling.CommandSkin;
 import pro.delfik.proxy.command.handling.CommandStats;
 import pro.delfik.proxy.command.handling.CommandStp;
+import pro.delfik.proxy.command.handling.CommandVK;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.command.handling.PrivateMessages;
 import pro.delfik.proxy.data.Connection;
@@ -100,6 +102,8 @@ public class AurumPlugin extends Plugin implements Runnable {
 		new CommandFM("osk", "");//TODO
 		new CommandFM("flud", "");
 		new CommandFM("mat", "");
+		new CommandGuide();
+		new CommandVK();
 		new CommandAurum();
 		new PrivateMessages(false);
 		new PrivateMessages(true);
