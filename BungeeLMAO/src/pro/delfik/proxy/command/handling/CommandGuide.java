@@ -6,11 +6,17 @@ import pro.delfik.proxy.permissions.Rank;
 
 public class CommandGuide extends Command{
 	public CommandGuide() {
-		super("guide", Rank.PLAYER, "");//TODO
+		super("guide", Rank.PLAYER, "Туториалы по разным вещам");
 	}
 
 	@Override
 	protected void run(CommandSender sender, String[] args) {
-		//Ну выводи
+		if (args.length == 0) {
+			msg(sender, "§cИспользование: §f/guide a");
+			return;
+		}
+		if (args[0].charAt(0) == 'a') {
+			msg(sender, "§eЗдесь будет гайд."); // TODO: Написать гайд.
+		}
 	}
 }

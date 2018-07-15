@@ -39,7 +39,7 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 		if (!(this instanceof Authorization)) {
 			if (!user.isAuthorized()) {
 				U.msg(sender, "§eДля использования команд вам необходимо авторизоваться.");
-				U.msg(sender, U.run("§eНе знаете, что это такое? §nНажмите сюда§e.", "§e> §fГайд по авторизации §e<", "guide a"));//TODO
+				U.msg(sender, U.run("§eНе знаете, что это такое? §nНажмите сюда§e.", "§e> §fГайд по авторизации §e<", "guide a"));
 				return;
 			}
 			if (!user.hasRank(getRequiredRank())) {
