@@ -46,7 +46,8 @@ public class ServerListener implements Listener{
 			new Server(server, p2p);
 			return;
 		}
-		BungeeCord.getInstance().pluginManager.callEvent(new PacketEvent(server, packet));
+		BungeeCord.getInstance().getScheduler().runAsync(AurumPlugin.instance, () -> BungeeCord.getInstance()
+				.pluginManager.callEvent(new PacketEvent(server, packet)));
 	}
 
 	@Override
