@@ -8,21 +8,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class CryptoUtils {
-	private static final String ALGO = "AES";
+	private static final String algoritm = "Blowfish";
 	private final SecretKeySpec key;
 	private static final Keccak hash = new Keccak();
 	
 	public CryptoUtils(String key) {
-		if (key != null && (key.length() == 16 || key.length() == 32 || key.length() == 48)) {
-			this.key = new SecretKeySpec(key.getBytes(), "AES");
-		} else {
-			throw new Error(key + " error size, need 16, 32 or 48");
-		}
+		this.key = new SecretKeySpec(key.getBytes(), algoritm);
 	}
 	
 	public String encrypt(String data) {
 		try {
-			Cipher c = Cipher.getInstance("AES");
+			Cipher c = Cipher.getInstance(algoritm);
 			c.init(1, this.key);
 			byte[] encVal = c.doFinal(data.getBytes());
 			return new String(Base64.getEncoder().encode(encVal));
@@ -34,7 +30,7 @@ public class CryptoUtils {
 	
 	public String decrypt(String encryptedData) {
 		try {
-			Cipher c = Cipher.getInstance("AES");
+			Cipher c = Cipher.getInstance(algoritm);
 			c.init(2, this.key);
 			byte[] decodedValue = Base64.getDecoder().decode(encryptedData);
 			byte[] decValue = c.doFinal(decodedValue);
