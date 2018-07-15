@@ -42,8 +42,8 @@ public class Connection extends Thread {
 	
 	private void exec() throws IOException {
 		this.socket.setSoTimeout(1000);
-		String[] keys = this.readLine().split(" ");
-		if (!this.keys(keys, 2)) {
+		String[] keys = in.readAll().split(" ");
+		if (!keys(keys, 2)) {
 			String key = keys[0];
 			if (key.equals("get")) {
 				Map<String, String> in = DataIO.readConfig(keys[1]);
@@ -73,7 +73,7 @@ public class Connection extends Thread {
 						builder.append(file.getName()).append("}");
 					}
 					
-					this.out.write(builder.toString());
+					out.write(builder.toString());
 				} else {
 					Person user;
 					if (key.equals("pex")) {
@@ -84,7 +84,7 @@ public class Connection extends Thread {
 						user = Person.get(keys[1]);
 						Rank rank;
 						if (user == null) {
-							this.out.write("n");
+							out.write("n");
 							return;
 						} else {
 							rank = user.getRank();
@@ -92,60 +92,42 @@ public class Connection extends Thread {
 							if (player != null) {
 								Server server = player.getServer();
 								if (server != null && !user.getServer().equals(keys[2])) {
-									this.out.write("n");
+									out.write("n");
 									return;
 								}
 							}
 						}
 						
-						this.out.write(rank + "");
+						out.write(rank + "");
 					} else if (key.equals("memget")) {
-						this.out.write(map.get(keys[1]));
+						out.write(map.get(keys[1]));
 					} else if (key.equals("memset")) {
-						if (this.keys(keys, 3)) {
+						if (keys(keys, 3)) {
 							return;
 						}
 						map.put(keys[1], keys[2]);
 					} else if (key.equals("memrem")) {
 						map.remove(keys[1]);
 					} else if (key.equals("getauth")) {
-						if (this.keys(keys, 3)) {
-							return;
-						}
+						if (keys(keys, 3)) return;
 						user = Person.get(keys[1]);
 						boolean b = false;
-						
 						try {
-							if (user.getHandle().getServer().getInfo().getName().equals(keys[2]) && user.isAuthorized()) {
+							if (user.getHandle().getServer().getInfo().getName().equals(keys[2]) && user.isAuthorized())
 								b = true;
-							}
-						} catch (Exception ignored) {
-						}
-						
-						this.out.write(b + "");
+						} catch (Exception ignored) {}
+						out.write(b + "");
 					} else if (key.equals("broadevent")) {
-						if (this.keys(keys, 3)) {
-							return;
-						}
-						
+						if (keys(keys, 3)) return;
 						DataEvent.broadevent(keys[1], keys[2]);
 					} else if (key.equals("event")) {
-						if (this.keys(keys, 4)) {
-							return;
-						}
-						
+						if (keys(keys, 4)) return;
 						DataEvent.event(keys[1], keys[2], keys[3]);
 					} else if (key.equals("bungeeevent")) {
-						if (this.keys(keys, 3)) {
-							return;
-						}
-						
+						if (keys(keys, 3)) return;
 						BungeeCord.getInstance().pluginManager.callEvent(new SocketEvent(keys[1], keys[2]));
 					} else if (key.equals("typeevent")) {
-						if (this.keys(keys, 4)) {
-							return;
-						}
-						
+						if (keys(keys, 4)) return;
 						DataEvent.typeevent(keys[1], keys[2], keys[3]);
 					} else if (key.equals("getport")) {
 						this.out.write((char) DataPort.putPort(keys[1]) + "");
@@ -159,7 +141,7 @@ public class Connection extends Thread {
 									in.close();
 									break;
 								}
-								this.out.write((char) i + "");
+								out.write((char) i + "");
 							}
 						} catch (IOException ex) {
 							try {in.close();} catch (IOException ignored) {}
@@ -169,7 +151,7 @@ public class Connection extends Thread {
 					} else if (key.equals("top")) {
 						SfTop.checkTop(keys[1]);
 					} else if (key.equals("gettop")) {
-						this.out.write(SfTop.getAllTop());
+						out.write(SfTop.getAllTop());
 					} else if (key.equals("writeReal")) {
 						List<String> list = new ArrayList<>(keys.length - 2);
 						for (i = 2; i < keys.length; ++i) list.add(keys[i]);
@@ -177,15 +159,14 @@ public class Connection extends Thread {
 					} else if (key.equals("readReal")) {
 						List<String> in = DataIO.read(keys[1]);
 						if (in == null) {
-							this.out.write("null");
+							out.write("null");
 							return;
 						}
 						for (i = 0; i < in.size(); ++i) {
-							this.out.write(in.get(i));
-							this.out.write("\n");
+							out.write(in.get(i));
+							out.write("\n");
 						}
 					} else if (key.equals("servers")) {
-						Collection<ServerInfo> infos = Proxy.getServers().values();
 						LinkedHashSet<String> result = new LinkedHashSet<>();
 						for (ServerInfo info : Proxy.i().getServers().values()) {
 							String line = info.getName() + "@" + info.getPlayers().size() + "\n";
@@ -268,10 +249,6 @@ public class Connection extends Thread {
 			this.socket.close();
 		} catch (IOException ignored) {}
 		
-	}
-	
-	private String readLine() throws IOException {
-		return this.in.readAll();
 	}
 	
 	private class b {
