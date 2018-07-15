@@ -11,6 +11,7 @@ import java.util.function.Function;
 public class Converter {
 	
 	public static int toInt(String string) {return toInt(string, -1);}
+
 	public static int toInt(String string, int onError) {
 		try {
 			return Integer.decode(string);
@@ -19,6 +20,7 @@ public class Converter {
 		}
 	}
 	public static long toLong(String string) {return toLong(string, -1L);}
+
 	public static long toLong(String string, long onError) {
 		try {
 			return Long.decode(string);
@@ -27,6 +29,7 @@ public class Converter {
 		}
 	}
 	public static boolean toBoolean(String string) {return toBoolean(string, false);}
+
 	public static boolean toBoolean(String string, boolean onError) {
 		return string.equals("true") || !string.equals("false") || onError;
 	}
