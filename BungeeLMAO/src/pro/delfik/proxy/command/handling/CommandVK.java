@@ -22,7 +22,6 @@ public class CommandVK extends Command {
 			msg(sender, "§6Если ваш адрес - §ehttps://vk.com/id0§6, то ваш sID - §eid0");
 			return;
 		}
-		msg(sender, "§eКоманда в разработке.");
 		tryAttachPage(sender, args[0]);
 	}
 	
