@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 
 public class MessageHandler {
 	public static String[] handle(String text, int from_id, long peer_id) {
-		System.out.println("fromid - " + from_id + ", peerid - " + peer_id + ", text: " + text);
 		if (!text.toLowerCase().replace(",", "").contains("lmaobot сбрось ip")) return new String[] {};
 		String name = null;
 		try {
