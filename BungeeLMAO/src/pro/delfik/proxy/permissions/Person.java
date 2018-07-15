@@ -26,7 +26,10 @@ public class Person {
 	public static Person get(String name) {
 		return list.get(Converter.smartLowercase(name).hashCode());
 	}
-	public static Person get(CommandSender sender) {return list.get(Converter.smartLowercase(sender.getName()).hashCode());}
+
+	public static Person get(CommandSender sender) {
+		return list.get(Converter.smartLowercase(sender.getName()).hashCode());
+	}
 	
 	public static Person load(String name) {
 		PersonInfo info = PlayerDataManager.load(Converter.smartLowercase(name));
@@ -99,10 +102,8 @@ public class Person {
 		this.money = personInfo.money;
 		this.mute = mute;
 		this.ipbound = personInfo.ipbound;
-		
-		
+
 		if (auth) this.authorize();
-		
 		this.connectedAt = System.currentTimeMillis();
 		list.put(definition.hashCode(), this);
 	}
@@ -112,21 +113,28 @@ public class Person {
 	public void msg(Object... o) {
 		U.msg(getHandle(), o);
 	}
+
 	public void kick(String reason) {
 		getHandle().disconnect(new TextComponent(reason));
 	}
+
 	public String getIP() {return getHandle().getAddress().getHostName();}
+
 	public ServerInfo getServerInfo() {return getHandle().getServer().getInfo();}
 	
 	
 	// Getters & Setters
 	
 	protected final String definition() {return definition;}
+
 	public ProxiedPlayer getHandle() {
 		return Proxy.getPlayer(name);
 	}
 	
-	public boolean isAuthorized() {return authorized;}
+	public boolean isAuthorized() {
+		return authorized;
+	}
+
 	public void authorize() {
 		authorized = true;
 		DataEvent.event(getHandle().getServer(), "auth", name);
@@ -135,15 +143,22 @@ public class Person {
 	public void setRank(Rank rank) {
 		this.rank = rank;
 	}
+
 	public Rank getRank() {
 		return rank;
 	}
-	public boolean hasRank(Rank rank) {return isAuthorized() && this.rank.ordinal() <= rank.ordinal();}
-	
+
+	public boolean hasRank(Rank rank) {
+		return isAuthorized() && this.rank.ordinal() <= rank.ordinal();
+	}
+
 	public String getServer() {
 		return this.server.equals("") ? "LOBBY_1" : this.server;
 	}
-	public void setServer(String server) {this.server = server;}
+
+	public void setServer(String server) {
+		this.server = server;
+	}
 	
 	public void earn(int money) {
 		this.money += money;
@@ -158,13 +173,21 @@ public class Person {
 		Database.sendUpdate("UPDATE Users SET money = " + money + " WHERE name = " + definition());
 	}
 	
-	public long getMoney() {return money;}
+	public long getMoney() {
+		return money;
+	}
 	
-	public String getPassword() {return password;}
-	public void setPassword(String password) {this.password = password.length() == 0 ? "" : CryptoUtils.getHash(password);}
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password.length() == 0 ? "" : CryptoUtils.getHash(password);
+	}
 	
-	public long getOnline() {return System.currentTimeMillis() - connectedAt + online;}
-	
+	public long getOnline() {
+		return System.currentTimeMillis() - connectedAt + online;
+	}
 	
 	public PersonInfo getInfo() {
 		return new PersonInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers, pmDisabled, friends);
