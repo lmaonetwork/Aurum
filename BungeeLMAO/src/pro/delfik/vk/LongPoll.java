@@ -102,7 +102,7 @@ public class LongPoll {
 	}
 	
 	public static String msg(String message, long peer) {
-		return VK.query("messages.send", "message=" + message + "&" +
+		return VK.query("messages.send", "message=" + message.replace(' ', '+') + "&" +
 												 (peer > 2000000000 ? "chat_id=" + (peer - 2000000000) : "user_id=" + peer));
 	}
 	
