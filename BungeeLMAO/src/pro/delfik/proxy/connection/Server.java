@@ -1,6 +1,7 @@
 package pro.delfik.proxy.connection;
 
 import pro.delfik.net.P2P;
+import pro.delfik.net.Packet;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,5 +25,9 @@ public class Server {
 		this.server = server;
 		this.p2p = p2p;
 		servers.put(server, this);
+	}
+
+	public void send(Packet packet){
+		p2p.send(packet);
 	}
 }

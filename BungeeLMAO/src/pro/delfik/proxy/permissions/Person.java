@@ -4,8 +4,10 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Mutes;
+import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.data.DataEvent;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
@@ -152,12 +154,17 @@ public class Person {
 		return isAuthorized() && this.rank.ordinal() <= rank.ordinal();
 	}
 
+	public Server server(){
+		return Server.get(getServer());
+	}
+
 	public String getServer() {
 		return this.server.equals("") ? "LOBBY_1" : this.server;
 	}
 
 	public void setServer(String server) {
 		this.server = server;
+		server().send(new PacketUser(name, rank, authorized));
 	}
 	
 	public void earn(int money) {
