@@ -4,6 +4,7 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
+import pro.delfik.net.Packet;
 import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
@@ -129,6 +130,7 @@ public class AurumPlugin extends Plugin implements Runnable {
 		SkinApplier.init();
 		SkinStorage.init(new File("Core/SkinsHandler"));
 		Scheduler.init();
+		Packet.init();
 		
 		VKBot.start();
 		
