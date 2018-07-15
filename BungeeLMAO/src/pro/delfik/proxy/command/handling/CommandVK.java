@@ -1,6 +1,8 @@
 package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
+import pro.delfik.proxy.AurumPlugin;
+import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.permissions.Rank;
@@ -22,7 +24,10 @@ public class CommandVK extends Command {
 			msg(sender, "§6Если ваш адрес - §ehttps://vk.com/id0§6, то ваш sID - §eid0");
 			return;
 		}
-		tryAttachPage(sender, args[0]);
+		msg(sender, "§aПроверка ");
+		Proxy.i().getScheduler().runAsync(AurumPlugin.instance, () -> {
+		
+		});
 	}
 	
 	private static void tryAttachPage(CommandSender sender, String arg) {

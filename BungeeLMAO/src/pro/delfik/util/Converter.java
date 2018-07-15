@@ -1,7 +1,9 @@
 package pro.delfik.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -135,5 +137,23 @@ public class Converter {
 			if (empty || smartLowercase(s).startsWith(smartLowercase(startstring))) set.add(s);
 		}
 		return set;
+	}
+	
+	
+	public static HashMap<String, String> deserializeMap(String string, String entrySeparator, String keyValueSeparator) {
+		if(string == null)return new HashMap<>();
+		String split[] = string.split(entrySeparator);
+		HashMap<String, String> map = new HashMap<>();
+		for(String line : split){
+			String spl[] = line.split(keyValueSeparator);
+			if(spl.length == 1) map.put(spl[0], "");
+			else map.put(spl[0], spl[1]);
+		}
+		return map;
+	}
+	
+	public static List<String> deserializeList(String str, String separator) {
+		if(str == null) return new ArrayList<>();
+		return Arrays.asList(str.split(separator));
 	}
 }

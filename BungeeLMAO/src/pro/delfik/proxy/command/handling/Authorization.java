@@ -52,7 +52,7 @@ public class Authorization extends Command {
 	}
 
 	private static void registerNewPlayer(String name, String passhash) {
-		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false));
+		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false, ignoredPlayers));
 	}
 
 	@Override

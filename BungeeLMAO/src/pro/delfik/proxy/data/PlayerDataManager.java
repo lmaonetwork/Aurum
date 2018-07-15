@@ -57,7 +57,8 @@ public class PlayerDataManager {
 		ONLINE("online", PersonInfo::getOnline, (u, o) -> u.online = o.getLong("online")),
 		IP("ip", PersonInfo::getIP, (u, o) -> u.ip = o.getString("ip")),
 		MONEY("money", PersonInfo::getMoney, (u, o) -> u.money = o.getInt("money")),
-		IPBOUND("ipbound", PersonInfo::isIPBound, (u, o) -> u.ipbound = o.getBoolean("ipbound"));
+		IPBOUND("ipbound", PersonInfo::isIPBound, (u, o) -> u.ipbound = o.getBoolean("ipbound")),
+		PMDISABLED("pmdisabled", PersonInfo::isPMDisabled, (u, o) -> u.pmDisabled = o.getBoolean("pmdisabled"));
 		
 		private final String string;
 		private final Extractor extractor;

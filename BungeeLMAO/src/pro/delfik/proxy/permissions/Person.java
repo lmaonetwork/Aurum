@@ -37,7 +37,7 @@ public class Person {
 		int money = info.money;
 		String password = info.password;
 		Mutes.MuteInfo mute = Mutes.get(name);
-		String lastSeenIP = info.getIP();
+		String lastSeenIP = info.getIp();
 		boolean ipbound = info.ipbound;
 		
 		if (lastSeenIP != null && info.ipbound) {
@@ -162,7 +162,7 @@ public class Person {
 	
 	
 	public PersonInfo getInfo() {
-		return new PersonInfo(name, password, money, rank, getOnline(), getIP(), ipbound);
+		return new PersonInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers);
 	}
 	
 	public Mutes.MuteInfo getActiveMute() {
