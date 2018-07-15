@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import pro.delfik.net.packet.PacketPex;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Mutes;
@@ -145,6 +146,7 @@ public class Person {
 	
 	public void setRank(Rank rank) {
 		this.rank = rank;
+		server().send(new PacketPex(name, rank));
 	}
 
 	public Rank getRank() {

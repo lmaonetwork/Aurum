@@ -27,6 +27,10 @@ public class Server {
 		servers.put(server, this);
 	}
 
+	public String getServer() {
+		return server;
+	}
+
 	public void send(Packet packet){
 		p2p.send(packet);
 	}
