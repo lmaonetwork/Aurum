@@ -17,6 +17,7 @@ public class Server {
 	}
 
 	private final String server;
+
 	private final P2P p2p;
 
 	public Server(String server, P2P p2p){
