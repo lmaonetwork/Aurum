@@ -14,11 +14,7 @@ public class Scheduler extends Thread{
 	@Override
 	public void run() {
 		while (true){
-			try{
-				sleep(100);
-			}catch (InterruptedException ex){
-				return; //Сервер упал, или остановился
-			}
+			sleep(100);
 			if(++times == 11)times = 0;
 			for(Task task : tasks)
 				if(times % task.times == 0)task.run();
@@ -39,6 +35,14 @@ public class Scheduler extends Thread{
 				this.stop();
 			}
 		}.start();
+	}
+
+	public static void sleep(int millis){
+		try{
+			Thread.sleep(millis);
+		}catch (InterruptedException ex){
+			throw new RuntimeException(ex);
+		}
 	}
 
 	public static abstract class Task implements Runnable{
