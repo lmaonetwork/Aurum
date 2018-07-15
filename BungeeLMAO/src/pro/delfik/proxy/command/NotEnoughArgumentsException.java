@@ -11,6 +11,6 @@ public class NotEnoughArgumentsException extends CustomException {
 	@Override
 	public void execute(CommandSender sender, String command) {
 		U.msg(sender, "§cНедостаточно аргументов.");
-		U.msg(sender, "§cИспользование: §e/" + command + "' '" + getMessage());
+		U.msg(sender, "§cИспользование: §e/" + command + " " + getMessage());
 	}
 }
