@@ -99,11 +99,11 @@ public class AurumPlugin extends Plugin implements Runnable {
 		new CommandOnline();
 		new Authorization("login", "Авторизация на сервере.", "l");
 		new Authorization("register", "Регистрация на сервере", "p", "reg");
-		new CommandFM("osk", "");//TODO забыл про description
-		new CommandFM("flood", "");
-		new CommandFM("mt", "");
-		new CommandFM("caps", "");
-		new CommandFM("amoral", "");
+		new CommandFM("osk", "Быстрый мут за оскорбление");
+		new CommandFM("flood", "Быстрый мут за флуд");
+		new CommandFM("mt", "Быстрый мут за мат");
+		new CommandFM("caps", "Быстрый мут за капс");
+		new CommandFM("amoral", "Быстрый мут за аморальное поведение");
 		new CommandGuide();
 		new CommandVK();
 		new CommandAurum();
