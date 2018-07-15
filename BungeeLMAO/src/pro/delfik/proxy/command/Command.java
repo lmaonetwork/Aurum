@@ -30,48 +30,49 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 	}
 	
 	@Override
-	public final void execute(CommandSender commandSender, String[] strings) {
-		if (commandSender instanceof ConsoleCommandSender) {
-			run(commandSender, strings);
+	public final void execute(CommandSender sender, String[] args) {
+		if (sender instanceof ConsoleCommandSender) {
+			run(sender, args);
 			return;
 		}
-		Person user = Person.get(commandSender);
+		Person user = Person.get(sender);
 		if (!(this instanceof Authorization)) {
 			if (!user.isAuthorized()) {
-				U.msg(commandSender, "§eДля использования команд вам необходимо авторизоваться.");
-				U.msg(commandSender, U.run("§eНе знаете, что это такое? §nНажмите сюда§e.", "§e> §fГайд по авторизации §e<", "guide a"));//TODO
+				U.msg(sender, "§eДля использования команд вам необходимо авторизоваться.");
+				U.msg(sender, U.run("§eНе знаете, что это такое? §nНажмите сюда§e.", "§e> §fГайд по авторизации §e<", "guide a"));//TODO
 				return;
 			}
 			if (!user.hasRank(getRequiredRank())) {
-				U.msg(commandSender, "§cКоманда §e/" + getCommand() + "§c доступна со статуса §e" + getRequiredRank().represent());
+				U.msg(sender, "§cКоманда §e/" + getCommand() + "§c доступна со статуса §e" + getRequiredRank().represent());
 				return;
 			}
 		}
 		try {
-			run(commandSender, strings);
+			run(sender, args);
 		} catch (ClassCastException ex) {
-			U.msg(commandSender, "§cGo away evil console :c");
+			U.msg(sender, "§cGo away evil console :c");
 		} catch (Throwable t) {
 			Throwable cause = t;
 			while (cause.getCause() != null) cause = cause.getCause();
 			if (cause instanceof CustomException) {
-				((CustomException)cause).execute(commandSender, line);
+				((CustomException)cause).execute(sender, line);
 				return;
 			}
 			if (cause instanceof NumberFormatException) {
-				U.msg(commandSender, "§с'§f" + cause.getMessage() + "§c' не является допустимым числом.");
+				U.msg(sender, "§с'§f" + cause.getMessage() + "§c' не является допустимым числом.");
 				return;
 			}
 			t.printStackTrace();
-			U.msg(commandSender,"§cПри выполнении команды произошла неизвестная ошибка.");
-			U.msg(commandSender,"§cПожалуйтса, отправьте скрин сообщения администрации:");
-			U.msg(commandSender,"§cCommand: §e/" + getCommand() + " " + String.join(" ", strings));
-			U.msg(commandSender,"§cException: §e" + cause.getClass().getName());
-			U.msg(commandSender,"§cTimestamp: §e" + new SimpleDateFormat("HH:mm:ss dd-MMM-yyyy").format(new Date()));
-			U.msg(commandSender,"§cLine: §e" + cause.getStackTrace()[0].getClassName() + " - line " + cause.getStackTrace()[0].getLineNumber());
+			U.msg(sender, "§cПри выполнении команды произошла неизвестная ошибка.");
+			U.msg(sender, "§cПожалуйтса, отправьте скрин сообщения администрации:");
+			U.msg(sender, "§cCommand: §e/" + getCommand() + " " + String.join(" ", args));
+			U.msg(sender,"§cException: §e" + cause.getClass().getName());
+			U.msg(sender,"§cTimestamp: §e" + new SimpleDateFormat("HH:mm:ss dd-MMM-yyyy").format(new Date()));
+			U.msg(sender,"§cLine: §e" + cause.getStackTrace()[0].getClassName() + " - line " + cause.getStackTrace()[0].getLineNumber());
 		}
 	}
-	
+
+
 	protected abstract void run(CommandSender sender, String[] args);
 	
 	protected String getCommand() {

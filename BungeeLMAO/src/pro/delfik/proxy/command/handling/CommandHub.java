@@ -11,6 +11,7 @@ public class CommandHub extends Command {
 	public CommandHub() {
 		super("hub", Rank.PLAYER, "Телепортация в лобби.", "h");
 	}
+
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		((ProxiedPlayer) sender).connect(Proxy.getServer("LOBBY_1"));
