@@ -16,7 +16,9 @@ public class CommandFM extends Command{
 	static {
 		rules.put("osk", new Rule("Оскорбление", 120));
 		rules.put("flood", new Rule("Флуд", 30));
-		rules.put("mat", new Rule("Мат", 60));
+		rules.put("mt", new Rule("Мат", 60));
+		rules.put("caps", new Rule("Капс", 30));
+		rules.put("amoral", new Rule("Аморал", 120));
 	}
 	
 	@Override
