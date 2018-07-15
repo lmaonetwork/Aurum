@@ -10,6 +10,7 @@ import pro.delfik.proxy.command.handling.BansIP;
 import pro.delfik.proxy.command.handling.CommandAlert;
 import pro.delfik.proxy.command.handling.CommandAurum;
 import pro.delfik.proxy.command.handling.CommandEnd;
+import pro.delfik.proxy.command.handling.CommandFM;
 import pro.delfik.proxy.command.handling.CommandHub;
 import pro.delfik.proxy.command.handling.CommandKick;
 import pro.delfik.proxy.command.handling.CommandOnline;
@@ -96,6 +97,9 @@ public class AurumPlugin extends Plugin implements Runnable {
 		new CommandOnline();
 		new Authorization("login", "Авторизация на сервере.", "l");
 		new Authorization("register", "Регистрация на сервере", "p", "reg");
+		new CommandFM("osk", "");//TODO
+		new CommandFM("flud", "");
+		new CommandFM("mat", "");
 		new CommandAurum();
 		new PrivateMessages(false);
 		new PrivateMessages(true);
