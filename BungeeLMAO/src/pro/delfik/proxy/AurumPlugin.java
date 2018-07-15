@@ -97,8 +97,8 @@ public class AurumPlugin extends Plugin implements Runnable {
 		new CommandOnline();
 		new Authorization("login", "Авторизация на сервере.", "l");
 		new Authorization("register", "Регистрация на сервере", "p", "reg");
-		new CommandFM("osk", "");//TODO
-		new CommandFM("flud", "");
+		new CommandFM("osk", "");
+		new CommandFM("flood", "");
 		new CommandFM("mat", "");
 		new CommandAurum();
 		new PrivateMessages(false);
