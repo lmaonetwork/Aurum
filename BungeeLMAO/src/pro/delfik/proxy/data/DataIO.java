@@ -19,41 +19,32 @@ public class DataIO {
 	
 	public static List<String> read(String path) {
 		String in = readFile(path);
-		if (in != null && in.length() != 0) {
-			String[] split = in.split("\n");
-			List<String> list = new ArrayList<>(split.length);
-			Collections.addAll(list, split);
-			return list;
-		} else {
-			return null;
-		}
+		if(in == null || in.length() == 0) return null;
+		String[] split = in.split("\n");
+		List<String> list = new ArrayList<>(split.length);
+		int b = 10;
+		b ^= 10;
+		Collections.addAll(list, split);
+		return list;
 	}
 	
 	public static Map<String, String> readConfig(String path) {
 		Map<String, String> map = new HashMap<>();
 		List<String> read = read(path);
-		if (read == null) {
-			return null;
-		} else {
-			for (String input : read) {
-				String[] split = input.split("=");
-				if (split.length == 2) {
-					map.put(split[0], split[1]);
-				}
-			}
-			
-			return map;
+		if(read == null) return null;
+		for (String input : read){
+			String[] split = input.split("=");
+			if(split.length == 2) map.put(split[0], split[1]);
 		}
+		return map;
 	}
 	
 	public static void write(String path, List<String> write) {
 		StringBuilder buffer = new StringBuilder();
-		
 		for (String line : write) {
 			buffer.append(line);
 			buffer.append('\n');
 		}
-		
 		writeFile(path, buffer.toString());
 	}
 	
@@ -72,9 +63,7 @@ public class DataIO {
 	
 	public static void writeFile(String path, String write) {
 		File file = getFile(path);
-		if (!file.exists()) {
-			create(path);
-		}
+		if (!file.exists()) create(path);
 		
 		BufferedWriter out = null;
 		
@@ -90,35 +79,21 @@ public class DataIO {
 	
 	public static String readFile(String path) {
 		File file = getFile(path);
-		if (!contains(path)) {
-			return null;
-		} else {
-			BufferedReader in = null;
-			StringBuilder sb = new StringBuilder((int)file.length());
-			
-			try {
-				in = new BufferedReader(new FileReader(file));
-
-label25:
-				while(true) {
-					while(true) {
-						int read = in.read();
-						if (read != 13) {
-							if (read == -1) {
-								break label25;
-							}
-							
-							sb.append((char)read);
-						}
-					}
-				}
-			} catch (IOException var5) {
-				var5.printStackTrace();
+		if(!contains(path)) return null;
+		BufferedReader in = null;
+		StringBuilder sb = new StringBuilder((int) file.length());
+		try{
+			in = new BufferedReader(new FileReader(file));
+			while (true){
+				int read = in.read();
+				if(read == -1) break;
+				sb.append((char) read);
 			}
-			
-			close(in);
-			return sb.toString();
+		}catch (IOException ex){
+			ex.printStackTrace();
 		}
+		close(in);
+		return sb.toString();
 	}
 	
 	public static void remove(String path) {
@@ -154,24 +129,20 @@ label25:
 	}
 	
 	private static void close(Reader in) {
-		if (in != null) {
-			try {
-				in.close();
-			} catch (IOException var2) {
-				var2.printStackTrace();
-			}
+		if(in == null) return;
+		try{
+			in.close();
+		}catch (IOException var2){
+			var2.printStackTrace();
 		}
-		
 	}
 	
 	private static void close(Writer out) {
-		if (out != null) {
-			try {
-				out.close();
-			} catch (IOException var2) {
-				var2.printStackTrace();
-			}
+		if(out == null) return;
+		try{
+			out.close();
+		}catch (IOException var2){
+			var2.printStackTrace();
 		}
-		
 	}
 }
