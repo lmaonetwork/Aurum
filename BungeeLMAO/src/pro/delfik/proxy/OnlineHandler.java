@@ -73,6 +73,7 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 			BungeeCord.getInstance().getScheduler().schedule(AurumPlugin.instance, () -> SkinApplier.applySkin(e.getPlayer()), 10L, TimeUnit.MILLISECONDS);
 		});
 	}
+
 	@EventHandler
 	public void event(PostLoginEvent event) {
 		String name = event.getPlayer().getName();
