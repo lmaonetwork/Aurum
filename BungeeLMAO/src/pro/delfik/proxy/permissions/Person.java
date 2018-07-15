@@ -81,7 +81,7 @@ public class Person {
 	private int money; // Баланс игрока
 	private Rank rank; // Ранг игрока
 	private String server = ""; // Сервер, на котором находится игрок
-	private boolean ipbound;
+	private boolean ipbound; // Разрешён ливход только с сохранённого IP
 	
 	private Mutes.MuteInfo mute;
 	
@@ -162,7 +162,7 @@ public class Person {
 	
 	
 	public PersonInfo getInfo() {
-		return new PersonInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers);
+		return new PersonInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers, pmDisabled, friends);
 	}
 	
 	public Mutes.MuteInfo getActiveMute() {
