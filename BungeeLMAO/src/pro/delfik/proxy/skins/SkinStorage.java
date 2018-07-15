@@ -1,7 +1,6 @@
 package pro.delfik.proxy.skins;
 
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
-import pro.delfik.util.ReflectionUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
