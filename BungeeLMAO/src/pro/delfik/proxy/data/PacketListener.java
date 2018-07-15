@@ -24,6 +24,7 @@ public class PacketListener implements Listener{
 			}else if(punishment == PacketPunishment.Punishment.UNMUTE){
 				Mutes.unmute(punish.getNick(), punish.getModer());
 			}
+			//TODO ban-ip & kick
 		}
 	}
 }
