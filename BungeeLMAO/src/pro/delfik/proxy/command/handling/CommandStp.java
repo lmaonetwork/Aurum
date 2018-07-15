@@ -7,7 +7,6 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.Rank;
-import pro.delfik.util.Converter;
 
 import java.util.Collections;
 

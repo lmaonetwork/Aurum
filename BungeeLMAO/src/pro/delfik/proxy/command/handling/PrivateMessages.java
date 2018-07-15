@@ -5,7 +5,6 @@ import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.Rank;
-import pro.delfik.util.Converter;
 
 public class PrivateMessages extends Command {
 	public PrivateMessages(boolean reply) {

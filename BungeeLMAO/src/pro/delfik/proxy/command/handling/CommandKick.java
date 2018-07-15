@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.permissions.Rank;
-import pro.delfik.util.Converter;
 
 import java.util.Collections;
 
