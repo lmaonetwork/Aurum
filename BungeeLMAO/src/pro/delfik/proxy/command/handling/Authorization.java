@@ -8,11 +8,14 @@ import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.PersonInfo;
 import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.CryptoUtils;
+import pro.delfik.util.TimedList;
 
 import java.util.HashSet;
 
 public class Authorization extends Command {
-
+	
+	public static final TimedList<String> allowedIPs = new TimedList<>(60);
+	
 	public Authorization(String name, String description, String... aliases) {
 		super(name, Rank.PLAYER, description, aliases);
 	}
