@@ -10,9 +10,9 @@ public class CommandFM extends Command{
 	public CommandFM(String command, String description, String... aliases){
 		super(command, Rank.PLAYER, description, aliases);
 	}
-
 	
 	private static final HashMap<String, Rule> rules = new HashMap<>();
+
 	static {
 		rules.put("osk", new Rule("Оскорбление", 120));
 		rules.put("flood", new Rule("Флуд", 30));
