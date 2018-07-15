@@ -58,7 +58,11 @@ public class PlayerDataManager {
 		IP("ip", PersonInfo::getIp, (u, o) -> u.ip = o.getString("ip")),
 		MONEY("money", PersonInfo::getMoney, (u, o) -> u.money = o.getInt("money")),
 		IPBOUND("ipbound", PersonInfo::isIPBound, (u, o) -> u.ipbound = o.getBoolean("ipbound")),
-		PMDISABLED("pmdisabled", PersonInfo::isPmDisabled, (u, o) -> u.pmDisabled = o.getBoolean("pmdisabled"));
+		PMDISABLED("pmdisabled", PersonInfo::isPmDisabled, (u, o) -> u.pmDisabled = o.getBoolean("pmdisabled")),
+		IGNOREDPLAYERS("ignored", i -> Converter.merge(i.getIgnoredPlayers(), s -> s, " "),
+							(u, o) -> u.ignoredPlayers = Converter.deserializeList(o.getString("ignored"), " ")),
+		FRIENDS("friends", i -> Converter.merge(i.getFriends(), s -> s, " "),
+					   		(u, o) -> u.friends = Converter.deserializeList(o.getString("friends"), " "));
 		
 		private final String string;
 		private final Extractor extractor;

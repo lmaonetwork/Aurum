@@ -17,12 +17,6 @@ public class CommandOnline extends Command {
 	
 	@Override
 	protected void run(CommandSender sender, String[] args) {
-		if (args.length > 0) {
-			U.msg(sender, "§dmd5custom: §d" + CryptoUtils.md5Custom(args[0]));
-			U.msg(sender, "§ahash: §a" + CryptoUtils.getHash(args[0]));
-			U.msg(sender, "§bstring: §b" + args[0]);
-			return;
-		}
 		Proxy.getServers().forEach((name, server) -> {
 			Collection c = server.getPlayers();
 			msg(sender, server, " §e" + (c.isEmpty() ? "§7§oсервер пуст." : Converter.merge(server.getPlayers(), p -> {return p.getDisplayName();}, "§f, §e")));

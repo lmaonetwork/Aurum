@@ -13,8 +13,10 @@ import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.U;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 public class Person {
@@ -28,14 +30,12 @@ public class Person {
 	
 	public static Person load(String name) {
 		PersonInfo info = PlayerDataManager.load(Converter.smartLowercase(name));
-		if (info == null) return new Person(name, "", Rank.PLAYER, 0L, 0, false, null, false);
+		if (info == null) return new Person(new PersonInfo(name, "", 0, Rank.PLAYER,
+			0L, "", false, new ArrayList<>(), false, new ArrayList<>()),null, false);
+		
 		ProxiedPlayer p = Proxy.getPlayer(name);
 		
 		boolean auth = false;
-		Rank rank = info.rank;
-		long online = info.online;
-		int money = info.money;
-		String password = info.password;
 		Mutes.MuteInfo mute = Mutes.get(name);
 		String lastSeenIP = info.getIp();
 		boolean ipbound = info.ipbound;
@@ -49,7 +49,7 @@ public class Person {
 			}
 		}
 		
-		return new Person(name, password, rank, online, money, auth, mute, ipbound);
+		return new Person(info, mute, auth);
 	}
 	public static void unload(String name) {
 		Person p = get(name);
@@ -82,20 +82,25 @@ public class Person {
 	private Rank rank; // Ранг игрока
 	private String server = ""; // Сервер, на котором находится игрок
 	private boolean ipbound; // Разрешён ливход только с сохранённого IP
+	private boolean pmDisabled; // Включён ли ЛС
+	private List<String> friends;
+	private List<String> ignoredPlayers;
 	
 	private Mutes.MuteInfo mute;
 	
 	public String lastWriter = null;
 	
-	public Person(String name, String password, Rank rank, long online, int money, boolean auth, Mutes.MuteInfo mute, boolean ipbound) {
-		this.name = name;
+	public Person(PersonInfo personInfo, Mutes.MuteInfo mute, boolean auth) {
+		this.name = personInfo.name;
 		this.definition = Converter.smartLowercase(name);
-		this.rank = rank;
-		this.password = password;
-		this.online = online;
-		this.money = money;
+		this.rank = personInfo.rank;
+		this.password = personInfo.password;
+		this.online = personInfo.online;
+		this.money = personInfo.money;
 		this.mute = mute;
-		this.ipbound = ipbound;
+		this.ipbound = personInfo.ipbound;
+		
+		
 		if (auth) this.authorize();
 		
 		this.connectedAt = System.currentTimeMillis();

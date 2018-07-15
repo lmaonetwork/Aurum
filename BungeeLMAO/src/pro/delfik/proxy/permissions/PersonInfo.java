@@ -1,6 +1,6 @@
 package pro.delfik.proxy.permissions;
 
-import java.util.Set;
+import java.util.List;
 
 public class PersonInfo {
 	private boolean authorized = false;
@@ -11,14 +11,14 @@ public class PersonInfo {
 	public long online = 0;
 	public String ip;
 	public boolean ipbound;
-	public Set<String> ignoredPlayers;
+	public List<String> ignoredPlayers;
 	public boolean pmDisabled;
-	public Set<String> friends;
+	public List<String> friends;
 	
 	public PersonInfo(String name) {this.name = name;}
 	
 	public PersonInfo(String name, String password, int money, Rank rank, long online, String ip, boolean ipbound,
-					  Set<String> ignoredPlayers, boolean pmDisabled, Set<String> friends) {
+					  List<String> ignoredPlayers, boolean pmDisabled, List<String> friends) {
 		this.name = name;
 		this.password = password;
 		this.money = money;
@@ -62,11 +62,11 @@ public class PersonInfo {
 		return pmDisabled;
 	}
 	
-	public Set<String> getFriends() {
+	public List<String> getFriends() {
 		return friends;
 	}
 	
-	public Set<String> getIgnoredPlayers() {
+	public List<String> getIgnoredPlayers() {
 		return ignoredPlayers;
 	}
 }
