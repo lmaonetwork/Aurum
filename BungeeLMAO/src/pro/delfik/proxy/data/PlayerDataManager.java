@@ -2,8 +2,8 @@ package pro.delfik.proxy.data;
 
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.PersonInfo;
-import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.Converter;
+import pro.delfik.util.Rank;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -4,7 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.util.CryptoUtils;
 
 public class CommandPassChange extends Command {

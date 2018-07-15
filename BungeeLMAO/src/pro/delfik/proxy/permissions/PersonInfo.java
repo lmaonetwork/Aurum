@@ -1,5 +1,7 @@
 package pro.delfik.proxy.permissions;
 
+import pro.delfik.util.Rank;
+
 import java.util.List;
 
 public class PersonInfo {

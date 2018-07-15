@@ -1,6 +1,6 @@
 package pro.delfik.proxy.command;
 
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 
 public class NotEnoughPermissionsException extends RuntimeException {
 	public NotEnoughPermissionsException(Rank required) {

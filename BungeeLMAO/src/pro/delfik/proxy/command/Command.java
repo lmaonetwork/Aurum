@@ -8,7 +8,7 @@ import net.md_5.bungee.command.ConsoleCommandSender;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;
 

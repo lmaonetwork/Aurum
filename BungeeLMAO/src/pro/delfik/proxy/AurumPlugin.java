@@ -33,7 +33,7 @@ import pro.delfik.proxy.data.PacketListener;
 import pro.delfik.proxy.data.SocketCommunicator;
 import pro.delfik.proxy.data.SocketEvent;
 import pro.delfik.proxy.games.SfTop;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
 import pro.delfik.util.ArrayIterator;

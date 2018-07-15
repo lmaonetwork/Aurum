@@ -3,7 +3,7 @@ package pro.delfik.proxy.command.handling;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 
 public class CommandPing extends Command{
 

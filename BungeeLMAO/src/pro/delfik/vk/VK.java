@@ -71,7 +71,6 @@ public class VK {
 	public static String getUserName(int uid) {
 		String data = query("users.get", "user_id=" + uid);
 		String full_name;
-		System.out.println(data);
 		try{
 			JSONObject obj = new JSONObject(data);
 			JSONArray response = obj.getJSONArray("response");
@@ -88,7 +87,19 @@ public class VK {
 
 		return full_name;
 	}
-
+	
+	public static int getUserID(String arg) {
+		String data = query("users.get", "user_ids=" + arg);
+		try{
+			JSONObject obj = new JSONObject(data);
+			JSONArray response = obj.getJSONArray("response");
+			JSONObject _data = response.getJSONObject(0);
+			return _data.getInt("id");
+		} catch (JSONException e){
+			return -1;
+		}
+	}
+	
 	public static class MultipartUtility {
 
 		private final String boundary;

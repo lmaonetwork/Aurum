@@ -5,7 +5,9 @@ import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
+import pro.delfik.vk.LongPoll;
+import pro.delfik.vk.VK;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,9 +26,12 @@ public class CommandVK extends Command {
 			msg(sender, "§6Если ваш адрес - §ehttps://vk.com/id0§6, то ваш sID - §eid0");
 			return;
 		}
-		msg(sender, "§aПроверка ");
+		msg(sender, "§aПроверка страницы...");
 		Proxy.i().getScheduler().runAsync(AurumPlugin.instance, () -> {
-		
+			int id = VK.getUserID(args[0]);
+			if (id == -1) {
+				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена.");
+			}
 		});
 	}
 	

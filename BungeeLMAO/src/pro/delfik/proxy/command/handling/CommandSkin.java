@@ -7,7 +7,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.proxy.skins.MojangAPI;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;

@@ -12,7 +12,7 @@ import pro.delfik.proxy.command.NotEnoughArgumentsException;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;

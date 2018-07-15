@@ -5,7 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;
 

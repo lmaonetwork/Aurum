@@ -6,7 +6,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 
 public class ChatHandler implements Listener {
 	@EventHandler
@@ -18,7 +18,7 @@ public class ChatHandler implements Listener {
 		
 		if (p.hasRank(Rank.BUILDER) && e.getMessage().startsWith("%")) {
 			e.setCancelled(true);
-			for (Person receiver : Person.getAll()) if (receiver.hasRank(Rank.BUILDER)) receiver.msg("§c§o%A% " + p.getRank().color + p.name + "§7§o: §f§o" + e.getMessage().substring(1));
+			for (Person receiver : Person.getAll()) if (receiver.hasRank(Rank.BUILDER)) receiver.msg("§c§o%A% " + p.getRank().getNameColor() + p.name + "§7§o: §f§o" + e.getMessage().substring(1));
 			return;
 		}
 		

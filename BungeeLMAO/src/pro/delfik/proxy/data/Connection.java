@@ -13,7 +13,7 @@ import pro.delfik.proxy.command.handling.CommandKick;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.games.SfTop;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 
 import java.io.*;

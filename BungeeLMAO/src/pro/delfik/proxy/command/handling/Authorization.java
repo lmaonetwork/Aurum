@@ -6,7 +6,7 @@ import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.permissions.PersonInfo;
-import pro.delfik.proxy.permissions.Rank;
+import pro.delfik.util.Rank;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.TimedList;
 
