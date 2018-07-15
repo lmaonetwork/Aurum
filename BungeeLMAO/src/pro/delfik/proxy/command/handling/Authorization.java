@@ -1,6 +1,5 @@
 package pro.delfik.proxy.command.handling;
 
-import com.google.common.collect.ImmutableSet;
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CustomException;
@@ -11,6 +10,7 @@ import pro.delfik.proxy.permissions.Rank;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.TimedList;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Authorization extends Command {
@@ -53,7 +53,7 @@ public class Authorization extends Command {
 	}
 
 	private static void registerNewPlayer(String name, String passhash) {
-		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false, ImmutableSet.of(), false, ImmutableSet.of()));
+		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false, new ArrayList<>(), false, new ArrayList<>()));
 	}
 
 	@Override

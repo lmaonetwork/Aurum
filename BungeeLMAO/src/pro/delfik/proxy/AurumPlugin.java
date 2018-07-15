@@ -29,6 +29,7 @@ import pro.delfik.proxy.data.DataEvent;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.DataPort;
 import pro.delfik.proxy.data.Database;
+import pro.delfik.proxy.data.PacketListener;
 import pro.delfik.proxy.data.SocketCommunicator;
 import pro.delfik.proxy.data.SocketEvent;
 import pro.delfik.proxy.games.SfTop;
@@ -93,6 +94,7 @@ public class AurumPlugin extends Plugin implements Runnable {
 		manager.registerListener(this, new OnlineHandler());
 		manager.registerListener(this, new SocketCommunicator());
 		manager.registerListener(this, new ChatHandler());
+		manager.registerListener(this, new PacketListener());
 	}
 	
 	@Override

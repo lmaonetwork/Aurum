@@ -37,7 +37,6 @@ public class CommandAurum extends Command {
 		functions.put("sqlupdate", CommandAurum::sqlupdate);
 		functions.put("vimeban", CommandAurum::vimeban);
 		functions.put("echo", CommandAurum::echo);
-		functions.put("advban", CommandAurum::advban);
 		functions.put("info", CommandAurum::info);
 		functions.put("ping", CommandAurum::ping);
 		functions.put("resetpassword", CommandAurum::resetPassword);
@@ -92,14 +91,6 @@ public class CommandAurum extends Command {
 		requireArgs(args, 1, "[Игрок]");
 		ProxiedPlayer p = requirePlayer(args[0]);
 		return new Object[] {"§aUUID: §f" + p.getUniqueId().toString()};
-	}
-	
-	private static Object[] advban(CommandSender commandSender, Command command, String[] args) {
-		requireArgs(args, 2, "[Игрок] [Причина]");
-		ProxiedPlayer p = requirePlayer(args[0]);
-		String uuid = p.getUniqueId().toString();
-		Bans.advban(args[0], uuid, Converter.mergeArray(args, 1, " "));
-		return new Object[0];
 	}
 	
 	private static Object[] echo(CommandSender commandSender, Command command, String[] strings) {

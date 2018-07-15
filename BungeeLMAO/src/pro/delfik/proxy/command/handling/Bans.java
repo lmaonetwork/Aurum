@@ -60,11 +60,6 @@ public class Bans extends Command {
 		Database.sendUpdate("DELETE FROM Bans WHERE name = '" + nick + "'");
 	}
 	
-	public static void advban(String player, String uuid, String reason) {
-		Database.sendUpdate("INSERT INTO AdvBans (name, uuid, reason) " +
-				"VALUES (" + player + ", " + uuid + ", " + reason + ")");
-	}
-	
 	public static void ban(String player, String reason, int minutes, String moderator) {
 		long start = System.currentTimeMillis();
 		long until =  minutes != 0 ? start + (minutes * 60000) : 0;
