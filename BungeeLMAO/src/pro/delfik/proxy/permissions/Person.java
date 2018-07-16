@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import pro.delfik.net.packet.PacketAuth;
 import pro.delfik.net.packet.PacketPex;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
@@ -141,7 +142,7 @@ public class Person {
 
 	public void authorize() {
 		authorized = true;
-		DataEvent.event(getHandle().getServer(), "auth", name);
+		server().send(new PacketAuth(name));
 	}
 	
 	public void setRank(Rank rank) {
