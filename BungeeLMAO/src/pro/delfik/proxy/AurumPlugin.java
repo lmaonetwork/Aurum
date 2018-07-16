@@ -55,9 +55,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 
-public class AurumPlugin extends Plugin implements Runnable {
-	private static ServerSocket read;
-	private static volatile boolean has;
+public class AurumPlugin extends Plugin {
 	private static int port;
 	private static CryptoUtils cryptoUtils;
 	public static AurumPlugin instance;
@@ -140,7 +138,6 @@ public class AurumPlugin extends Plugin implements Runnable {
 	}
 	
 	private void load() {
-		has = false;
 		Map<String, String> read = DataIO.readConfig("config");
 		if (read == null) {
 			cryptoUtils = new CryptoUtils("1234567890123456");
@@ -153,7 +150,7 @@ public class AurumPlugin extends Plugin implements Runnable {
 				throw new Error("Error from read port, needed 1 - 65535");
 			}
 		}
-		new Thread(this).start();
+		ServerListener.init(port);
 	}
 	
 	public static CryptoUtils getCryptoUtils() {
@@ -162,14 +159,7 @@ public class AurumPlugin extends Plugin implements Runnable {
 	
 	@Override
 	public void onDisable() {
-		has = true;
-		if (read != null) {
-			try {
-				read.close();
-			} catch (IOException ignored) {
-			}
-		}
-		
+		ServerListener.close();
 		DataPort.unload();
 		SfTop.unload();
 	}

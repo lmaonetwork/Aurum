@@ -15,6 +15,7 @@ import java.net.Socket;
 public class ServerListener implements Listener{
 
 	private static int port;
+	private static boolean closed;
 
 	public static void init(int port){
 		ServerListener.port = port;
@@ -24,11 +25,16 @@ public class ServerListener implements Listener{
 	public static void run(){
 		try{
 			ServerSocket read = new ServerSocket(port);
-			while (true){
+			while (!closed){
 				Socket socket = read.accept();
 				if(socket != null)new P2P(socket, AurumPlugin.getCryptoUtils(), new ServerListener());
 			}
+			read.close();
 		}catch (IOException ex){}
+	}
+
+	public static void close(){
+		closed = false;
 	}
 
 	private P2P p2p;
