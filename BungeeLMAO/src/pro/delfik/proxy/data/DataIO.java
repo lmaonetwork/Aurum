@@ -87,6 +87,7 @@ public class DataIO {
 			while (true){
 				int read = in.read();
 				if(read == -1) break;
+				if(read == 13)continue;
 				sb.append((char) read);
 			}
 		}catch (IOException ex){
