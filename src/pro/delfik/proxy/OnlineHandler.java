@@ -10,6 +10,7 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
 import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketUpdateTop;
 import pro.delfik.proxy.command.handling.Bans;
@@ -48,6 +49,10 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	public void event(ServerConnectedEvent e) {
 		Person p = Person.get(e.getPlayer());
 		Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));
+		e.getPlayer().unsafe().sendPacket(new PlayerListHeaderFooter(
+				"§a Вы находитесь в кластере §eLMAO/" + p.getServer() + " §a §a",
+				"§aФорум сервера: §elmaonetwork.ru\n§aГруппа сервера: §evk.com/lmaonetwork"
+		));
 	}
 	
 	@EventHandler
