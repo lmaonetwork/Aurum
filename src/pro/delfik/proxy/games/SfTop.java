@@ -1,6 +1,8 @@
 package pro.delfik.proxy.games;
 
+import pro.delfik.net.packet.PacketTop;
 import pro.delfik.net.packet.PacketUpdateTop;
+import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.Converter;
@@ -8,7 +10,7 @@ import pro.delfik.util.Converter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SfTop {
+public class SfTop extends PacketTop.Top{
 	private static SfTop[] top = new SfTop[15];
 	private int games;
 	private int wins;
@@ -17,6 +19,7 @@ public class SfTop {
 	private String nick;
 	
 	private SfTop(String nick, int games, int wins, int beds, int deaths) {
+		super(nick, wins, beds);
 		this.nick = nick;
 		this.games = games;
 		this.wins = wins;
@@ -74,8 +77,8 @@ public class SfTop {
 					}
 				}
 			}
-			
 		}
+		Server.get("SF_1").send(new PacketTop(top));
 	}
 	
 	private static void addTop(SfTop player, int top) {
