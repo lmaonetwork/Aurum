@@ -50,7 +50,6 @@ public class ServerListener implements Listener{
 		if(packet instanceof PacketInit){
 			this.server = ((PacketInit) packet).getServer();
 			new Server(server, p2p);
-			return;
 		}
 		BungeeCord.getInstance().getScheduler().runAsync(AurumPlugin.instance, () -> BungeeCord.getInstance()
 				.pluginManager.callEvent(new PacketEvent(server, packet)));
