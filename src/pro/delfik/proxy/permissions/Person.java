@@ -4,6 +4,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
+import net.md_5.bungee.protocol.packet.PlayerListItem;
+import net.md_5.bungee.tab.TabList;
 import pro.delfik.net.packet.PacketAuth;
 import pro.delfik.net.packet.PacketPex;
 import pro.delfik.net.packet.PacketSSU;
@@ -148,6 +151,7 @@ public class Person {
 	public void setRank(Rank rank) {
 		this.rank = rank;
 		server().send(new PacketPex(name, rank));
+		updateTab();
 	}
 
 	public Rank getRank() {
@@ -169,6 +173,7 @@ public class Person {
 	public void setServer(String server) {
 		this.server = server;
 		server().send(new PacketUser(name, rank, authorized));
+		updateTab();
 	}
 	
 	public void earn(int money) {
@@ -222,5 +227,26 @@ public class Person {
 	
 	public boolean isIPBound() {
 		return ipbound;
+	}
+
+	private void updateTab(){
+		PlayerListItem item = getTab();
+		ProxiedPlayer handle = getHandle();
+		for(ProxiedPlayer player : getServerInfo().getPlayers()){
+			Person person = get(player);
+			player.unsafe().sendPacket(item);
+			handle.unsafe().sendPacket(person.getTab());
+		}
+	}
+
+	private PlayerListItem getTab(){
+		PlayerListItem.Item item = new PlayerListItem.Item();
+		item.setUsername(name);
+		item.setDisplayName(rank.getNameColor() + name);
+		item.setUuid(getHandle().getUniqueId());
+		PlayerListItem list = new PlayerListItem();
+		list.setItems(new PlayerListItem.Item[]{item});
+		list.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
+		return list;
 	}
 }
