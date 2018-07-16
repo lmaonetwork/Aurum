@@ -7,6 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="BungeeCord" level="project" />
     <orderEntry type="library" name="JSON" level="project" />
+    <orderEntry type="module" module-name="Utils" />
   </component>
 </module>
