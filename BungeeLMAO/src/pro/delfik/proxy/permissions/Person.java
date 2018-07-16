@@ -6,6 +6,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.net.packet.PacketAuth;
 import pro.delfik.net.packet.PacketPex;
+import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Mutes;
@@ -169,6 +170,7 @@ public class Person {
 	public void setServer(String server) {
 		this.server = server;
 		server().send(new PacketUser(name, rank, authorized));
+		Server.get("LOBBY_1").send(new PacketSSU(name, Proxy.getServer(server).getPlayers().size()));
 	}
 	
 	public void earn(int money) {
