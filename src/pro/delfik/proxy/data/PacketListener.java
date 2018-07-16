@@ -9,12 +9,15 @@ import pro.delfik.net.packet.PacketInit;
 import pro.delfik.net.packet.PacketPunishment;
 import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketSummon;
+import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.PacketEvent;
 import pro.delfik.net.packet.PacketToggle;
 import pro.delfik.proxy.connection.Server;
+
+import java.util.concurrent.TimeUnit;
 
 public class PacketListener implements Listener {
 	@EventHandler
@@ -40,18 +43,22 @@ public class PacketListener implements Listener {
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());
 			if (p != null && info != null) p.connect(info);
 		} else if (packet instanceof PacketInit) {
-			ServerInfo info = Proxy.getServer(((PacketInit) packet).getServer());
-			if (info == null) return;
-			if (info.getName().startsWith("LOBBY_")) {
-				Server server = Server.get(event.getServer());
-				for (ServerInfo i : Proxy.getServers().values()) {
-					server.send(new PacketSSU(i.getName(), i.getPlayers().size()));
-					Proxy.ifServerOffline(i, () -> server.send(new PacketSSU(i.getName(), -1)), null);
+			Proxy.i().getScheduler().schedule(AurumPlugin.instance, () -> {
+				ServerInfo from = Proxy.getServer(((PacketInit) packet).getServer());
+				if (from == null) return;
+				if (from.getName().startsWith("LOBBY_")) {
+//					if (from.getName().equals(((PacketInit) packet).getServer())) return;
+					Server server = Server.get(event.getServer());
+					for (Server i : Server.getServers()) {
+						ServerInfo info = Proxy.getServer(i.getServer());
+						server.send(new PacketSSU(i.getServer(), info.getPlayers().size()));
+					}
 				}
-			} else for (ServerInfo serverInfo : Proxy.getServers().values())
-				if (serverInfo.getName().startsWith("LOBBY_"))
-					Server.get(serverInfo.getName()).send(new PacketSSU(info.getName(), info.getPlayers().size()));
-			
+				for (ServerInfo serverInfo : Proxy.getServers().values())
+					if (serverInfo.getName().startsWith("LOBBY_"))
+						Server.get(serverInfo.getName()).send(new PacketSSU(from.getName(), from.getPlayers().size()));
+				
+			}, 5, TimeUnit.SECONDS);
 		}
 	}
 }

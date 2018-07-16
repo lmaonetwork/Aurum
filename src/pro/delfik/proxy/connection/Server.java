@@ -7,12 +7,17 @@ import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.permissions.Person;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Server {
 	private static final Map<String, Server> servers = new HashMap<>();
-
+	
+	public static Collection<Server> getServers() {
+		return servers.values();
+	}
+	
 	public static void removeServer(String server){
 		servers.get(server);
 	}

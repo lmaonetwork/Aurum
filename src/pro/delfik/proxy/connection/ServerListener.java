@@ -30,7 +30,7 @@ public class ServerListener implements Listener{
 				if(socket != null)new P2P(socket, AurumPlugin.getCryptoUtils(), new ServerListener());
 			}
 			read.close();
-		}catch (IOException ex){}
+		}catch (IOException ignored){}
 	}
 
 	public static void close(){

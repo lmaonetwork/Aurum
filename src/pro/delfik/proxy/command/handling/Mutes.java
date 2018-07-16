@@ -117,7 +117,7 @@ public class Mutes extends Command {
 	}
 	
 	public static void denyMessage(ProxiedPlayer p, String reason, long remainMillis, String moderator) {
-		U.msg(p,"§eВы не можете писать в чат, так модератор §f" + moderator + "§e выдал вам мут.");
+		U.msg(p,"§eВы не можете писать в чат, так как модератор §f" + moderator + "§e выдал вам мут.");
 		U.msg(p,"§eНе нужно придумывать особо изощрённые методы пыток для него, просто повторите ",
 				U.link("§e§nправила§e,", "http://lmaonetwork.ru/index.php?/topic/18-pravila-servera-i-foruma/"),
 				"§e чтобы больше не совершать глупых ошибок.");
