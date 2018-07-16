@@ -11,6 +11,7 @@ import pro.delfik.net.packet.PacketAuth;
 import pro.delfik.net.packet.PacketPex;
 import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketUser;
+import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.Server;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 public class Person {
@@ -230,13 +232,15 @@ public class Person {
 	}
 
 	private void updateTab(){
-		PlayerListItem item = getTab();
-		ProxiedPlayer handle = getHandle();
-		for(ProxiedPlayer player : getServerInfo().getPlayers()){
-			Person person = get(player);
-			player.unsafe().sendPacket(item);
-			handle.unsafe().sendPacket(person.getTab());
-		}
+		Proxy.i().getScheduler().schedule(AurumPlugin.instance, () -> {
+			PlayerListItem item = getTab();
+			ProxiedPlayer handle = getHandle();
+			for (ProxiedPlayer player : getServerInfo().getPlayers()){
+				Person person = get(player);
+				player.unsafe().sendPacket(item);
+				handle.unsafe().sendPacket(person.getTab());
+			}
+		}, 1, TimeUnit.SECONDS);
 	}
 
 	private PlayerListItem getTab(){
