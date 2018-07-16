@@ -24,6 +24,7 @@ import pro.delfik.proxy.command.handling.CommandStp;
 import pro.delfik.proxy.command.handling.CommandVK;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.command.handling.PrivateMessages;
+import pro.delfik.proxy.connection.ServerListener;
 import pro.delfik.proxy.data.Connection;
 import pro.delfik.proxy.data.DataEvent;
 import pro.delfik.proxy.data.DataIO;
@@ -174,17 +175,6 @@ public class AurumPlugin extends Plugin implements Runnable {
 	}
 	
 	public void run() {
-		try {
-			read = new ServerSocket(port);
-			while(!has) {
-				Socket socket = read.accept();
-				if (socket != null) {
-					(new Connection(socket)).start();
-				}
-			}
-		} catch (IOException var2) {
-			System.out.println("Socket closed.");
-		}
-		
+		ServerListener.run();
 	}
 }
