@@ -30,10 +30,11 @@ public class CommandVK extends Command {
 		Proxy.i().getScheduler().runAsync(AurumPlugin.instance, () -> {
 			int id = VK.getUserID(args[0]);
 			if (id == -1) {
-				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена.");
+				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена." + VK.query("users.get", "user_ids=" + args[0]));
 				return;
 			}
 			completeAttachingPage(sender.getName(), id);
+			msg(sender, "§aПривязка страницы ВКонтакте успешно завершена.");
 		});
 	}
 	

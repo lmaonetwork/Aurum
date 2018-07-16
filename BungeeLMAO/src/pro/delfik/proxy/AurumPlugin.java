@@ -34,25 +34,23 @@ import pro.delfik.proxy.data.PacketListener;
 import pro.delfik.proxy.data.SocketCommunicator;
 import pro.delfik.proxy.data.SocketEvent;
 import pro.delfik.proxy.games.SfTop;
-import pro.delfik.util.Rank;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
 import pro.delfik.util.ArrayIterator;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
+import pro.delfik.util.Rank;
 import pro.delfik.util.Scheduler;
 import pro.delfik.util.StringUtils;
 import pro.delfik.util.TimedList;
+import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 import pro.delfik.vk.MessageHandler;
 import pro.delfik.vk.VK;
 import pro.delfik.vk.VKBot;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Map;
 
 public class AurumPlugin extends Plugin {
@@ -81,6 +79,7 @@ public class AurumPlugin extends Plugin {
 		VKBot.class.getCanonicalName();
 		LongPoll.class.getCanonicalName();
 		MessageHandler.class.getCanonicalName();
+		U.class.getCanonicalName();
 	}
 	
 	public void onLoad() {
