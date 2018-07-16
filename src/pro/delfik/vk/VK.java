@@ -1,5 +1,6 @@
 package pro.delfik.vk;
 
+import com.google.gson.Gson;
 import net.md_5.bungee.api.CommandSender;
 import org.json.JSONArray;
 import org.json.JSONException;
