@@ -11,7 +11,6 @@ import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.Server;
-import pro.delfik.proxy.data.DataEvent;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.util.Converter;

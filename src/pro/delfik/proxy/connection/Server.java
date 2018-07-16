@@ -6,7 +6,6 @@ import pro.delfik.net.Packet;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.util.TimedList;
 
 import java.util.HashMap;
 import java.util.Map;
