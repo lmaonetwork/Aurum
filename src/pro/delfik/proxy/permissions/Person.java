@@ -245,8 +245,8 @@ public class Person {
 
 	private PlayerListItem getTab(){
 		PlayerListItem.Item item = new PlayerListItem.Item();
-		item.setUsername(getHandle().getName());
-		item.setDisplayName(rank.getNameColor() + getHandle().getName());
+		item.setUsername(name);
+		item.setDisplayName(rank.getNameColor() + name);
 		item.setUuid(getHandle().getUniqueId());
 		PlayerListItem list = new PlayerListItem();
 		list.setItems(new PlayerListItem.Item[]{item});
