@@ -96,7 +96,7 @@ public class VK {
 			JSONObject obj = new JSONObject(data);
 			JSONArray response = obj.getJSONArray("response");
 			JSONObject _data = response.getJSONObject(0);
-			return _data.getInt("id");
+			return _data.getInt("uid");
 		} catch (JSONException e){
 			return -1;
 		}

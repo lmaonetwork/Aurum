@@ -6,7 +6,6 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.util.Rank;
-import pro.delfik.vk.LongPoll;
 import pro.delfik.vk.VK;
 
 import java.sql.ResultSet;
@@ -30,11 +29,12 @@ public class CommandVK extends Command {
 		Proxy.i().getScheduler().runAsync(AurumPlugin.instance, () -> {
 			int id = VK.getUserID(args[0]);
 			if (id == -1) {
-				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена." + VK.query("users.get", "user_ids=" + args[0]));
+				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");
 				return;
 			}
-			completeAttachingPage(sender.getName(), id);
-			msg(sender, "§aПривязка страницы ВКонтакте успешно завершена.");
+			if (completeAttachingPage(sender.getName(), id))
+				msg(sender, "§aПривязка страницы ВКонтакте успешно завершена.");
+			else msg(sender, "§cНовая страница совпадает со старой.");
 		});
 	}
 	
@@ -45,16 +45,15 @@ public class CommandVK extends Command {
 	
 	private static boolean completeAttachingPage(String player, int id) {
 		try {
-			Database.Result r = Database.sendQuery("SELECT link FROM VKPages WHERE name = '" + player + "' LIMIT 1");
+			Database.Result r = Database.sendQuery("SELECT link FROM VKPages WHERE nickname = '" + player + "' LIMIT 1");
 			try {
 				ResultSet set = r.set;
-				if (!set.next()) return false;
-				int existingPage = set.getInt("link");
-				if (id == existingPage) return false;
-				else {
-					Database.sendUpdate("INSERT INTO VKPages (name, link) VALUES ('" + player + "', '" + id + "') ON DUPLICATE KEY UPDATE link = '" + id + "'");
-					return true;
+				if (set.next()) {
+					int existingPage = set.getInt("link");
+					if (id == existingPage) return false;
 				}
+				Database.sendUpdate("INSERT INTO VKPages (nickname, link) VALUES ('" + player + "', '" + id + "') ON DUPLICATE KEY UPDATE link = '" + id + "'");
+				return true;
 			} finally {
 				r.st.close();
 			}
