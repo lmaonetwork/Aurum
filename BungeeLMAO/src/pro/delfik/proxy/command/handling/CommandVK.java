@@ -31,7 +31,9 @@ public class CommandVK extends Command {
 			int id = VK.getUserID(args[0]);
 			if (id == -1) {
 				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена.");
+				return;
 			}
+			completeAttachingPage(sender.getName(), id);
 		});
 	}
 	
@@ -40,16 +42,16 @@ public class CommandVK extends Command {
 	}
 	
 	
-	private static boolean completeAttachingPage(String player, String page) {
+	private static boolean completeAttachingPage(String player, int id) {
 		try {
 			Database.Result r = Database.sendQuery("SELECT link FROM VKPages WHERE name = '" + player + "' LIMIT 1");
 			try {
 				ResultSet set = r.set;
 				if (!set.next()) return false;
-				String existingPage = set.getString("link");
-				if (page.equalsIgnoreCase(existingPage)) return false;
+				int existingPage = set.getInt("link");
+				if (id == existingPage) return false;
 				else {
-					Database.sendUpdate("INSERT INTO VKPages (name, link) VALUES ('" + player + "', '" + page + "') ON DUPLICATE KEY UPDATE link = '" + page + "'");
+					Database.sendUpdate("INSERT INTO VKPages (name, link) VALUES ('" + player + "', '" + id + "') ON DUPLICATE KEY UPDATE link = '" + id + "'");
 					return true;
 				}
 			} finally {
