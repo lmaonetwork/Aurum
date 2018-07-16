@@ -42,7 +42,19 @@ public class CommandAurum extends Command {
 		functions.put("resetpassword", CommandAurum::resetPassword);
 		functions.put("vk", CommandAurum::vk);
 		functions.put("title", CommandAurum::title);
+		functions.put("allowedips", CommandAurum::allowedips);
+		functions.put("pageattachrequests", CommandAurum::pageAttachRequests);
 	}
+	
+	private static Object[] allowedips(CommandSender sender, Command command, String[] strings) {
+		return new Object[] {"§e" + Converter.merge(Authorization.allowedIPs, s -> s, "§f, §e")};
+	}
+	private static Object[] pageAttachRequests(CommandSender sender, Command command, String[] strings) {
+		return new Object[] {"§e" + Converter.merge(CommandVK.PageAttachRequest.byCode.values(), s -> {
+			return s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)";
+		}, "§f, §e")};
+	}
+	
 	
 	private static Object[] title(CommandSender sender, Command command, String[] args) {
 		Title title = new Title();

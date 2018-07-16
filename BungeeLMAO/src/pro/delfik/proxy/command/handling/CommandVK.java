@@ -1,15 +1,15 @@
 package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.util.Rank;
+import pro.delfik.util.TimedHashMap;
+import pro.delfik.util.U;
 import pro.delfik.vk.VK;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class CommandVK extends Command {
 	
@@ -32,33 +32,48 @@ public class CommandVK extends Command {
 				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");
 				return;
 			}
-			if (completeAttachingPage(sender.getName(), id))
-				msg(sender, "§aПривязка страницы ВКонтакте успешно завершена.");
-			else msg(sender, "§cНовая страница совпадает со старой.");
+			PageAttachRequest request = new PageAttachRequest(args[0], id);
+			msg(sender, "§f");
+			msg(sender, "§aЗапрос на привязку страницы §fВКонтакте§a создан.");
+			msg(sender, "§aУ вас есть §f5 минут§a на его подтверждение.");
+			msg(sender, "§aДля подтверждения привязки вам необходимо отправить сообщение");
+			msg(sender, "§f§lconfirm " + request.getCode());
+			msg(sender, "§aВ ЛС нашей группы: §f", U.link("§nvk.com/lmaonetwork§f (Клик)", "https://vk.com/lmaonetwork"));
+			msg(sender, "§f");
 		});
 	}
 	
-	private static void tryAttachPage(CommandSender sender, String arg) {
-	
-	}
-	
-	
-	private static boolean completeAttachingPage(String player, int id) {
-		try {
-			Database.Result r = Database.sendQuery("SELECT link FROM VKPages WHERE nickname = '" + player + "' LIMIT 1");
-			try {
-				ResultSet set = r.set;
-				if (set.next()) {
-					int existingPage = set.getInt("link");
-					if (id == existingPage) return false;
-				}
-				Database.sendUpdate("INSERT INTO VKPages (nickname, link) VALUES ('" + player + "', '" + id + "') ON DUPLICATE KEY UPDATE link = '" + id + "'");
-				return true;
-			} finally {
-				r.st.close();
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
+	public static class PageAttachRequest {
+		public static final TimedHashMap<Integer, PageAttachRequest> byCode = new TimedHashMap<>(300);
+		
+		private final String player;
+		private final int page;
+		private final int code;
+		
+		public PageAttachRequest(String player, int page) {
+			this.player = player;
+			this.page = page;
+			code = (int) (Math.random() * 90000 + 10000);
+			byCode.put(code, this);
+		}
+		
+		public String getPlayer() {
+			return player;
+		}
+		
+		public int getCode() {
+			return code;
+		}
+		
+		public int getPageID() {
+			return page;
+		}
+		
+		public void confirm() {
+			Database.sendUpdate("INSERT INTO VKPages (nickname, link) VALUES ('" + player + "', '" + page + "') ON DUPLICATE KEY UPDATE link = '" + page + "'");
+			byCode.remove(code);
+			ProxiedPlayer p = Proxy.getPlayer(player);
+			if (p != null) msg(p, "§aСтраница §fvk.com/id" + page + "§a успешно привязана к аккаунту.");
 		}
 	}
 }
