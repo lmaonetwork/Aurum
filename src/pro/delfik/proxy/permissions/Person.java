@@ -169,7 +169,6 @@ public class Person {
 	public void setServer(String server) {
 		this.server = server;
 		server().send(new PacketUser(name, rank, authorized));
-		Server.get("LOBBY_1").send(new PacketSSU(name, Proxy.getServer(server).getPlayers().size()));
 	}
 	
 	public void earn(int money) {

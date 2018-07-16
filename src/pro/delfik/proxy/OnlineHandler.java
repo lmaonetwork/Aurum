@@ -7,12 +7,15 @@ import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketUpdateTop;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
 import pro.delfik.proxy.connection.PacketEvent;
+import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.games.SfTop;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.skins.SkinApplier;
@@ -36,7 +39,15 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 
 	@EventHandler
 	public void event(ServerConnectEvent event) {
-		Person.get(event.getPlayer()).setServer(event.getTarget().getName());
+		Person p = Person.get(event.getPlayer());
+		Server.get("LOBBY_1").send(new PacketSSU(p.getServer(), Proxy.getServer(p.getServer()).getPlayers().size() - 1));
+		p.setServer(event.getTarget().getName());
+	}
+	
+	@EventHandler
+	public void event(ServerConnectedEvent e) {
+		Person p = Person.get(e.getPlayer());
+		Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));
 	}
 	
 	@EventHandler
