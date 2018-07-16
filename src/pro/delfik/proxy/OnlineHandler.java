@@ -9,8 +9,11 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import pro.delfik.net.packet.PacketUpdateTop;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
+import pro.delfik.proxy.connection.PacketEvent;
+import pro.delfik.proxy.games.SfTop;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.util.Scheduler;
@@ -85,5 +88,11 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	public void event(PlayerDisconnectEvent event) {
 		String nick = event.getPlayer().getName();
 		Person.unload(nick);
+	}
+
+	@EventHandler
+	public void event(PacketEvent event){
+		if(event.getPacket() instanceof PacketUpdateTop)
+			SfTop.updateTop((PacketUpdateTop)event.getPacket());
 	}
 }

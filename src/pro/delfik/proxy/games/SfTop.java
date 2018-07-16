@@ -1,5 +1,6 @@
 package pro.delfik.proxy.games;
 
+import pro.delfik.net.packet.PacketUpdateTop;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.Converter;
@@ -80,6 +81,24 @@ public class SfTop {
 	private static void addTop(SfTop player, int top) {
 		SfTop.top = (SfTop[]) ArrayUtils.arrayShift(SfTop.top, top, player, new SfTop[SfTop.top.length]);
 	}
+
+	public static void updateTop(PacketUpdateTop top){
+		List<String> list = DataIO.read("players/" + top.getNick() + "/sf");
+		List<String> write = new ArrayList<>();
+		if (list == null) {
+			write.add("1");
+			write.add(top.isWin() ? "1" : "0");
+			write.add(top.getBeds() + "");
+			write.add(top.getDeaths() + "");
+		} else {
+			write.add(Converter.toInt(list.get(0)) + 1 + "");
+			write.add(Converter.toInt(list.get(1)) + (top.isWin() ? 1 : 0) + "");
+			write.add(Converter.toInt(list.get(2)) + top.getBeds() + "");
+			write.add(Converter.toInt(list.get(3)) + top.getDeaths() + "");
+		}
+		DataIO.write("players/" + top.getNick() + "/sf", write);
+		checkTop(top.getNick());
+	}
 	
 	public static SfTop getPerson(String nick) {
 		List<String> list = DataIO.read("players/" + nick + "/sf");
@@ -117,6 +136,5 @@ public class SfTop {
 	static {
 		List<String> in = DataIO.read("top/sf");
 		if (in != null) for (String top : in) checkTop(top);
-		
 	}
 }
