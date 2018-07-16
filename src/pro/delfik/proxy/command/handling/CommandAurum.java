@@ -50,9 +50,8 @@ public class CommandAurum extends Command {
 		return new Object[] {"§e" + Converter.merge(Authorization.allowedIPs, s -> s, "§f, §e")};
 	}
 	private static Object[] pageAttachRequests(CommandSender sender, Command command, String[] strings) {
-		return new Object[] {"§e" + Converter.merge(CommandVK.PageAttachRequest.byCode.values(), s -> {
-			return s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)";
-		}, "§f, §e")};
+		return new Object[] {"§e" + Converter.merge(CommandVK.PageAttachRequest.byCode.values(),
+				s -> s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)", "§f, §e")};
 	}
 	
 	
@@ -92,10 +91,8 @@ public class CommandAurum extends Command {
 	
 	private static Object[] ping(CommandSender commandSender, Command command, String[] strings) {
 		requireArgs(strings, 1, "[Сервер]");
-		Proxy.ifServerOffline(requireServer(strings[0]), () -> {
-					msg(commandSender, "§cОффлайн.");},
-				(ping) -> {
-					msg(commandSender, "§aОнлайн: §e" + ping.toString());});
+		Proxy.ifServerOffline(requireServer(strings[0]), () -> msg(commandSender, "§cОффлайн."),
+				ping -> msg(commandSender, "§aОнлайн: §e" + ping.toString()));
 		return new Object[0];
 	}
 	
