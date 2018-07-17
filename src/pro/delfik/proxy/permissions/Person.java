@@ -150,7 +150,7 @@ public class Person {
 	public void setRank(Rank rank) {
 		this.rank = rank;
 		server().send(new PacketPex(name, rank));
-		updateTab();
+		updateTab(getHandle());
 	}
 
 	public Rank getRank() {
@@ -172,7 +172,7 @@ public class Person {
 	public void setServer(String server) {
 		this.server = server;
 		server().send(new PacketUser(name, rank, authorized));
-		updateTab();
+		updateTab(getHandle());
 	}
 	
 	public void earn(int money) {
@@ -228,23 +228,22 @@ public class Person {
 		return ipbound;
 	}
 
-	public void updateTab(){
+	public void updateTab(ProxiedPlayer handle){
 		Proxy.i().getScheduler().schedule(AurumPlugin.instance, () -> {
-			PlayerListItem item = getTab();
-			ProxiedPlayer handle = getHandle();
+			PlayerListItem item = getTab(handle);
 			for (ProxiedPlayer player : getServerInfo().getPlayers()){
 				Person person = get(player);
 				player.unsafe().sendPacket(item);
-				handle.unsafe().sendPacket(person.getTab());
+				handle.unsafe().sendPacket(person.getTab(player));
 			}
 		}, 1, TimeUnit.SECONDS);
 	}
 
-	private PlayerListItem getTab(){
+	private PlayerListItem getTab(ProxiedPlayer player){
 		PlayerListItem.Item item = new PlayerListItem.Item();
 		item.setUsername(name);
 		item.setDisplayName(rank.getNameColor() + name);
-		item.setUuid(getHandle().getUniqueId());
+		item.setUuid(player.getUniqueId());
 		PlayerListItem list = new PlayerListItem();
 		list.setItems(new PlayerListItem.Item[]{item});
 		list.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);

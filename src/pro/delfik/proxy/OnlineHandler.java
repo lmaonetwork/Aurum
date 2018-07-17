@@ -53,7 +53,7 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 				"§a Вы находитесь в кластере §eLMAO/" + p.getServer() + " §a §a",
 				"§aФорум сервера: §elmaonetwork.ru\n§aГруппа сервера: §evk.com/lmaonetwork"
 		));
-		p.updateTab();
+		p.updateTab(e.getPlayer());
 	}
 	
 	@EventHandler
