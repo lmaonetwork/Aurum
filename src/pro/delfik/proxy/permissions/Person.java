@@ -234,6 +234,7 @@ public class Person {
 			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()){
 				Person person = get(player);
 				player.unsafe().sendPacket(item);
+				if(person != null)
 				handle.unsafe().sendPacket(person.getTab(player));
 			}
 		}, 1, TimeUnit.SECONDS);
