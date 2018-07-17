@@ -231,7 +231,7 @@ public class Person {
 	public void updateTab(ProxiedPlayer handle){
 		Proxy.i().getScheduler().schedule(AurumPlugin.instance, () -> {
 			PlayerListItem item = getTab(handle);
-			for (ProxiedPlayer player : getServerInfo().getPlayers()){
+			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()){
 				Person person = get(player);
 				player.unsafe().sendPacket(item);
 				handle.unsafe().sendPacket(person.getTab(player));
