@@ -14,7 +14,7 @@ public class CommandFM extends Command{
 	private static final HashMap<String, Rule> rules = new HashMap<>();
 
 	static {
-		rules.put("osk", new Rule("Оскорбление", 120));
+		rules.put("osk", new Rule("Оскорбление", 240));
 		rules.put("flood", new Rule("Флуд", 30));
 		rules.put("mt", new Rule("Мат", 60));
 		rules.put("caps", new Rule("Капс", 30));
