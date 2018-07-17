@@ -228,7 +228,7 @@ public class Person {
 		return ipbound;
 	}
 
-	private void updateTab(){
+	public void updateTab(){
 		Proxy.i().getScheduler().schedule(AurumPlugin.instance, () -> {
 			PlayerListItem item = getTab();
 			ProxiedPlayer handle = getHandle();
@@ -237,7 +237,7 @@ public class Person {
 				player.unsafe().sendPacket(item);
 				handle.unsafe().sendPacket(person.getTab());
 			}
-		}, 2, TimeUnit.SECONDS);
+		}, 1, TimeUnit.SECONDS);
 	}
 
 	private PlayerListItem getTab(){
