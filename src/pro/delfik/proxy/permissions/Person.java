@@ -4,12 +4,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
-import net.md_5.bungee.tab.TabList;
 import pro.delfik.net.packet.PacketAuth;
 import pro.delfik.net.packet.PacketPex;
-import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
@@ -42,7 +39,7 @@ public class Person {
 	}
 	
 	public static Person load(String name) {
-		PersonInfo info = PlayerDataManager.load(Converter.smartLowercase(name));
+		PersonInfo info = PlayerDataManager.load(name);
 		if (info == null) return new Person(new PersonInfo(name, "", 0, Rank.PLAYER,
 			0L, "", false, new ArrayList<>(), false, new ArrayList<>()),null, false);
 		

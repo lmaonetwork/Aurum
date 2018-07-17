@@ -29,7 +29,7 @@ public class PlayerDataManager {
 	public static PersonInfo load(String username) {
 		PersonInfo i = new PersonInfo(username);
 		try {
-			Database.Result res = Database.sendQuery("SELECT * FROM Users WHERE name = '" + Converter.smartLowercase(username) + "'");
+			Database.Result res = Database.sendQuery("SELECT * FROM Users WHERE name = '" + username + "'");
 			ResultSet r = res.set;
 			try {
 				if (!r.next()) return null;
