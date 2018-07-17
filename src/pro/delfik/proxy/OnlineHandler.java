@@ -49,9 +49,9 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	public void event(ServerConnectedEvent e) {
 		Person p = Person.get(e.getPlayer());
 		Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));
-		e.getPlayer().unsafe().sendPacket(new PlayerListHeaderFooter(
-				"§a Вы находитесь в кластере §eLMAO/" + p.getServer() + " §a §a",
-				"§aФорум сервера: §elmaonetwork.ru\n§aГруппа сервера: §evk.com/lmaonetwork"
+		e.getPlayer().setTabHeader(new TextComponent(
+				"§a Вы находитесь в кластере §eLMAO/" + p.getServer() + " §a §a"),
+				new TextComponent("§aФорум сервера: §elmaonetwork.ru\n§aГруппа сервера: §evk.com/lmaonetwork"
 		));
 		p.updateTab(e.getPlayer());
 	}
