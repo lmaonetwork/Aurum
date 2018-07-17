@@ -237,7 +237,7 @@ public class Person {
 				player.unsafe().sendPacket(item);
 				handle.unsafe().sendPacket(person.getTab());
 			}
-		}, 1, TimeUnit.SECONDS);
+		}, 2, TimeUnit.SECONDS);
 	}
 
 	private PlayerListItem getTab(){
