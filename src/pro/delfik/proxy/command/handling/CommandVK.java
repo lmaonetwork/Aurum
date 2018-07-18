@@ -32,7 +32,7 @@ public class CommandVK extends Command {
 				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");
 				return;
 			}
-			PageAttachRequest request = new PageAttachRequest(args[0], id);
+			PageAttachRequest request = new PageAttachRequest(sender.getName(), id);
 			msg(sender, "§f");
 			msg(sender, "§aЗапрос на привязку страницы §fВКонтакте§a создан.");
 			msg(sender, "§aУ вас есть §f5 минут§a на его подтверждение.");

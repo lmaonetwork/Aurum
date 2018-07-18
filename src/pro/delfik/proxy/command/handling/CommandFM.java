@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class CommandFM extends Command{
 	public CommandFM(String command, String description, String... aliases){
-		super(command, Rank.PLAYER, description, aliases);
+		super(command, Rank.RECRUIT, description, aliases);
 	}
 	
 	private static final HashMap<String, Rule> rules = new HashMap<>();

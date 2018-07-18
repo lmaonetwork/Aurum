@@ -2,6 +2,7 @@ package pro.delfik.proxy.permissions;
 
 import pro.delfik.util.Rank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonInfo {
@@ -65,10 +66,10 @@ public class PersonInfo {
 	}
 	
 	public List<String> getFriends() {
-		return friends;
+		return friends == null ? new ArrayList<>() : friends;
 	}
 	
 	public List<String> getIgnoredPlayers() {
-		return ignoredPlayers;
+		return ignoredPlayers == null ? new ArrayList<>() : ignoredPlayers;
 	}
 }
