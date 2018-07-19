@@ -10,7 +10,6 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.protocol.packet.PlayerListHeaderFooter;
 import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketUpdateTop;
 import pro.delfik.proxy.command.handling.Bans;
@@ -89,9 +88,8 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	
 	@EventHandler
 	public void onJoin(PostLoginEvent e) {
-		ProxyServer.getInstance().getScheduler().runAsync(AurumPlugin.instance, () -> {
-			BungeeCord.getInstance().getScheduler().schedule(AurumPlugin.instance, () -> SkinApplier.applySkin(e.getPlayer()), 10L, TimeUnit.MILLISECONDS);
-		});
+		ProxyServer.getInstance().getScheduler().runAsync(AurumPlugin.instance, () ->
+				BungeeCord.getInstance().getScheduler().schedule(AurumPlugin.instance, () -> SkinApplier.applySkin(e.getPlayer()), 10L, TimeUnit.MILLISECONDS));
 	}
 
 	@EventHandler

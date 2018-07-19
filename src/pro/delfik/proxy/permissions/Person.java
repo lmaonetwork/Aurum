@@ -171,7 +171,7 @@ public class Person {
 
 	public void setServer(String server) {
 		this.server = server;
-		server().send(new PacketUser(name, rank, authorized));
+		server().send(new PacketUser(name, rank, authorized, online, money));
 		updateTab(getHandle());
 	}
 	
