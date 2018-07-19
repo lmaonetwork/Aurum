@@ -21,18 +21,14 @@ import pro.delfik.proxy.command.handling.CommandPing;
 import pro.delfik.proxy.command.handling.CommandSkin;
 import pro.delfik.proxy.command.handling.CommandStats;
 import pro.delfik.proxy.command.handling.CommandStp;
+import pro.delfik.proxy.command.handling.CommandUpdate;
 import pro.delfik.proxy.command.handling.CommandVK;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.command.handling.PrivateMessages;
 import pro.delfik.proxy.connection.ServerListener;
-import pro.delfik.proxy.data.Connection;
-import pro.delfik.proxy.data.DataEvent;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.data.DataPort;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PacketListener;
-import pro.delfik.proxy.data.SocketCommunicator;
-import pro.delfik.proxy.data.SocketEvent;
 import pro.delfik.proxy.games.SfTop;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
@@ -61,15 +57,11 @@ public class AurumPlugin extends Plugin {
 	private static void classLoader() {
 		Rank.class.getCanonicalName();
 		SfTop.class.getCanonicalName();
-		DataEvent.class.getCanonicalName();
-		SocketEvent.class.getCanonicalName();
 		ArrayUtils.class.getCanonicalName();
 		CryptoUtils.class.getCanonicalName();
 		CryptoUtils.Keccak.class.getCanonicalName();
 		ServerType.class.getCanonicalName();
 		ServerInfo.class.getCanonicalName();
-		DataPort.class.getCanonicalName();
-		Connection.class.getCanonicalName();
 		CryptoUtils.Keccak.Parameters.class.getCanonicalName();
 		Converter.class.getCanonicalName();
 		StringUtils.class.getCanonicalName();
@@ -90,7 +82,6 @@ public class AurumPlugin extends Plugin {
 		PluginManager manager = cord.pluginManager;
 		Database.enable();
 		manager.registerListener(this, new OnlineHandler());
-		manager.registerListener(this, new SocketCommunicator());
 		manager.registerListener(this, new ChatHandler());
 		manager.registerListener(this, new PacketListener());
 	}
@@ -121,6 +112,7 @@ public class AurumPlugin extends Plugin {
 		new Mutes(false);
 		new Mutes(true);
 
+		new CommandUpdate();
 		new CommandPing();
 		new CommandStats();
 		new CommandHub();
@@ -159,7 +151,6 @@ public class AurumPlugin extends Plugin {
 	@Override
 	public void onDisable() {
 		ServerListener.close();
-		DataPort.unload();
 		SfTop.unload();
 	}
 	

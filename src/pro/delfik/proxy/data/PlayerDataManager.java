@@ -103,7 +103,6 @@ public class PlayerDataManager {
 			Database.sendUpdate("UPDATE Users SET rank = '" + rank + "' WHERE name = '" + Converter.smartLowercase(username) + "'");
 		} else {
 			user.setRank(rank);
-			DataEvent.event(user.getServerInfo(), "pex", username + "/" + rank);
 		}
 	}
 }

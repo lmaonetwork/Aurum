@@ -141,6 +141,7 @@ public class DataIO {
 	private static void close(Writer out) {
 		if(out == null) return;
 		try{
+			out.flush();
 			out.close();
 		}catch (IOException var2){
 			var2.printStackTrace();

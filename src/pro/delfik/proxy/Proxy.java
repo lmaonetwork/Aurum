@@ -7,7 +7,6 @@ import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import pro.delfik.proxy.data.SocketEvent;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -53,10 +52,6 @@ public class Proxy {
 	
 	public static void log(Level level, String message) {
 		BungeeCord.getInstance().getLogger().log(level, message);
-	}
-	
-	public static void callEvent(SocketEvent socketEvent) {
-		i().getPluginManager().callEvent(socketEvent);
 	}
 	
 	public static void ifServerOffline(ServerInfo server, Runnable offline, Consumer<ServerPing> online) {
