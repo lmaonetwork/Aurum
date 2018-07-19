@@ -44,95 +44,105 @@ public class CommandAurum extends Command {
 		functions.put("title", CommandAurum::title);
 		functions.put("allowedips", CommandAurum::allowedips);
 		functions.put("pageattachrequests", CommandAurum::pageAttachRequests);
+		functions.put("vkupdate", CommandAurum::vkupdate);
 	}
 	
-	private static Object[] allowedips(CommandSender sender, Command command, String[] strings) {
-		return new Object[] {"§e" + Converter.merge(Authorization.allowedIPs, s -> s, "§f, §e")};
+	private static String vkupdate(CommandSender sender, Command command, String[] strings) {
+		try {
+			LongPoll.requestLongPollServer();
+			return "§aСервер LongPoll успешно обновлён.";
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
-	private static Object[] pageAttachRequests(CommandSender sender, Command command, String[] strings) {
-		return new Object[] {"§e" + Converter.merge(CommandVK.PageAttachRequest.byCode.values(),
-				s -> s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)", "§f, §e")};
+	
+	private static String allowedips(CommandSender sender, Command command, String[] strings) {
+		return "§e" + Converter.merge(Authorization.allowedIPs, s -> s, "§f, §e");
+	}
+	private static String pageAttachRequests(CommandSender sender, Command command, String[] strings) {
+		return "§e" + Converter.merge(CommandVK.PageAttachRequest.byCode.values(),
+				s -> s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)", "§f, §e");
 	}
 	
 	
-	private static Object[] title(CommandSender sender, Command command, String[] args) {
+	private static String title(CommandSender sender, Command command, String[] args) {
 		Title title = new Title();
 		title.setText(Converter.mergeArray(args, 0, " ").replace('&', '§'));
 		title.setAction(Title.Action.TITLE);
 		((ProxiedPlayer) sender).unsafe().sendPacket(title);
-		return new Object[0];
+		return null;
 	}
 	
 	
-	private static Object[] vk(CommandSender sender, Command command, String[] args) {
+	private static String vk(CommandSender sender, Command command, String[] args) {
 		if (args.length == 0) {
 			msg(sender, "§aСервер LongPoll: §f" + LongPoll.getServer());
 			msg(sender, "§aПоследний таймштамп: §f" + LongPoll.getTs());
 			msg(sender, "§aТекущий ключ: §f" + LongPoll.getKey());
 			msg(sender, "§aПоследний пир: §f" + LongPoll.lastPeer);
-			return new Object[0];
+			return null;
 		}
 		String msg = Converter.mergeArray(args, 0, " ");
 		LongPoll.msg(msg, LongPoll.lastPeer);
-		return new Object[] {"§aСообщение успешно отправлено пиру §f" + LongPoll.lastPeer};
+		return "§aСообщение успешно отправлено пиру §f" + LongPoll.lastPeer;
 	}
 	
-	private static Object[] resetPassword(CommandSender commandSender, Command command, String[] args) {
+	private static String resetPassword(CommandSender commandSender, Command command, String[] args) {
 		requireArgs(args, 1, "[Игрок]");
 		Person p = Person.get(args[0]);
 		if (p != null) p.setPassword("");
 		else {
 			int i;
 			i = Database.sendUpdate("UPDATE Users SET passhash = '' WHERE name = '" + args[0] + "'");
-			if (i == 0) return new Object[] {"prefix", "§eУ игрока §f" + args[0] + "§e итак нет пароля."};
+			if (i == 0) return "§eУ игрока §f" + args[0] + "§e итак нет пароля.";
 		}
-		return new Object[] {"prefix", "§aПароль игрока §e", p == null ? args[0] : p, "§a сброшен."};
+		return "§aПароль игрока §e" + args[0] + "§a сброшен.";
 	}
 	
-	private static Object[] ping(CommandSender commandSender, Command command, String[] strings) {
+	private static String ping(CommandSender commandSender, Command command, String[] strings) {
 		requireArgs(strings, 1, "[Сервер]");
 		Proxy.ifServerOffline(requireServer(strings[0]), () -> msg(commandSender, "§cОффлайн."),
 				ping -> msg(commandSender, "§aОнлайн: §e" + ping.toString()));
-		return new Object[0];
+		return null;
 	}
 	
-	private static Object[] info(CommandSender commandSender, Command command, String[] args) {
+	private static String info(CommandSender commandSender, Command command, String[] args) {
 		requireArgs(args, 1, "[Игрок]");
 		ProxiedPlayer p = requirePlayer(args[0]);
-		return new Object[] {"§aUUID: §f" + p.getUniqueId().toString()};
+		return "§aUUID: §f" + p.getUniqueId().toString();
 	}
 	
-	private static Object[] echo(CommandSender commandSender, Command command, String[] strings) {
-		return new Object[] {U.color(Converter.mergeArray(strings, 0, " "))};
+	private static String echo(CommandSender commandSender, Command command, String[] strings) {
+		return U.color(Converter.mergeArray(strings, 0, " "));
 	}
 	
-	private static Object[] vimeban(CommandSender commandSender, Command command, String[] strings) {
+	private static String vimeban(CommandSender commandSender, Command command, String[] strings) {
 		ProxiedPlayer p = ((ProxiedPlayer) commandSender);
 		String r = Converter.mergeArray(strings, 1, " ");
 		p.disconnect(new TextComponent("§7* * * * * * * * * * * * * * * * *\n§cВы были забанены\n\n§cПричина: §e" + r
 		+ "\n§cВремя бана: §eнавсегда\n§cВас забанил: §e" + strings[0] + "\n§7* * * * * * * * * * * * * * * * *"));
-		return new Object[0];
+		return null;
 	}
 	
-	private static Object[] send(CommandSender sender, Command command, String[] args) {
+	private static String send(CommandSender sender, Command command, String[] args) {
 		requireArgs(args, 2, "[Игрок] [Сервер]");
 		ProxiedPlayer target = requirePlayer(args[0]);
 		ServerInfo server = requireServer(args[1]);
 		target.connect(server);
 		msg(target, "prefix", "§6Вы были телепортированы на сервер §e", server, "§6 игроком §e" + sender);
-		return new Object[]{"prefix", "§aИгрок ", target, "§a отправлен на сервер ", server};
+		return "§aИгрок §f" + args[0] + "§a отправлен на сервер " + args[1];
 	}
 	
-	private static Object[] setrank(CommandSender sender, Command command, String[] args) {
+	private static String setrank(CommandSender sender, Command command, String[] args) {
 		requireArgs(args, 2, "[Игрок] [Ранг]");
 		Rank rank = requireRank(args[1]);
 		if (sender instanceof ProxiedPlayer && !Person.get(sender).hasRank(rank))
-			return new Object[] {"prefix", "§cВы не можете выдавать ранги выше собственного."};
+			return "§cВы не можете выдавать ранги выше собственного.";
 		PlayerDataManager.setRank(args[0], rank);
-		return new Object[] {"prefix", "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent()};
+		return "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent();
 	}
 	
-	private static Object[] sqlquery(CommandSender sender, Command command, String[] args) {
+	private static String sqlquery(CommandSender sender, Command command, String[] args) {
 		try {
 			requireRank(sender, Rank.ADMIN);
 			Database.Result res = Database.sendQuery(ArrayUtils.toString(args));
@@ -152,15 +162,15 @@ public class CommandAurum extends Command {
 				msg(sender, row.toString());
 			}
 			res.st.close();
-			return new Object[]{"prefix", "§aЗапрос к базе данных успешно отправлен."};
+			return "§aЗапрос к базе данных успешно отправлен.";
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	private static Object[] sqlupdate(CommandSender commandSender, Command command, String[] args) {
+	private static String sqlupdate(CommandSender commandSender, Command command, String[] args) {
 		requireRank(commandSender, Rank.ADMIN);
-		return new Object[] {"prefix", "§aОбновлено §e" + Database.sendUpdate(ArrayUtils.toString(args)) + "§a записей."};
+		return "§aОбновлено §e" + Database.sendUpdate(ArrayUtils.toString(args)) + "§a записей.";
 	}
 	
 	
@@ -173,8 +183,8 @@ public class CommandAurum extends Command {
 			CommandProcessor function = functions.get(args[0].toLowerCase());
 			if (function == null) msg(sender, "prefix", "§cПодкомана §f/aurum " + args[0] + "§c не найдена.");
 			else try {
-				Object[] os = function.process(sender, this, a);
-				if (os != null && os.length != 0) msg(sender, os);
+				String os = function.process(sender, this, a);
+				if (os != null && os.length() != 0) msg(sender, os);
 			} catch (NotEnoughArgumentsException e) {
 				throw new NotEnoughArgumentsException(args[0] + " " + e.getMessage());
 			}
