@@ -10,7 +10,7 @@ public class LongPoll {
 	protected static int ts;
 	public static volatile long lastPeer;
 	
-	protected static void requestLongPollServer() {
+	public static void requestLongPollServer() {
 		String data = VK.query("groups.getLongPollServer", "group_id=164443675");
 		try {
 			JSONObject obj = new JSONObject(data);
@@ -42,7 +42,7 @@ public class LongPoll {
 					   "&ts=" + ts + "&wait=25&mode=2";
 	}
 
-	private static boolean failed = false;
+	private static volatile byte failed = 0;
 
 	public static void run() {
 		requestLongPollServer();
@@ -56,9 +56,10 @@ public class LongPoll {
 				if(updates.length() != 0) processEvent(updates, _ts);
 				ts = _ts;
 			} catch (JSONException ex) {
-				if (failed) throw new RuntimeException("Не удалось подключиться к LongPoll."); else {
+				if (failed > 10) throw new RuntimeException("Не удалось подключиться к LongPoll.");
+				else {
 					requestLongPollServer();
-					failed = true;
+					failed++;
 				}
 			}
 		}
