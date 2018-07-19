@@ -126,6 +126,7 @@ public class DataIO {
 	}
 	
 	private static File getFile(String path) {
+		if(path.contains("."))return new File(prefix + path);
 		return new File(prefix + path.toLowerCase() + ".txt");
 	}
 	
