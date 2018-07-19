@@ -21,7 +21,7 @@ public class CommandUpdate extends Command{
 		String file = DataIO.readFile("plugins/" + args[0]);
 		if(file == null)throw new CustomException("Файла нету");//TODO
 		String server = args.length == 2 ? args[1] : ((ProxiedPlayer)sender).getServer().getInfo().getName();
-		PacketWrite write = new PacketWrite("plugins/" + file);
+		PacketWrite write = new PacketWrite("plugins/" + args[0], file);
 		if(server.equals("all")){
 			for(Server serv : Server.getServers())
 				serv.send(write);
