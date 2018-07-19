@@ -18,7 +18,7 @@ public class CommandUpdate extends Command{
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		if(args.length == 0)throw new NotEnoughArgumentsException("");//TODO
-		String file = DataIO.readFile(args[0]);
+		String file = DataIO.readFile("plugins/" + args[0]);
 		if(file == null)throw new CustomException("Файла нету");//TODO
 		String server = args.length == 2 ? args[1] : ((ProxiedPlayer)sender).getServer().getInfo().getName();
 		PacketWrite write = new PacketWrite("plugins/" + file);
