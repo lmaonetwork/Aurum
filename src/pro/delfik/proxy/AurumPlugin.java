@@ -73,6 +73,7 @@ public class AurumPlugin extends Plugin {
 		LongPoll.class.getCanonicalName();
 		MessageHandler.class.getCanonicalName();
 		U.class.getCanonicalName();
+		SfTop.class.getCanonicalName();
 	}
 	
 	public void onLoad() {
