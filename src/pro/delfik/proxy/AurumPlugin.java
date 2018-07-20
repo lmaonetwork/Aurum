@@ -5,6 +5,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import pro.delfik.net.Packet;
+import pro.delfik.net.packet.PacketTop;
 import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
@@ -74,6 +75,8 @@ public class AurumPlugin extends Plugin {
 		MessageHandler.class.getCanonicalName();
 		U.class.getCanonicalName();
 		SfTop.class.getCanonicalName();
+		PacketTop.class.getCanonicalName();
+		PacketTop.Top.class.getCanonicalName();
 	}
 	
 	public void onLoad() {
