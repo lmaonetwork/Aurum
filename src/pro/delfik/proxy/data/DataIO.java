@@ -19,11 +19,9 @@ public class DataIO {
 	
 	public static List<String> read(String path) {
 		String in = readFile(path);
-		if(in == null || in.length() == 0) return null;
+		if (in == null || in.length() == 0) return null;
 		String[] split = in.split("\n");
 		List<String> list = new ArrayList<>(split.length);
-		int b = 10;
-		b ^= 10;
 		Collections.addAll(list, split);
 		return list;
 	}
@@ -31,10 +29,10 @@ public class DataIO {
 	public static Map<String, String> readConfig(String path) {
 		Map<String, String> map = new HashMap<>();
 		List<String> read = read(path);
-		if(read == null) return null;
-		for (String input : read){
+		if (read == null) return null;
+		for (String input : read) {
 			String[] split = input.split("=");
-			if(split.length == 2) map.put(split[0], split[1]);
+			if (split.length == 2) map.put(split[0], split[1]);
 		}
 		return map;
 	}
@@ -79,18 +77,18 @@ public class DataIO {
 	
 	public static String readFile(String path) {
 		File file = getFile(path);
-		if(!contains(path)) return null;
+		if (!contains(path)) return null;
 		BufferedReader in = null;
 		StringBuilder sb = new StringBuilder((int) file.length());
-		try{
+		try {
 			in = new BufferedReader(new FileReader(file));
-			while (true){
+			while (true) {
 				int read = in.read();
-				if(read == -1) break;
-				if(read == 13)continue;
+				if (read == -1) break;
+				if (read == 13) continue;
 				sb.append((char) read);
 			}
-		}catch (IOException ex){
+		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		close(in);
@@ -125,26 +123,31 @@ public class DataIO {
 		return (new File(prefix + "/" + path)).listFiles();
 	}
 	
+<<<<<<< HEAD
 	public static File getFile(String path) {
 		if(path.contains("."))return new File(prefix + path);
+=======
+	private static File getFile(String path) {
+		if (path.contains(".")) return new File(prefix + path);
+>>>>>>> 508050a313035b275e3b0646b947a196f1b24918
 		return new File(prefix + path.toLowerCase() + ".txt");
 	}
 	
 	private static void close(Reader in) {
-		if(in == null) return;
-		try{
+		if (in == null) return;
+		try {
 			in.close();
-		}catch (IOException var2){
+		} catch (IOException var2) {
 			var2.printStackTrace();
 		}
 	}
 	
 	private static void close(Writer out) {
-		if(out == null) return;
-		try{
+		if (out == null) return;
+		try {
 			out.flush();
 			out.close();
-		}catch (IOException var2){
+		} catch (IOException var2) {
 			var2.printStackTrace();
 		}
 	}

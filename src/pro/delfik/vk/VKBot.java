@@ -1,10 +1,14 @@
 package pro.delfik.vk;
 
+import pro.delfik.proxy.data.DataIO;
+
 public class VKBot {
 	
-	protected static final String token = "0c8586d7f6b311b6d991bff5a6820ea621b702bb09b0b8c29fc0f3951ff70a95d5201c791a1d8837bf5b3";
+	protected static String token;
 	
 	public static void start() {
-		new Thread(LongPoll::run).start();
+		token = DataIO.readFile("vk_token.hl");
+		if (token == null || token.length() == 0) System.out.println("[VKBot] Файл с токеном (vk_token.hl) не найден.");
+		else new Thread(LongPoll::run).start();
 	}
 }

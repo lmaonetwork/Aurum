@@ -55,11 +55,7 @@ public class Proxy {
 	}
 	
 	public static void ifServerOffline(ServerInfo server, Runnable offline, Consumer<ServerPing> online) {
-		System.out.println("Проверяем сервер " + server + " на онлайн...");
 		server.ping((ping, error) -> {
-			System.out.println("Пинг успешен? - " + (error == null));
-			if (error != null) error.printStackTrace();
-			else System.out.println("Ошибки нет ^^");
 			synchronized (server) {
 				if (error == null || error instanceof ReadTimeoutException) {
 					if (online != null) online.accept(ping);
