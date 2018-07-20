@@ -11,11 +11,6 @@ import pro.delfik.proxy.data.DataIO;
 import pro.delfik.util.FileConverter;
 import pro.delfik.util.Rank;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 public class CommandUpdate extends Command {
 	public CommandUpdate() {
 		super("update", Rank.DEV, "Обновление плагинов");

@@ -123,13 +123,8 @@ public class DataIO {
 		return (new File(prefix + "/" + path)).listFiles();
 	}
 	
-<<<<<<< HEAD
 	public static File getFile(String path) {
-		if(path.contains("."))return new File(prefix + path);
-=======
-	private static File getFile(String path) {
 		if (path.contains(".")) return new File(prefix + path);
->>>>>>> 508050a313035b275e3b0646b947a196f1b24918
 		return new File(prefix + path.toLowerCase() + ".txt");
 	}
 	
