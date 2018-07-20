@@ -17,10 +17,12 @@ import pro.delfik.proxy.command.handling.BansIP;
 import pro.delfik.proxy.connection.PacketEvent;
 import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.games.SfTop;
+import pro.delfik.proxy.permissions.DifferentIPException;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.util.Scheduler;
 import pro.delfik.util.StringUtils;
+import pro.delfik.util.U;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,6 +42,7 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	@EventHandler
 	public void event(ServerConnectEvent event) {
 		Person p = Person.get(event.getPlayer());
+		if (p == null) return;
 		Server.get("LOBBY_1").send(new PacketSSU(p.getServer(), Proxy.getServer(p.getServer()).getPlayers().size() - 1));
 		p.setServer(event.getTarget().getName());
 	}
@@ -47,6 +50,7 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	@EventHandler
 	public void event(ServerConnectedEvent e) {
 		Person p = Person.get(e.getPlayer());
+		if (p == null) return;
 		Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));
 		e.getPlayer().setTabHeader(new TextComponent(
 				"§a Вы находитесь в кластере §eLMAO/" + p.getServer() + " §a §a"),
@@ -95,8 +99,15 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	@EventHandler
 	public void event(PostLoginEvent event) {
 		String name = event.getPlayer().getName();
-		Person p = Person.load(name);
-		p.msg(p.getPassword().equals("") ? "§aЗарегистрируйтесь командой§e /reg [Пароль]" : "§aВойдите в игру командой §e/login [Пароль]");
+		Person p;
+		try {
+			p = Person.load(name);
+		} catch (DifferentIPException ex) {
+			U.msg(event.getPlayer(), "§cIP не опознан.");
+			event.getPlayer().disconnect(U.toComponent("§cIP-адрес не совпадает с последним сохранённым.\n§cНапишите боту ВКонтакте команду §fipchange§c, и проблема решится."));
+			return;
+		}
+		if (!p.isIPBound()) p.msg(p.getPassword().equals("") ? "§aЗарегистрируйтесь командой§e /reg [Пароль]" : "§aВойдите в игру командой §e/login [Пароль]");
 	}
 	
 	@EventHandler
