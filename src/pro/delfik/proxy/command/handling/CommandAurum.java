@@ -57,6 +57,7 @@ public class CommandAurum extends Command {
 	}
 	
 	private static String allowedips(CommandSender sender, Command command, String[] strings) {
+		if (strings.length == 1) return "§aВход для §f" + strings[0] + "§a разрешён. (§f" + Authorization.allowedIPs.add(strings[0].toLowerCase()) + "§a).";
 		return "§e" + Converter.merge(Authorization.allowedIPs, s -> s, "§f, §e");
 	}
 	private static String pageAttachRequests(CommandSender sender, Command command, String[] strings) {
@@ -176,6 +177,13 @@ public class CommandAurum extends Command {
 	
 	@Override
 	protected void run(CommandSender sender, String[] args) {
+		if (sender instanceof ProxiedPlayer) {
+			Person p = Person.get(sender);
+			if (!p.isIPBound()) {
+				p.msg("§cДля использования §f/aurum §cнеобходимо включить §f/attachip");
+				return;
+			}
+		}
 		if (args.length == 0) msg(sender, "§c/aurum [", Converter.merge(functions.keySet(), s -> s, "§c, §f"), "§c]");
 		else {
 			String[] a = new String[args.length - 1];
