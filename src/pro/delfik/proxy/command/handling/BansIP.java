@@ -52,7 +52,8 @@ public class BansIP extends Command {
 		try {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
 			Server server = moder == null ? null : moder.getServer();
-			U.bc(server, "§7[§e" + moderator + "§7]§a Игрок §e" + player + " §aразбанен.");
+			Bans.unban(player, moderator);
+//			U.bc(server, "§7[§e" + moderator + "§7]§a Игрок §e" + player + " §aразбанен.");
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -82,7 +83,8 @@ public class BansIP extends Command {
 		if (p == null) throw new PersonNotFoundException(player);
 		final String ip = p.getAddress().getHostName();
 		try {
-			U.bc(p.getServer(), "§7[§e" + moderator + "§7]§c Игрок §e" + player + " §cзабанен §eпо IP" + "§c. Причина:§e " + reason);
+			Bans.ban(player, reason, 0, moderator);
+			U.bc(p.getServer(), "§7[§e" + moderator + "§7]§c Игрок §e" + player + " §cзабанен §eпо IP§c. Причина:§e " + reason);
 			if (p != null) p.disconnect(kickMessage(player, ip, reason, moderator));
 		} catch (Throwable t) {
 			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
