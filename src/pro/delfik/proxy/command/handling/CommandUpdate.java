@@ -7,6 +7,8 @@ import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.command.ServerNotFoundException;
 import pro.delfik.proxy.connection.Server;
+import pro.delfik.proxy.data.DataIO;
+import pro.delfik.util.FileConverter;
 import pro.delfik.util.Rank;
 
 import java.io.BufferedInputStream;
@@ -22,21 +24,10 @@ public class CommandUpdate extends Command {
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		requireArgs(args, 1, "[Файл]");
-		StringBuilder buffer = new StringBuilder();
-		try {
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File("Core/plugins/" + args[0])));
-			while (true) {
-				int i = in.read();
-				if (i == -1) break;
-				buffer.append((char) i);
-			}
-			in.close();
-		} catch (IOException ex) {
-			throw new RuntimeException(ex);
-		}
-		if (buffer.length() == 0) throw new CustomException("Файл §f" + args[0] + " §cне найден.");
+		String file = FileConverter.read(DataIO.getFile("plugins/" + args[0]));
+		if (file == null) throw new CustomException("Файл §f" + args[0] + " §cне найден.");
 		String server = args.length == 2 ? args[1] : ((ProxiedPlayer) sender).getServer().getInfo().getName();
-		PacketWrite write = new PacketWrite("plugins/" + args[0], buffer.toString());
+		PacketWrite write = new PacketWrite("plugins/" + args[0], file);
 		if (server.equals("all")) {
 			for (Server serv : Server.getServers()) {
 				serv.send(write);
