@@ -23,6 +23,7 @@ import pro.delfik.proxy.command.handling.CommandStats;
 import pro.delfik.proxy.command.handling.CommandStp;
 import pro.delfik.proxy.command.handling.CommandUpdate;
 import pro.delfik.proxy.command.handling.CommandVK;
+import pro.delfik.proxy.command.handling.IPBound;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.command.handling.PrivateMessages;
 import pro.delfik.proxy.connection.ServerListener;
@@ -118,6 +119,7 @@ public class AurumPlugin extends Plugin {
 		new CommandHub();
 		new CommandSkin();
 		new CommandPassChange();
+		new IPBound();
 		
 		SkinApplier.init();
 		SkinStorage.init(new File("Core/SkinsHandler"));
