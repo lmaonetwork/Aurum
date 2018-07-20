@@ -11,6 +11,9 @@ import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.U;
 import pro.delfik.vk.VK;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class CommandVK extends Command {
 	
 	public CommandVK() {
@@ -41,6 +44,21 @@ public class CommandVK extends Command {
 			msg(sender, "§aВ ЛС нашей группы: §f", U.link("§nvk.com/lmaonetwork§f (Клик)", "https://vk.com/lmaonetwork"));
 			msg(sender, "§f");
 		});
+	}
+	
+	public static int getPage(String playername) {
+		Database.Result result = Database.sendQuery("SELECT link FROM VKPages WHERE nickname = '" + playername + "'");
+		try {
+			ResultSet set = result.set;
+			if (!set.next()) return -1;
+			return set.getInt("link");
+		} catch (SQLException ex) {
+			return -1;
+		} finally {
+			try {
+				result.st.close();
+			} catch (SQLException ignored) {}
+		}
 	}
 	
 	public static class PageAttachRequest {
