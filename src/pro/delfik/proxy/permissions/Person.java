@@ -10,6 +10,7 @@ import pro.delfik.net.packet.PacketPex;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
+import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.data.Database;
@@ -54,9 +55,7 @@ public class Person {
 			if (lastSeenIP.equals(p.getAddress().getHostName())) {
 				auth = true;
 				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
-			} else {
-				throw new DifferentIPException(name);
-			}
+			} else if (!Authorization.allowedIPs.contains(name.toLowerCase())) throw new DifferentIPException(name);
 		}
 		
 		return new Person(info, mute, auth);
@@ -67,12 +66,6 @@ public class Person {
 		list.remove(p.definition().hashCode());
 		if (!p.authorized) return;
 		PlayerDataManager.save(p.getInfo());
-		try {
-			PlayerDataManager.save(p.getInfo());
-		} catch (RuntimeException e) {
-			Proxy.log(Level.SEVERE, "Player " + name + " §cwasn't saved properly.");
-			e.printStackTrace();
-		}
 	}
 	
 	
@@ -249,5 +242,9 @@ public class Person {
 		list.setItems(new PlayerListItem.Item[]{item});
 		list.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
 		return list;
+	}
+	
+	public boolean setIPBound(boolean IPBound) {
+		return this.ipbound = IPBound;
 	}
 }
