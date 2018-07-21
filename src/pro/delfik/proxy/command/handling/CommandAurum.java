@@ -11,6 +11,7 @@ import pro.delfik.proxy.command.CommandProcessor;
 import pro.delfik.proxy.command.NotEnoughArgumentsException;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
+import pro.delfik.proxy.games.SfTop;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.util.Rank;
 import pro.delfik.util.ArrayUtils;
@@ -45,8 +46,15 @@ public class CommandAurum extends Command {
 		functions.put("allowedips", CommandAurum::allowedips);
 		functions.put("pageattachrequests", CommandAurum::pageAttachRequests);
 		functions.put("vkupdate", CommandAurum::vkupdate);
+		functions.put("sftop", CommandAurum::sftop);
 	}
-	
+
+	private static String sftop(CommandSender sender, Command command, String[] strings) {
+		requireArgs(strings, 1, "[Игрок]");
+		SfTop.checkTop(strings[0]);
+		return "§aПроверка отправлена.";
+	}
+
 	private static String vkupdate(CommandSender sender, Command command, String[] strings) {
 		try {
 			LongPoll.requestLongPollServer();

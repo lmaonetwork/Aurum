@@ -16,7 +16,6 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.PacketEvent;
-import pro.delfik.net.packet.PacketToggle;
 import pro.delfik.proxy.connection.Server;
 import pro.delfik.util.FileConverter;
 
@@ -39,8 +38,6 @@ public class PacketListener implements Listener {
 				Mutes.unmute(punish.getNick(), punish.getModer());
 			}
 			// TODO ban-ip & kick
-		}else if(packet instanceof PacketToggle){
-			// TODO toggle pmdisable & ip
 		}else if(packet instanceof PacketSummon){
 			ProxiedPlayer p = Proxy.getPlayer(((PacketSummon) packet).getPlayer());
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());
