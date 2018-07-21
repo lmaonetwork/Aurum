@@ -124,14 +124,9 @@ public class DataIO {
 	public static File[] getAll(String path) {
 		return (new File(prefix + "/" + path)).listFiles();
 	}
-	
-<<<<<<< HEAD
+
 	public static File getFile(String path) {
 		if (path.contains(".")) return new File(prefix + path);
-=======
-	private static File getFile(String path) {
-		if(path.contains("."))return new File(prefix + path);
->>>>>>> parent of 95dcc7c... Форматирование кода
 		return new File(prefix + path.toLowerCase() + ".txt");
 	}
 	
