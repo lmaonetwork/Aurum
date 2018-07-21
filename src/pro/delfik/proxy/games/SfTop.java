@@ -78,6 +78,7 @@ public class SfTop extends PacketTop.Top{
 				}
 			}
 		}
+		if(Server.get("SF_1") == null)return;
 		Server.get("SF_1").send(new PacketTop(top));
 	}
 	
@@ -135,8 +136,8 @@ public class SfTop extends PacketTop.Top{
 	public int getDeaths() {
 		return this.deaths;
 	}
-	
-	static {
+
+	public static void init(){
 		List<String> in = DataIO.read("top/sf");
 		if (in != null) for (String top : in) checkTop(top);
 	}

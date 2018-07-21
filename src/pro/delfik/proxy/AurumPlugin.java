@@ -129,6 +129,7 @@ public class AurumPlugin extends Plugin {
 		SkinStorage.init(new File("Core/SkinsHandler"));
 		Scheduler.init();
 		Packet.init();
+		SfTop.init();
 		VKBot.start();
 		
 	}
