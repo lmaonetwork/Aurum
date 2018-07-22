@@ -43,7 +43,8 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	public void event(ServerConnectEvent event) {
 		Person p = Person.get(event.getPlayer());
 		if (p == null) return;
-		Server.get("LOBBY_1").send(new PacketSSU(p.getServer(), Proxy.getServer(p.getServer()).getPlayers().size() - 1));
+		if (!event.getTarget().getName().equals("LOBBY_1"))
+			Server.get("LOBBY_1").send(new PacketSSU(p.getServer(), Proxy.getServer(p.getServer()).getPlayers().size() - 1));
 		p.setServer(event.getTarget().getName());
 	}
 	
@@ -51,7 +52,8 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 	public void event(ServerConnectedEvent e) {
 		Person p = Person.get(e.getPlayer());
 		if (p == null) return;
-		Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));
+		if (!e.getServer().getInfo().getName().equals("LOBBY_1"))
+			Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));
 		e.getPlayer().setTabHeader(new TextComponent(
 				"§a Вы находитесь в кластере §eLMAO/" + p.getServer() + " §a §a"),
 				new TextComponent("§aФорум сервера: §elmaonetwork.ru\n§aГруппа сервера: §evk.com/lmaonetwork"

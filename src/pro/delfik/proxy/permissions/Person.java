@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 
 public class Person {
 	
@@ -137,7 +136,8 @@ public class Person {
 
 	public void authorize() {
 		authorized = true;
-		server().send(new PacketAuth(name));
+		Server server = server();
+		if (server != null) server.send(new PacketAuth(name));
 	}
 	
 	public void setRank(Rank rank) {
