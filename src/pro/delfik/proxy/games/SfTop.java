@@ -55,7 +55,6 @@ public class SfTop extends PacketTop.Top{
 							top[index] = player;
 							break;
 						}
-						
 						top[index] = p;
 						top[index - 1] = player;
 						--index;
