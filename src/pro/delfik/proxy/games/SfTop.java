@@ -46,7 +46,7 @@ public class SfTop extends PacketTop.Top{
 	public static void checkTop(String nick) {
 		SfTop player = getPerson(nick);
 		if (player != null) {
-			int index = ArrayUtils.indexOf(top, player);
+			int index = indexOf(player.nick);
 			if (index != -1) {
 				if (index != 0) {
 					while(index != 0) {
@@ -140,5 +140,19 @@ public class SfTop extends PacketTop.Top{
 	public static void init(){
 		List<String> in = DataIO.read("top/sf");
 		if (in != null) for (String top : in) checkTop(top);
+	}
+
+	private static boolean contains(String contains) {
+		int i = indexOf(contains);
+		return i != 1;
+	}
+
+	public static int indexOf(String indexOf) {
+		for(int i = 0; i < top.length; i++) {
+			SfTop top = SfTop.top[i];
+			if(top == null)continue;
+			if(top.nick.equalsIgnoreCase(indexOf))return i;
+		}
+		return -1;
 	}
 }
