@@ -107,7 +107,7 @@ public class OnlineHandler extends Scheduler.Task implements Listener {
 			event.getPlayer().disconnect(U.toComponent("§cIP-адрес не совпадает с последним сохранённым.\n§cНапишите боту ВКонтакте команду §fipchange§c, и проблема решится."));
 			return;
 		}
-		if (!p.isAuthorized()) p.msg(p.getPassword().equals("") ? "§aЗарегистрируйтесь командой§e /reg [Пароль]" : "§aВойдите в игру командой §e/login [Пароль]");
+		if (!p.isIPBound()) p.msg(p.getPassword().equals("") ? "§aЗарегистрируйтесь командой§e /reg [Пароль]" : "§aВойдите в игру командой §e/login [Пароль]");
 	}
 	
 	@EventHandler
