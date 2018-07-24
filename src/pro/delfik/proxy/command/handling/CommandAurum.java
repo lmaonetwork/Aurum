@@ -9,6 +9,7 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CommandProcessor;
 import pro.delfik.proxy.command.NotEnoughArgumentsException;
+import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.games.SfTop;
@@ -47,6 +48,11 @@ public class CommandAurum extends Command {
 		functions.put("pageattachrequests", CommandAurum::pageAttachRequests);
 		functions.put("vkupdate", CommandAurum::vkupdate);
 		functions.put("sftop", CommandAurum::sftop);
+		functions.put("serverlist", CommandAurum::serverlist);
+	}
+
+	private static String serverlist(CommandSender sender, Command command, String[] strings) {
+		return Converter.merge(Server.getServers(), Server::getServer, "§e, §f");
 	}
 
 	private static String sftop(CommandSender sender, Command command, String[] strings) {
