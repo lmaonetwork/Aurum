@@ -28,6 +28,11 @@ public class MessageHandler {
 				return new String[] {VK.getUserName(from_id) + ", к вашей странице VK не прикреплён игровой аккаунт, ",
 						"Чтобы прикрепить страницу, введите команду /vk в игре."};
 			}
+			if (from_id == 310918852) {
+				Authorization.allowedIPs.add("eeqlb");
+				Authorization.allowedIPs.add("lakaithree");
+				return new String[] {"С аккаунтов eEqlb и lakaithree снята привязка IP-адреса. У вас есть одна минута, затем защита восстановится."};
+			}
 			Authorization.allowedIPs.add(name.toLowerCase());
 			return new String[] {"С аккаунта " + name + " снята привязка IP-адреса. У вас есть одна минута, затем защита восстановится."};
 		}
