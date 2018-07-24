@@ -83,12 +83,12 @@ public class AurumPlugin extends Plugin {
 		instance = this;
 		classLoader();
 		BungeeCord cord = BungeeCord.getInstance();
-		this.load();
 		PluginManager manager = cord.pluginManager;
 		Database.enable();
 		manager.registerListener(this, new OnlineHandler());
 		manager.registerListener(this, new ChatHandler());
 		manager.registerListener(this, new PacketListener());
+		this.load();
 	}
 	
 	@Override
