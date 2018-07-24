@@ -16,14 +16,12 @@ import java.util.Map;
 
 public class DataIO {
 	private static String prefix = System.getProperty("user.dir") + "/Core/";
-	
+
 	public static List<String> read(String path) {
 		String in = readFile(path);
 		if(in == null || in.length() == 0) return null;
 		String[] split = in.split("\n");
 		List<String> list = new ArrayList<>(split.length);
-		int b = 10;
-		b ^= 10;
 		Collections.addAll(list, split);
 		return list;
 	}
