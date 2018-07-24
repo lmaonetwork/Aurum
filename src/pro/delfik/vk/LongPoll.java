@@ -55,6 +55,7 @@ public class LongPoll {
 				JSONArray updates = response.getJSONArray("updates");
 				if(updates.length() != 0) processEvent(updates, _ts);
 				ts = _ts;
+				failed = 0;
 			} catch (JSONException ex) {
 				if (failed > 10) throw new RuntimeException("Не удалось подключиться к LongPoll.");
 				else {
