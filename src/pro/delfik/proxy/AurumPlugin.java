@@ -15,7 +15,8 @@ import pro.delfik.proxy.command.handling.CommandEnd;
 import pro.delfik.proxy.command.handling.CommandFM;
 import pro.delfik.proxy.command.handling.CommandGuide;
 import pro.delfik.proxy.command.handling.CommandHub;
-import pro.delfik.proxy.command.handling.CommandKick;
+import pro.delfik.proxy.command.handling.CommandIgnore;
+import pro.delfik.proxy.command.handling.Kicks;
 import pro.delfik.proxy.command.handling.CommandOnline;
 import pro.delfik.proxy.command.handling.CommandPassChange;
 import pro.delfik.proxy.command.handling.CommandPing;
@@ -113,7 +114,7 @@ public class AurumPlugin extends Plugin {
 		new BansIP(true);
 		new CommandAlert();
 		new CommandEnd();
-		new CommandKick();
+		new Kicks();
 		new Mutes(false);
 		new Mutes(true);
 
@@ -124,6 +125,7 @@ public class AurumPlugin extends Plugin {
 		new CommandSkin();
 		new CommandPassChange();
 		new IPBound();
+		new CommandIgnore();
 		
 		SkinApplier.init();
 		SkinStorage.init(new File("Core/SkinsHandler"));

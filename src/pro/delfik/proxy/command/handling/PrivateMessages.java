@@ -4,8 +4,9 @@ import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.permissions.Person;
-import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
+import pro.delfik.util.Rank;
+import pro.delfik.util.U;
 
 public class PrivateMessages extends Command {
 	public PrivateMessages(boolean reply) {
@@ -32,6 +33,11 @@ public class PrivateMessages extends Command {
 			dest.lastWriter = p.name;
 			msg = Converter.mergeArray(args, 1, " ");
 		}
+		if (dest.isIgnoring(p.definition)) {
+			U.msg(sender, "§cВы находитесь в чёрном списке у игрока §e", dest, "§c.");
+			return;
+		}
+		if (p.isIgnoring(dest.definition)) throw new CustomException("§cВы не можете писать игроку, который находится у вас в игноре.");
 		dest.msg("§e[§f", sender, "§e -> §fВы§e] " + msg);
 		p.msg("§e[§fВы §e-> §f", dest, "§e] " + msg);
 	}

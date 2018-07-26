@@ -65,8 +65,8 @@ public class Mutes extends Command {
 			ProxiedPlayer p = Proxy.getPlayer(player);
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
 			Server server = p == null ? moder == null ? null : moder.getServer() : p.getServer();
-			U.bc(server, "§7[§e" + moderator + "§7]§c Игроку §e" + player + " §cзапрещено разговаривать §eна" +
-								 representTime(minutes * 60000) + "§c Причина:§e " + reason);
+			U.bc(server, "§7[§e" + moderator + "§7]§6 Игроку §e" + player + " §6запрещено разговаривать §eна" +
+								 representTime(minutes * 60000) + "§6 Причина:§e " + reason);
 			Person person = Person.get(player);
 			if (person != null) person.mute(new MuteInfo(player, moderator, System.currentTimeMillis() + minutes * 60000, reason));
 		} catch (Throwable t) {

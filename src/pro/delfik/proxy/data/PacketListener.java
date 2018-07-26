@@ -14,6 +14,7 @@ import pro.delfik.net.packet.PacketWrite;
 import pro.delfik.proxy.AurumPlugin;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Bans;
+import pro.delfik.proxy.command.handling.Kicks;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.PacketEvent;
 import pro.delfik.proxy.connection.Server;
@@ -28,16 +29,20 @@ public class PacketListener implements Listener {
 		if(packet instanceof PacketPunishment){
 			PacketPunishment punish = (PacketPunishment) packet;
 			PacketPunishment.Punishment punishment = punish.getPunishment();
-			if(punishment == PacketPunishment.Punishment.BAN){
-				Bans.ban(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
-			}else if(punishment == PacketPunishment.Punishment.UNBAN){
-				Bans.unban(punish.getNick(), punish.getModer());
-			}else if(punishment == PacketPunishment.Punishment.MUTE){
-				Mutes.mute(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
-			}else if(punishment == PacketPunishment.Punishment.UNMUTE){
-				Mutes.unmute(punish.getNick(), punish.getModer());
+
+			switch (punishment) {
+				case BAN:
+					Bans.ban(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
+				case UNBAN:
+					Bans.unban(punish.getNick(), punish.getModer());
+				case MUTE:
+					Mutes.mute(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
+				case UNMUTE:
+					Mutes.unmute(punish.getNick(), punish.getModer());
+				case KICK:
+					Kicks.kick(Proxy.getPlayer(punish.getNick()), punish.getModer(), punish.getReason());
 			}
-			// TODO ban-ip & kick
+
 		}else if(packet instanceof PacketSummon){
 			ProxiedPlayer p = Proxy.getPlayer(((PacketSummon) packet).getPlayer());
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());

@@ -59,6 +59,7 @@ public class Person {
 		
 		return new Person(info, mute, auth);
 	}
+
 	public static void unload(String name) {
 		Person p = get(name);
 		if (p == null) return;
@@ -93,14 +94,15 @@ public class Person {
 	public String lastWriter = null;
 	
 	public Person(PersonInfo personInfo, Mutes.MuteInfo mute, boolean auth) {
-		this.name = personInfo.name;
+		this.name = personInfo.getName();
 		this.definition = Converter.smartLowercase(name);
-		this.rank = personInfo.rank;
-		this.password = personInfo.password;
-		this.online = personInfo.online;
-		this.money = personInfo.money;
+		this.rank = personInfo.getRank();
+		this.password = personInfo.getPassword();
+		this.online = personInfo.getOnline();
+		this.money = personInfo.getMoney();
 		this.mute = mute;
-		this.ipbound = personInfo.ipbound;
+		this.ipbound = personInfo.isIPBound();
+		this.ignoredPlayers = personInfo.getIgnoredPlayers();
 
 		if (auth) this.authorize();
 		this.connectedAt = System.currentTimeMillis();
@@ -246,5 +248,18 @@ public class Person {
 	
 	public boolean setIPBound(boolean IPBound) {
 		return this.ipbound = IPBound;
+	}
+
+	public List<String> getIgnoredPlayers() {
+		return ignoredPlayers;
+	}
+	public void ignore(String player) {
+		ignoredPlayers.add(player);
+	}
+	public boolean unignore(String player) {
+		return ignoredPlayers.remove(player);
+	}
+	public boolean isIgnoring(String player) {
+		return ignoredPlayers.contains(player);
 	}
 }

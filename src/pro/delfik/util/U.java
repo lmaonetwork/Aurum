@@ -77,10 +77,10 @@ public class U {
 		return c;
 	}
 	
-	public static final Function<ProxiedPlayer, TextComponent> player = p -> {return create(p.getDisplayName(), getHover(p), getClick(p));};
-	public static final Function<Person, TextComponent> person = p -> {return create(p.getHandle().getDisplayName(), getHover(p), getClick(p));};
-	public static final Function<ServerInfo, TextComponent> server = s -> {return simple("§b§o@" + s.getName(),
-			"§e>§f Телепортироваться на сервер §e<", "/stp @" + s.getName());};
+	public static final Function<ProxiedPlayer, TextComponent> player = p -> create(p.getDisplayName(), getHover(p), getClick(p));
+	public static final Function<Person, TextComponent> person = p -> create(p.getHandle().getDisplayName(), getHover(p), getClick(p));
+	public static final Function<ServerInfo, TextComponent> server = s -> simple("§b§o@" + s.getName(),
+			"§e>§f Телепортироваться на сервер §e<", "/stp @" + s.getName());
 	
 	public static TextComponent constructComponent(Object... o) {
 		TextComponent c = new TextComponent("§7");
@@ -92,6 +92,7 @@ public class U {
 		if (o instanceof ProxiedPlayer) return player.apply((ProxiedPlayer) o);
 		else if (o instanceof ServerInfo) return server.apply((ServerInfo) o);
 		else if (o instanceof Person) return person.apply((Person) o);
+		else if (o instanceof PlayerWrapper) return ((PlayerWrapper) o).toComponent();
 		else if (o instanceof TextComponent) return (TextComponent) o;
 		else {
 			String string = o.toString();
@@ -124,6 +125,22 @@ public class U {
 		return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[] {
 				new TextComponent("§7" + p.getHandle().getDisplayName() + "\n§e> Нажмите для списка действий §e<")
 		});
+	}
+
+	public static class PlayerWrapper {
+		private final ProxiedPlayer player;
+		private final String prefix;
+
+		public PlayerWrapper(ProxiedPlayer player, String prefix) {
+			this.player = player;
+			this.prefix = prefix;
+		}
+
+		private TextComponent toComponent() {
+			TextComponent tc = U.toComponent(player);
+			tc.setText(prefix + player.getName());
+			return tc;
+		}
 	}
 	
 }
