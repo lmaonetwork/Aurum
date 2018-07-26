@@ -1,11 +1,17 @@
 package pro.delfik.proxy.data;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -94,6 +100,34 @@ public class DataIO {
 		close(in);
 		return sb.toString();
 	}
+
+	public static void writeBytes(String path, byte bytes[]){
+		File file = getFile(path);
+		if (!file.exists()) create(path);
+		BufferedOutputStream out = null;
+		try {
+			out = new BufferedOutputStream(new FileOutputStream(file));
+			out.write(bytes);
+		} catch (IOException var5) {
+			var5.printStackTrace();
+		}
+		close(out);
+	}
+
+	public static byte[] readBytes(String path){
+		File file = getFile(path);
+		if(!contains(file))return null;
+		byte bytes[] = new byte[(int)file.length()];
+		BufferedInputStream in = null;
+		try{
+			in = new BufferedInputStream(new FileInputStream(file));
+			in.read(bytes, 0, bytes.length);
+		}catch (IOException ex){
+			ex.printStackTrace();
+		}
+		close(in);
+		return bytes;
+	}
 	
 	public static void remove(String path) {
 		getFile(path).delete();
@@ -138,6 +172,25 @@ public class DataIO {
 	}
 	
 	private static void close(Writer out) {
+		if(out == null) return;
+		try{
+			out.flush();
+			out.close();
+		}catch (IOException var2){
+			var2.printStackTrace();
+		}
+	}
+
+	private static void close(InputStream in){
+		if(in == null) return;
+		try{
+			in.close();
+		}catch (IOException var2){
+			var2.printStackTrace();
+		}
+	}
+
+	private static void close(OutputStream out) {
 		if(out == null) return;
 		try{
 			out.flush();
