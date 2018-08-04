@@ -33,11 +33,11 @@ public class PrivateMessages extends Command {
 			dest.lastWriter = p.name;
 			msg = Converter.mergeArray(args, 1, " ");
 		}
-		if (dest.isIgnoring(p.definition)) {
+		if (dest.isIgnoring(p.getName())) {
 			U.msg(sender, "§cВы находитесь в чёрном списке у игрока §e", dest, "§c.");
 			return;
 		}
-		if (p.isIgnoring(dest.definition)) throw new CustomException("§cВы не можете писать игроку, который находится у вас в игноре.");
+		if (p.isIgnoring(dest.getName())) throw new CustomException("§cВы не можете писать игроку, который находится у вас в игноре.");
 		dest.msg("§e[§f", sender, "§e -> §fВы§e] " + msg);
 		p.msg("§e[§fВы §e-> §f", dest, "§e] " + msg);
 	}

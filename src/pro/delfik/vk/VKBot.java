@@ -7,7 +7,7 @@ public class VKBot {
 	protected static String token;
 	
 	public static void start() {
-		token = DataIO.readFile("vk_token.hl");
+		token = DataIO.readFile("vk_token");
 		if (token == null || token.length() == 0) System.out.println("[VKBot] Файл с токеном (vk_token.hl) не найден.");
 		else new Thread(LongPoll::run).start();
 	}

@@ -15,6 +15,7 @@ import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
+import pro.delfik.util.ByteZip;
 import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.Rank;
@@ -27,15 +28,21 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Person {
+
+	public static final String path = "players";
+
+	public static String getPath(String nick){
+		return path + "/" + Converter.smartLowercase(nick) + "/";
+	}
 	
-	private static final HashMap<Integer, Person> list = new HashMap<>();
+	private static final HashMap<String, Person> list = new HashMap<>();
 	
 	public static Person get(String name) {
-		return list.get(Converter.smartLowercase(name).hashCode());
+		return list.get(Converter.smartLowercase(name));
 	}
 
 	public static Person get(CommandSender sender) {
-		return list.get(Converter.smartLowercase(sender.getName()).hashCode());
+		return list.get(Converter.smartLowercase(sender.getName()));
 	}
 	
 	public static Person load(String name) {
@@ -63,7 +70,7 @@ public class Person {
 	public static void unload(String name) {
 		Person p = get(name);
 		if (p == null) return;
-		list.remove(p.definition().hashCode());
+		list.remove(Converter.smartLowercase(name));
 		if (!p.authorized) return;
 		PlayerDataManager.save(p.getInfo());
 	}
@@ -76,7 +83,6 @@ public class Person {
 	// non-static
 	
 	public final String name; // Ник игрока
-	public final String definition; // Адрес, по которому хранится игрок в базе данных
 	private long connectedAt; // Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
 	private boolean authorized = false; // Авторизован ли игрок
 	private String password ; // Hash пароля
@@ -90,12 +96,11 @@ public class Person {
 	private List<String> ignoredPlayers;
 	
 	private Mutes.MuteInfo mute;
-	
-	public String lastWriter = null;
+
+	public String lastWriter;
 	
 	public Person(PersonInfo personInfo, Mutes.MuteInfo mute, boolean auth) {
 		this.name = personInfo.getName();
-		this.definition = Converter.smartLowercase(name);
 		this.rank = personInfo.getRank();
 		this.password = personInfo.getPassword();
 		this.online = personInfo.getOnline();
@@ -106,7 +111,7 @@ public class Person {
 
 		if (auth) this.authorize();
 		this.connectedAt = System.currentTimeMillis();
-		list.put(definition.hashCode(), this);
+		list.put(Converter.smartLowercase(name), this);
 	}
 	
 	// Implementation
@@ -125,8 +130,6 @@ public class Person {
 	
 	
 	// Getters & Setters
-	
-	protected final String definition() {return definition;}
 
 	public ProxiedPlayer getHandle() {
 		return Proxy.getPlayer(name);
@@ -180,7 +183,7 @@ public class Person {
 	}
 	
 	private void updateMoney() {
-		Database.sendUpdate("UPDATE Users SET money = " + money + " WHERE name = " + definition());
+		Database.sendUpdate("UPDATE Users SET money = " + money + " WHERE name = " + Converter.smartLowercase(name));
 	}
 	
 	public long getMoney() {
@@ -254,12 +257,12 @@ public class Person {
 		return ignoredPlayers;
 	}
 	public void ignore(String player) {
-		ignoredPlayers.add(player);
+		ignoredPlayers.add(Converter.smartLowercase(player));
 	}
 	public boolean unignore(String player) {
-		return ignoredPlayers.remove(player);
+		return ignoredPlayers.remove(Converter.smartLowercase(player));
 	}
 	public boolean isIgnoring(String player) {
-		return ignoredPlayers.contains(player);
+		return ignoredPlayers.contains(Converter.smartLowercase(player));
 	}
 }

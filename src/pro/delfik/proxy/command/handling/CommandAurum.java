@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Title;
+import pro.delfik.net.packet.PacketGC;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CommandProcessor;
@@ -49,6 +50,8 @@ public class CommandAurum extends Command {
 		functions.put("vkupdate", CommandAurum::vkupdate);
 		functions.put("sftop", CommandAurum::sftop);
 		functions.put("serverlist", CommandAurum::serverlist);
+		functions.put("gc", CommandAurum::gc);
+		functions.put("memory", CommandAurum::memory);
 	}
 
 	private static String serverlist(CommandSender sender, Command command, String[] strings) {
@@ -57,7 +60,7 @@ public class CommandAurum extends Command {
 
 	private static String sftop(CommandSender sender, Command command, String[] strings) {
 		requireArgs(strings, 1, "[Игрок]");
-		SfTop.checkTop(strings[0]);
+		SfTop.checkTop(SfTop.getPerson(strings[0]));
 		return "§aПроверка отправлена.";
 	}
 
@@ -187,7 +190,21 @@ public class CommandAurum extends Command {
 		requireRank(commandSender, Rank.ADMIN);
 		return "§aОбновлено §e" + Database.sendUpdate(ArrayUtils.toString(args)) + "§a записей.";
 	}
-	
+
+	private static String gc(CommandSender commandSender, Command command, String[] args){
+		requireRank(commandSender, Rank.DEV);
+		boolean rl = false;
+		if(args.length == 2)rl = true;
+		PacketGC gc = new PacketGC(rl);
+		for(Server server : Server.getServers())
+			server.send(gc);
+		Runtime.getRuntime().gc();
+		return "§aНа всех серверах запущена очистка мусора";
+	}
+
+	private static String memory(CommandSender commandSender, Command command, String[] args){
+		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " занятой оперативной памяти";
+	}
 	
 	@Override
 	protected void run(CommandSender sender, String[] args) {

@@ -29,20 +29,16 @@ public class PacketListener implements Listener {
 		if(packet instanceof PacketPunishment){
 			PacketPunishment punish = (PacketPunishment) packet;
 			PacketPunishment.Punishment punishment = punish.getPunishment();
-
-			switch (punishment) {
-				case BAN:
-					Bans.ban(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
-				case UNBAN:
-					Bans.unban(punish.getNick(), punish.getModer());
-				case MUTE:
-					Mutes.mute(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
-				case UNMUTE:
-					Mutes.unmute(punish.getNick(), punish.getModer());
-				case KICK:
-					Kicks.kick(Proxy.getPlayer(punish.getNick()), punish.getModer(), punish.getReason());
-			}
-
+			if(punishment == PacketPunishment.Punishment.BAN)
+				Bans.ban(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
+			else if(punishment == PacketPunishment.Punishment.UNBAN)
+				Bans.unban(punish.getNick(), punish.getModer());
+			else if(punishment == PacketPunishment.Punishment.MUTE)
+				Mutes.mute(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
+			else if(punishment == PacketPunishment.Punishment.UNMUTE)
+				Mutes.unmute(punish.getNick(), punish.getModer());
+			else if(punishment == PacketPunishment.Punishment.KICK)
+				Kicks.kick(Proxy.getPlayer(punish.getNick()), punish.getModer(), punish.getReason());
 		}else if(packet instanceof PacketSummon){
 			ProxiedPlayer p = Proxy.getPlayer(((PacketSummon) packet).getPlayer());
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());
