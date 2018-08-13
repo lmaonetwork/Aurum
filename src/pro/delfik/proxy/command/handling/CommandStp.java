@@ -5,7 +5,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 
@@ -21,7 +21,7 @@ public class CommandStp extends Command {
 		requireArgs(args, 1, "[Сервер]");
 		ProxiedPlayer p = (ProxiedPlayer) sender;
 		ServerInfo i = requireServer(args[0]);
-		if ((args[0].startsWith("TEST_") || args[0].startsWith("B_")) && !Person.get(sender).hasRank(Rank.BUILDER)){
+		if ((args[0].startsWith("TEST_") || args[0].startsWith("B_")) && !User.get(sender).hasRank(Rank.BUILDER)){
 			msg(sender, "§cТебе нельзя заходить на сервер @§f" + args[0] + "§c.");
 			msg(sender, "§cТребуемый ранг - " + Rank.BUILDER.represent());
 			return;

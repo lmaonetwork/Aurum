@@ -1,10 +1,10 @@
-package pro.delfik.proxy.command;
+package pro.delfik.proxy.command.ex;
 
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.util.U;
 
-public class CustomException extends RuntimeException {
-    public CustomException(String message){
+public class ExCustom extends RuntimeException {
+    public ExCustom(String message){
         super(message);
     }
 

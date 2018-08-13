@@ -1,11 +1,11 @@
-package pro.delfik.proxy.connection;
+package pro.delfik.proxy.data;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.net.P2P;
 import pro.delfik.net.Packet;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,8 +35,8 @@ public class Server {
 		this.p2p = p2p;
 		servers.put(server, this);
 		for(ProxiedPlayer player : Proxy.getServer(server).getPlayers()){
-			Person person = Person.get(player.getName());
-			send(new PacketUser(person.getName(), person.getRank(), person.isAuthorized(), person.getOnline(), ((int) person.getMoney())));
+			User user = User.get(player.getName());
+			send(new PacketUser(user.getName(), user.getRank(), user.isAuthorized(), user.getOnline(), ((int) user.getMoney())));
 		}
 	}
 

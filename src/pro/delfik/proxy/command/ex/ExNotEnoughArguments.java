@@ -1,10 +1,10 @@
-package pro.delfik.proxy.command;
+package pro.delfik.proxy.command.ex;
 
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.util.U;
 
-public class NotEnoughArgumentsException extends CustomException {
-	public NotEnoughArgumentsException(String usage) {
+public class ExNotEnoughArguments extends ExCustom {
+	public ExNotEnoughArguments(String usage) {
 		super(usage);
 	}
 

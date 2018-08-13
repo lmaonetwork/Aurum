@@ -1,4 +1,4 @@
-package pro.delfik.proxy.permissions;
+package pro.delfik.proxy.user;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -12,7 +12,7 @@ import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.command.handling.Mutes;
-import pro.delfik.proxy.connection.Server;
+import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.util.Converter;
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Person {
+public class User {
 
 	public static final String path = "players";
 
@@ -34,19 +34,19 @@ public class Person {
 		return path + "/" + Converter.smartLowercase(nick) + "/";
 	}
 	
-	private static final HashMap<String, Person> list = new HashMap<>();
+	private static final HashMap<String, User> list = new HashMap<>();
 	
-	public static Person get(String name) {
+	public static User get(String name) {
 		return list.get(Converter.smartLowercase(name));
 	}
 
-	public static Person get(CommandSender sender) {
+	public static User get(CommandSender sender) {
 		return list.get(Converter.smartLowercase(sender.getName()));
 	}
 	
-	public static Person load(String name) {
-		PersonInfo info = PlayerDataManager.load(name);
-		if (info == null) return new Person(new PersonInfo(name, "", 0, Rank.PLAYER,
+	public static User load(String name) {
+		UserInfo info = PlayerDataManager.load(name);
+		if (info == null) return new User(new UserInfo(name, "", 0, Rank.PLAYER,
 			0L, "", false, new ArrayList<>(), false, new ArrayList<>()),null, false);
 		
 		ProxiedPlayer p = Proxy.getPlayer(name);
@@ -63,11 +63,11 @@ public class Person {
 			} else if (!Authorization.allowedIPs.contains(name.toLowerCase())) throw new DifferentIPException(name);
 		}
 		
-		return new Person(info, mute, auth);
+		return new User(info, mute, auth);
 	}
 
 	public static void unload(String name) {
-		Person p = get(name);
+		User p = get(name);
 		if (p == null) return;
 		list.remove(Converter.smartLowercase(name));
 		if (!p.authorized) return;
@@ -75,7 +75,7 @@ public class Person {
 	}
 	
 	
-	public static Collection<Person> getAll() {
+	public static Collection<User> getAll() {
 		return list.values();
 	}
 	
@@ -113,15 +113,15 @@ public class Person {
 
 	public String lastWriter;
 	
-	public Person(PersonInfo personInfo, Mutes.MuteInfo mute, boolean auth) {
-		this.name = personInfo.getName();
-		this.rank = personInfo.getRank();
-		this.password = personInfo.getPassword();
-		this.online = personInfo.getOnline();
-		this.money = personInfo.getMoney();
+	public User(UserInfo userInfo, Mutes.MuteInfo mute, boolean auth) {
+		this.name = userInfo.getName();
+		this.rank = userInfo.getRank();
+		this.password = userInfo.getPassword();
+		this.online = userInfo.getOnline();
+		this.money = userInfo.getMoney();
 		this.mute = mute;
-		this.ipbound = personInfo.isIPBound();
-		this.ignoredPlayers = personInfo.getIgnoredPlayers();
+		this.ipbound = userInfo.isIPBound();
+		this.ignoredPlayers = userInfo.getIgnoredPlayers();
 
 		if (auth) this.authorize();
 		this.connectedAt = System.currentTimeMillis();
@@ -216,8 +216,8 @@ public class Person {
 		return System.currentTimeMillis() - connectedAt + online;
 	}
 	
-	public PersonInfo getInfo() {
-		return new PersonInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers, pmDisabled, friends);
+	public UserInfo getInfo() {
+		return new UserInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers, pmDisabled, friends);
 	}
 	
 	public Mutes.MuteInfo getActiveMute() {
@@ -244,10 +244,10 @@ public class Person {
 		Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
 			PlayerListItem item = getTab(handle);
 			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()){
-				Person person = get(player);
+				User user = get(player);
 				player.unsafe().sendPacket(item);
-				if(person != null)
-				handle.unsafe().sendPacket(person.getTab(player));
+				if(user != null)
+				handle.unsafe().sendPacket(user.getTab(player));
 			}
 		}, 1, TimeUnit.SECONDS);
 	}

@@ -7,13 +7,13 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.connection.Server;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.data.Server;
+import pro.delfik.proxy.user.User;
 
 public class EvReconnect implements Listener{
 	@EventHandler
 	public void event(ServerConnectEvent event) {
-		Person p = Person.get(event.getPlayer());
+		User p = User.get(event.getPlayer());
 		if (p == null) return;
 		if (!event.getTarget().getName().equals("LOBBY_1"))
 			Server.get("LOBBY_1").send(new PacketSSU(p.getServer(),
@@ -23,7 +23,7 @@ public class EvReconnect implements Listener{
 
 	@EventHandler
 	public void event(ServerConnectedEvent e) {
-		Person p = Person.get(e.getPlayer());
+		User p = User.get(e.getPlayer());
 		if (p == null) return;
 		if (!e.getServer().getInfo().getName().equals("LOBBY_1"))
 			Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));

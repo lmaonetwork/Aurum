@@ -9,13 +9,13 @@ import pro.delfik.net.packet.PacketGC;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.command.CommandProcessor;
-import pro.delfik.proxy.command.NotEnoughArgumentsException;
-import pro.delfik.proxy.connection.Server;
+import pro.delfik.proxy.command.ex.ExNotEnoughArguments;
+import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.ev.EvChat;
-import pro.delfik.proxy.games.SfTop;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.SfTop;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.Converter;
@@ -118,7 +118,7 @@ public class CommandAurum extends Command {
 	
 	private static String resetPassword(CommandSender commandSender, Command command, String[] args) {
 		requireArgs(args, 1, "[Игрок]");
-		Person p = Person.get(args[0]);
+		User p = User.get(args[0]);
 		if (p != null) p.setPassword("");
 		else {
 			int i;
@@ -165,7 +165,7 @@ public class CommandAurum extends Command {
 	private static String setrank(CommandSender sender, Command command, String[] args) {
 		requireArgs(args, 2, "[Игрок] [Ранг]");
 		Rank rank = requireRank(args[1]);
-		if (sender instanceof ProxiedPlayer && !Person.get(sender).hasRank(rank))
+		if (sender instanceof ProxiedPlayer && !User.get(sender).hasRank(rank))
 			return "§cВы не можете выдавать ранги выше собственного.";
 		PlayerDataManager.setRank(args[0], rank);
 		return "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent();
@@ -220,7 +220,7 @@ public class CommandAurum extends Command {
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		if (sender instanceof ProxiedPlayer) {
-			Person p = Person.get(sender);
+			User p = User.get(sender);
 			if (!p.isIPBound()) {
 				p.msg("§cДля использования §f/aurum §cнеобходимо включить §f/attachip");
 				return;
@@ -235,8 +235,8 @@ public class CommandAurum extends Command {
 			else try {
 				String os = function.process(sender, this, a);
 				if (os != null && os.length() != 0) msg(sender, os);
-			} catch (NotEnoughArgumentsException e) {
-				throw new NotEnoughArgumentsException(args[0] + " " + e.getMessage());
+			} catch (ExNotEnoughArguments e) {
+				throw new ExNotEnoughArguments(args[0] + " " + e.getMessage());
 			}
 		}
 	}

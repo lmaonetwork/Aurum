@@ -2,10 +2,10 @@ package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.command.CustomException;
+import pro.delfik.proxy.command.ex.ExCustom;
 import pro.delfik.proxy.data.PlayerDataManager;
-import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.PersonInfo;
+import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.user.UserInfo;
 import pro.delfik.util.Rank;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.TimedList;
@@ -23,11 +23,11 @@ public class Authorization extends Command {
 
 	@Override
 	protected void run(CommandSender sender, String[] args) {
-		Person u = Person.get(sender);
-		if (u.isAuthorized()) throw new CustomException("§eТы уже авторизован.");
+		User u = User.get(sender);
+		if (u.isAuthorized()) throw new ExCustom("§eТы уже авторизован.");
 		if (getCommand().equals("login")){
 			if(u.getPassword().equals(""))
-				throw new CustomException("§eДля первого входа в игру сперва нужно зарегистрироваться: /reg [Пароль]");
+				throw new ExCustom("§eДля первого входа в игру сперва нужно зарегистрироваться: /reg [Пароль]");
 			requireArgs(args, 0, "[Пароль]");
 			String input = args[0];
 			String pass = u.getPassword();
@@ -42,8 +42,8 @@ public class Authorization extends Command {
 			String input = args[0];
 			String pass = u.getPassword();
 			if(!pass.equals(""))
-				throw new CustomException("Вы уже зарегистрированы, пожалуйста, авторизуйтесь командой §e/login [Пароль]§c.");
-			if(input.length() < 3) throw new CustomException("§cДлина пароля не может быть меньше трёх символов.");
+				throw new ExCustom("Вы уже зарегистрированы, пожалуйста, авторизуйтесь командой §e/login [Пароль]§c.");
+			if(input.length() < 3) throw new ExCustom("§cДлина пароля не может быть меньше трёх символов.");
 			u.setPassword(input);
 			registerNewPlayer(sender.getName(), u.getPassword());
 
@@ -53,7 +53,7 @@ public class Authorization extends Command {
 	}
 
 	private static void registerNewPlayer(String name, String passhash) {
-		PlayerDataManager.save(new PersonInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false, new ArrayList<>(), false, new ArrayList<>()));
+		PlayerDataManager.save(new UserInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false, new ArrayList<>(), false, new ArrayList<>()));
 	}
 
 	@Override

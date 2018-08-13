@@ -8,7 +8,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 
 import java.util.function.Function;
 
@@ -85,7 +85,7 @@ public class U {
 	}
 	
 	public static final Function<ProxiedPlayer, TextComponent> player = p -> create(p.getDisplayName(), getHover(p), getClick(p));
-	public static final Function<Person, TextComponent> person = p -> create(p.getHandle().getDisplayName(), getHover(p), getClick(p));
+	public static final Function<User, TextComponent> person = p -> create(p.getHandle().getDisplayName(), getHover(p), getClick(p));
 	public static final Function<ServerInfo, TextComponent> server = s -> simple("§b§o@" + s.getName(),
 			"§e>§f Телепортироваться на сервер §e<", "/stp @" + s.getName());
 	
@@ -98,7 +98,7 @@ public class U {
 	public static TextComponent toComponent(Object o) {
 		if (o instanceof ProxiedPlayer) return player.apply((ProxiedPlayer) o);
 		else if (o instanceof ServerInfo) return server.apply((ServerInfo) o);
-		else if (o instanceof Person) return person.apply((Person) o);
+		else if (o instanceof User) return person.apply((User) o);
 		else if (o instanceof PlayerWrapper) return ((PlayerWrapper) o).toComponent();
 		else if (o instanceof TextComponent) return (TextComponent) o;
 		else {
@@ -122,11 +122,11 @@ public class U {
 				new TextComponent("§7" + p.getDisplayName() + "\n§e> Нажмите для списка действий §e<")
 		});
 	}
-	private static ClickEvent getClick(Person p) {
+	private static ClickEvent getClick(User p) {
 		return new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/player " + p.name);
 	}
 	
-	private static HoverEvent getHover(Person p) {
+	private static HoverEvent getHover(User p) {
 		return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[] {
 				new TextComponent("§7" + p.getHandle().getDisplayName() + "\n§e> Нажмите для списка действий §e<")
 		});

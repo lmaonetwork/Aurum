@@ -5,11 +5,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.protocol.packet.Chat;
-import pro.delfik.proxy.command.CustomException;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.Scheduler;
 import pro.delfik.util.StringUtils;
@@ -62,20 +60,20 @@ public class EvChat implements Listener{
 	@EventHandler
 	public void event(ChatEvent event) {
 		if(event.isCommand()) return;
-		Person person = Person.get(((UserConnection) event.getSender()).getName());
-		if(person == null || !person.isAuthorized()) return;
-		if(checkFlood(event, person))return;
-		if(adminChat(event, person))return;
-		if(checkMute(event, person))return;
+		User user = User.get(((UserConnection) event.getSender()).getName());
+		if(user == null || !user.isAuthorized()) return;
+		if(checkFlood(event, user))return;
+		if(adminChat(event, user))return;
+		if(checkMute(event, user))return;
 		event.setMessage(applyMat(event.getMessage()));
-		if(antiFlood(event, person))return;
+		if(antiFlood(event, user))return;
 	}
 
-	private boolean adminChat(ChatEvent event, Person person){
-		if(person.hasRank(Rank.BUILDER) && event.getMessage().startsWith("%")){
+	private boolean adminChat(ChatEvent event, User user){
+		if(user.hasRank(Rank.BUILDER) && event.getMessage().startsWith("%")){
 			event.setCancelled(true);
-			String message = "§c§o%A% " + person.getRank().getNameColor() + person.name + "§7§o: §f§o" + event.getMessage().substring(1);
-			for (Person receiver : Person.getAll())
+			String message = "§c§o%A% " + user.getRank().getNameColor() + user.name + "§7§o: §f§o" + event.getMessage().substring(1);
+			for (User receiver : User.getAll())
 				if (receiver.hasRank(Rank.BUILDER))
 					receiver.msg(message);
 			return true;
@@ -83,13 +81,13 @@ public class EvChat implements Listener{
 		return false;
 	}
 
-	private boolean checkFlood(ChatEvent event, Person person){
+	private boolean checkFlood(ChatEvent event, User user){
 		Integer integer = messages.get(event.getReceiver().getAddress().getHostName());
 		if(integer == null) integer = 0;
 		integer = integer + 1;
 		if(integer > 3){
 			event.setCancelled(true);
-			person.msg("Не флуди");
+			user.msg("Не флуди");
 			return true;
 		}else if(integer > 10){
 			event.getSender().disconnect(new TextComponent("Не флуди"));
@@ -99,29 +97,29 @@ public class EvChat implements Listener{
 		return false;
 	}
 
-	private boolean checkMute(ChatEvent event, Person person){
-		Mutes.MuteInfo mute = person.getActiveMute();
+	private boolean checkMute(ChatEvent event, User user){
+		Mutes.MuteInfo mute = user.getActiveMute();
 		if (mute != null){
 			if (mute.until < System.currentTimeMillis()){
-				Mutes.clear(person.name);
+				Mutes.clear(user.name);
 				return false;
 			}
 			event.setCancelled(true);
-			mute.sendChatDisallowMessage(person.getHandle());
+			mute.sendChatDisallowMessage(user.getHandle());
 			return true;
 		}
 		return false;
 	}
 
-	private boolean antiFlood(ChatEvent event, Person person){
+	private boolean antiFlood(ChatEvent event, User user){
 		String message = event.getMessage();
-		if(person.getLast().equals(message) && person.getLastLast().equals(message)){
-			Mutes.mute(person.getName(), "флуд", 30, "Антифлуд");
-			person.setLast("");
+		if(user.getLast().equals(message) && user.getLastLast().equals(message)){
+			Mutes.mute(user.getName(), "флуд", 30, "Антифлуд");
+			user.setLast("");
 			event.setCancelled(true);
 			return true;
 		}
-		person.setLast(message);
+		user.setLast(message);
 		return false;
 	}
 

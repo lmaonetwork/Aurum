@@ -1,7 +1,7 @@
 package pro.delfik.proxy.data;
 
-import pro.delfik.proxy.permissions.Person;
-import pro.delfik.proxy.permissions.PersonInfo;
+import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.user.UserInfo;
 import pro.delfik.util.Converter;
 import pro.delfik.util.Rank;
 
@@ -17,7 +17,7 @@ public class PlayerDataManager {
 
 	public static String parameters = null;
 
-	public static boolean save(PersonInfo info) {
+	public static boolean save(UserInfo info) {
 		if (parameters == null) parameters = Converter.merge(Field.values(), Field::toString, ", ");
 		String values = Converter.merge(Field.values(), (f) -> adjust(f.extractFrom(info)), ", ");
 		String replace = Converter.merge(Field.values(), f -> f.string + " = " + adjust(f.extractFrom(info)), ", ");
@@ -26,8 +26,8 @@ public class PlayerDataManager {
 		return true;
 	}
 
-	public static PersonInfo load(String username) {
-		PersonInfo i = new PersonInfo(username);
+	public static UserInfo load(String username) {
+		UserInfo i = new UserInfo(username);
 		try {
 			Database.Result res = Database.sendQuery("SELECT * FROM Users WHERE name = '" + username + "'");
 			ResultSet r = res.set;
@@ -51,14 +51,14 @@ public class PlayerDataManager {
 	
 	
 	public enum Field {
-		NAME("name", PersonInfo::getName, (u, o) -> {}),
+		NAME("name", UserInfo::getName, (u, o) -> {}),
 		RANK("rank", info -> info.getRank().toString(), (u, o) -> u.rank = Rank.decode(o.getString("rank"))),
-		PASSHASH("passhash", PersonInfo::getPassword, (u, o) -> u.password = o.getString("passhash")),
-		ONLINE("online", PersonInfo::getOnline, (u, o) -> u.online = o.getLong("online")),
-		IP("ip", PersonInfo::getIp, (u, o) -> u.ip = o.getString("ip")),
-		MONEY("money", PersonInfo::getMoney, (u, o) -> u.money = o.getInt("money")),
-		IPBOUND("ipbound", PersonInfo::isIPBound, (u, o) -> u.ipbound = o.getBoolean("ipbound")),
-		PMDISABLED("pmdisabled", PersonInfo::isPmDisabled, (u, o) -> u.pmDisabled = o.getBoolean("pmdisabled")),
+		PASSHASH("passhash", UserInfo::getPassword, (u, o) -> u.password = o.getString("passhash")),
+		ONLINE("online", UserInfo::getOnline, (u, o) -> u.online = o.getLong("online")),
+		IP("ip", UserInfo::getIp, (u, o) -> u.ip = o.getString("ip")),
+		MONEY("money", UserInfo::getMoney, (u, o) -> u.money = o.getInt("money")),
+		IPBOUND("ipbound", UserInfo::isIPBound, (u, o) -> u.ipbound = o.getBoolean("ipbound")),
+		PMDISABLED("pmdisabled", UserInfo::isPmDisabled, (u, o) -> u.pmDisabled = o.getBoolean("pmdisabled")),
 		IGNOREDPLAYERS("ignored", i -> Converter.merge(i.getIgnoredPlayers(), s -> s, " "),
 							(u, o) -> u.ignoredPlayers = Converter.deserializeList(o.getString("ignored"), " ")),
 		FRIENDS("friends", i -> Converter.merge(i.getFriends(), s -> s, " "),
@@ -78,27 +78,27 @@ public class PlayerDataManager {
 			return string;
 		}
 		
-		public Object extractFrom(PersonInfo u) {
+		public Object extractFrom(UserInfo u) {
 			return extractor.extract(u);
 		}
 
-		public void applyTo(PersonInfo p, ResultSet r) throws SQLException {
+		public void applyTo(UserInfo p, ResultSet r) throws SQLException {
 			applier.set(p, r);
 		}
 		
 		@FunctionalInterface
 		public interface Extractor {
-			Object extract(PersonInfo info);
+			Object extract(UserInfo info);
 		}
 		
 		@FunctionalInterface
 		private interface Applier {
-			void set(PersonInfo u, ResultSet set) throws SQLException;
+			void set(UserInfo u, ResultSet set) throws SQLException;
 		}
 	}
 
 	public static void setRank(String username, Rank rank) {
-		Person user = Person.get(username);
+		User user = User.get(username);
 		if (user == null) {
 			Database.sendUpdate("UPDATE Users SET rank = '" + rank + "' WHERE name = '" + Converter.smartLowercase(username) + "'");
 		} else {

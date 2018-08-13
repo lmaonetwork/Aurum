@@ -6,7 +6,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.proxy.skins.MojangAPI;
 import pro.delfik.proxy.skins.SkinApplier;
@@ -21,7 +21,7 @@ public class CommandSkin extends Command {
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		ProxiedPlayer p = (ProxiedPlayer) sender;
-		if (!Person.get(sender).isAuthorized()) return;
+		if (!User.get(sender).isAuthorized()) return;
 		if (args.length == 0) {
 			sender.sendMessage(new TextComponent("§aДля изменения скина напишите команду §e/skin [Ник]§a."));
 			sender.sendMessage(new TextComponent("§aПосле этого вам будет необходимо перезайти на сервер."));

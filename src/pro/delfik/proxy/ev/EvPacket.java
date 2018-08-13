@@ -17,10 +17,10 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.Kicks;
 import pro.delfik.proxy.command.handling.Mutes;
-import pro.delfik.proxy.connection.Server;
+import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.ev.added.PacketEvent;
-import pro.delfik.proxy.games.SfTop;
+import pro.delfik.proxy.user.SfTop;
 import pro.delfik.util.FileConverter;
 
 import java.util.concurrent.TimeUnit;

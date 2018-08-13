@@ -6,8 +6,13 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import net.md_5.bungee.command.ConsoleCommandSender;
 import pro.delfik.proxy.Proxy;
+import pro.delfik.proxy.command.ex.ExCustom;
+import pro.delfik.proxy.command.ex.ExNotEnoughArguments;
+import pro.delfik.proxy.command.ex.ExNotEnoughPermissions;
+import pro.delfik.proxy.command.ex.ExUserNotFound;
+import pro.delfik.proxy.command.ex.ExServerNotFound;
 import pro.delfik.proxy.command.handling.Authorization;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;
@@ -35,7 +40,7 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 			run(sender, args);
 			return;
 		}
-		Person user = Person.get(sender);
+		User user = User.get(sender);
 		if (!(this instanceof Authorization)) {
 			if (!user.isAuthorized()) {
 				U.msg(sender, "§eДля использования команд вам необходимо авторизоваться.");
@@ -54,8 +59,8 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 		} catch (Throwable t) {
 			Throwable cause = t;
 			while (cause.getCause() != null) cause = cause.getCause();
-			if (cause instanceof CustomException) {
-				((CustomException)cause).execute(sender, line);
+			if (cause instanceof ExCustom) {
+				((ExCustom)cause).execute(sender, line);
 				return;
 			}
 			if (cause instanceof NumberFormatException) {
@@ -92,26 +97,26 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 	}
 	
 	public static void requireArgs(String[] args, int required, String usage) {
-		if (args.length < required) throw new NotEnoughArgumentsException(usage);
+		if (args.length < required) throw new ExNotEnoughArguments(usage);
 	}
 
 	public static void requireRank(CommandSender sender, Rank rank) {
-		if (!Person.get(sender).hasRank(rank)) throw new NotEnoughPermissionsException(rank);
+		if (!User.get(sender).hasRank(rank)) throw new ExNotEnoughPermissions(rank);
 	}
 
-	public static Person requirePerson(String arg) {
-		Person u = Person.get(arg);
-		if (u == null) throw new PersonNotFoundException(arg); else return u;
+	public static User requirePerson(String arg) {
+		User u = User.get(arg);
+		if (u == null) throw new ExUserNotFound(arg); else return u;
 	}
 
 	public static ProxiedPlayer requirePlayer(String arg) {
 		ProxiedPlayer p = Proxy.getPlayer(arg);
-		if (p == null) throw new PersonNotFoundException(arg); else return p;
+		if (p == null) throw new ExUserNotFound(arg); else return p;
 	}
 	
 	public static ServerInfo requireServer(String arg) {
 		ServerInfo server = Proxy.getServer(arg);
-		if (server == null) throw new ServerNotFoundException(arg); else return server;
+		if (server == null) throw new ExServerNotFound(arg); else return server;
 	}
 	
 	public static Rank requireRank(String arg) {
@@ -130,7 +135,7 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 		if (sender instanceof ProxiedPlayer)
 			return Converter.tabComplete(((ProxiedPlayer) sender).getServer().getInfo().getPlayers(), ProxiedPlayer::getName, arg);
 		else
-			return Converter.tabComplete(Person.getAll(), Person::getName, arg);
+			return Converter.tabComplete(User.getAll(), User::getName, arg);
 	}
 	
 	@Override

@@ -1,11 +1,11 @@
-package pro.delfik.proxy.permissions;
+package pro.delfik.proxy.user;
 
 import pro.delfik.util.Rank;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonInfo {
+public class UserInfo {
 	private boolean authorized = false;
 	public String name;
 	public String password = "";
@@ -18,10 +18,10 @@ public class PersonInfo {
 	public boolean pmDisabled;
 	public List<String> friends;
 	
-	public PersonInfo(String name) {this.name = name;}
+	public UserInfo(String name) {this.name = name;}
 	
-	public PersonInfo(String name, String password, int money, Rank rank, long online, String ip, boolean ipbound,
-					  List<String> ignoredPlayers, boolean pmDisabled, List<String> friends) {
+	public UserInfo(String name, String password, int money, Rank rank, long online, String ip, boolean ipbound,
+					List<String> ignoredPlayers, boolean pmDisabled, List<String> friends) {
 		this.name = name;
 		this.password = password;
 		this.money = money;
@@ -61,6 +61,7 @@ public class PersonInfo {
 	public boolean isIPBound() {
 		return ipbound;
 	}
+
 	public boolean isPmDisabled() {
 		return pmDisabled;
 	}

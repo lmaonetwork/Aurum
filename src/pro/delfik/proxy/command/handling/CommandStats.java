@@ -2,8 +2,8 @@ package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.command.CustomException;
-import pro.delfik.proxy.games.SfTop;
+import pro.delfik.proxy.command.ex.ExCustom;
+import pro.delfik.proxy.user.SfTop;
 import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;
@@ -16,7 +16,7 @@ public class CommandStats extends Command{
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		SfTop top = SfTop.getPerson(sender.getName());
-		if (top == null) throw new CustomException("§eТы ещё никогда не играл в §fMLGRush§e. Самое время это исправить!");
+		if (top == null) throw new ExCustom("§eТы ещё никогда не играл в §fMLGRush§e. Самое время это исправить!");
 		U.msg(sender, "§e\u2b26 Статистика по §fMLGRush §e\u2b26");
 		int beds = top.getBeds(), deaths = top.getDeaths(), games = top.getGames(), wins = top.getWins();
 		U.msg(sender, "§a\u1405 §f" + beds + "§a кроват" + Converter.plural(beds, "ь", "и", "ей"));

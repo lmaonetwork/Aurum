@@ -1,4 +1,4 @@
-package pro.delfik.proxy.connection;
+package pro.delfik.proxy.data;
 
 import net.md_5.bungee.BungeeCord;
 import pro.delfik.net.Listener;

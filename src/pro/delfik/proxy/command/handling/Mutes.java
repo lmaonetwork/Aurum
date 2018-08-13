@@ -5,9 +5,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.command.CustomException;
+import pro.delfik.proxy.command.ex.ExCustom;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;
@@ -29,7 +29,7 @@ public class Mutes extends Command {
 		if (getCommand().equalsIgnoreCase("unmute")) {
 			requireArgs(args, 1, "[Игрок]");
 			Mutes.MuteInfo i = get(args[0]);
-			if (i == null) throw new CustomException("§eИгрок §f" + args[0] + "§e не замучен.");
+			if (i == null) throw new ExCustom("§eИгрок §f" + args[0] + "§e не замучен.");
 			unmute(args[0], sender.getName());
 		} else {
 			requireArgs(args, 3, "[Игрок] [Время] [Причина]");
@@ -43,7 +43,7 @@ public class Mutes extends Command {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
 			Server server = moder == null ? null : moder.getServer();
 			U.bc(server, "§7[§e" + moderator + "§7]§a Игрок §e" + player + " §aснова может общаться с вами.");
-			Person p = Person.get(player);
+			User p = User.get(player);
 			if (p != null) {
 				p.clearMute();
 				p.msg("§aТы снова можешь писать в чат. Поблагодари §f" + moderator + "§a за размут.");
@@ -67,8 +67,8 @@ public class Mutes extends Command {
 			Server server = p == null ? moder == null ? null : moder.getServer() : p.getServer();
 			U.bc(server, "§7[§e" + moderator + "§7]§6 Игроку §e" + player + " §6запрещено разговаривать §eна" +
 								 representTime(minutes * 60000) + "§6 Причина:§e " + reason);
-			Person person = Person.get(player);
-			if (person != null) person.mute(new MuteInfo(player, moderator, System.currentTimeMillis() + minutes * 60000, reason));
+			User user = User.get(player);
+			if (user != null) user.mute(new MuteInfo(player, moderator, System.currentTimeMillis() + minutes * 60000, reason));
 		} catch (Throwable t) {
 			Proxy.i().broadcast("§c§lПри муте ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();

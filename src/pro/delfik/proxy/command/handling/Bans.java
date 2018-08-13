@@ -6,7 +6,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.command.CustomException;
+import pro.delfik.proxy.command.ex.ExCustom;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
@@ -30,11 +30,11 @@ public class Bans extends Command {
 		if (getCommand().equalsIgnoreCase("unban")) {
 			requireArgs(args, 1, "[Игрок]");
 			BanInfo i = get(args[0]);
-			if (i == null) throw new CustomException("§eИгрок §f" + args[0] + "§e не заблокирован.");
+			if (i == null) throw new ExCustom("§eИгрок §f" + args[0] + "§e не заблокирован.");
 			unban(args[0], sender.getName());
 		} else {
 			requireArgs(args, 2, "[Игрок] {Время} [Причина]");
-			if (args[0].length() == 0) throw new CustomException("§cПроверьте количество пробелов в этом месте: §e/ban__" + args[1] + "...");
+			if (args[0].length() == 0) throw new ExCustom("§cПроверьте количество пробелов в этом месте: §e/ban__" + args[1] + "...");
 			int time = 0;
 			boolean skiptime = false;
 			try {

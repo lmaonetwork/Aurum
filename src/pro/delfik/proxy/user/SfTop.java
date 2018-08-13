@@ -1,10 +1,9 @@
-package pro.delfik.proxy.games;
+package pro.delfik.proxy.user;
 
 import pro.delfik.net.packet.PacketTop;
 import pro.delfik.net.packet.PacketUpdateTop;
-import pro.delfik.proxy.connection.Server;
+import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.permissions.Person;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.ByteUnzip;
 import pro.delfik.util.ByteZip;
@@ -100,15 +99,15 @@ public class SfTop extends PacketTop.Top{
 		top.deaths = top.deaths + top.getDeaths();
 		top.games = top.games + 1;
 		top.wins = top.wins + (packet.isWin() ? 1 : 0);
-		DataIO.writeBytes(Person.getPath(packet.getNick()) + path, new ByteZip()
+		DataIO.writeBytes(User.getPath(packet.getNick()) + path, new ByteZip()
 				.add(top.games).add(top.wins).add(top.beds).add(top.deaths).build());
 		checkTop(top);
 	}
 	
 	public static SfTop getPerson(String nick) {
-		byte[] array = DataIO.readBytes(Person.getPath(nick) + path);
+		byte[] array = DataIO.readBytes(User.getPath(nick) + path);
 		if(array == null || array.length == 0){
-			List<String> list = DataIO.read(Person.getPath(nick) + "sf");
+			List<String> list = DataIO.read(User.getPath(nick) + "sf");
 			if(list == null) return null;
 			int games = Converter.toInt(list.get(0));
 			int wins = Converter.toInt(list.get(1));

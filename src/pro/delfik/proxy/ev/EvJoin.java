@@ -10,8 +10,8 @@ import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.BansIP;
-import pro.delfik.proxy.permissions.DifferentIPException;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.DifferentIPException;
+import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.util.Scheduler;
 import pro.delfik.util.StringUtils;
@@ -87,9 +87,9 @@ public class EvJoin implements Listener{
 	@EventHandler
 	public void event(PostLoginEvent event) {
 		String name = event.getPlayer().getName();
-		Person p;
+		User p;
 		try {
-			p = Person.load(name);
+			p = User.load(name);
 		} catch (DifferentIPException ex) {
 			U.msg(event.getPlayer(), "§cIP не опознан.");
 			event.getPlayer().disconnect(U.toComponent("§cIP-адрес не совпадает с последним сохранённым.\n§cНапишите боту ВКонтакте команду §fipchange§c, и проблема решится."));

@@ -2,7 +2,7 @@ package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.command.Command;
-import pro.delfik.proxy.permissions.Person;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.U;
 
@@ -14,7 +14,7 @@ public class IPBound extends Command {
 	
 	@Override
 	protected void run(CommandSender sender, String[] args) {
-		Person p = requirePerson(sender.getName());
+		User p = requirePerson(sender.getName());
 		if (CommandVK.getPage(p.getName()) == -1) {
 			U.msg(sender, "§cК вашему аккаунту не привязана страница ВКонтакте.");
 			U.msg(sender, "§cДля использования привязки по IP необходимо привязать ВК.");
