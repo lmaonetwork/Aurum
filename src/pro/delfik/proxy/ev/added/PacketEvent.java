@@ -1,4 +1,4 @@
-package pro.delfik.proxy.connection;
+package pro.delfik.proxy.ev.added;
 
 import net.md_5.bungee.api.plugin.Event;
 import pro.delfik.net.Packet;

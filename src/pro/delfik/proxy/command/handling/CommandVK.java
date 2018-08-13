@@ -2,7 +2,7 @@ package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import pro.delfik.proxy.AurumPlugin;
+import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.data.Database;
@@ -29,7 +29,7 @@ public class CommandVK extends Command {
 			return;
 		}
 		msg(sender, "§aПроверка страницы...");
-		Proxy.i().getScheduler().runAsync(AurumPlugin.instance, () -> {
+		Proxy.i().getScheduler().runAsync(Aurum.instance, () -> {
 			int id = VK.getUserID(args[0]);
 			if (id == -1) {
 				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");

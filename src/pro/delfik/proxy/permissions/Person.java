@@ -8,14 +8,13 @@ import net.md_5.bungee.protocol.packet.PlayerListItem;
 import pro.delfik.net.packet.PacketAuth;
 import pro.delfik.net.packet.PacketPex;
 import pro.delfik.net.packet.PacketUser;
-import pro.delfik.proxy.AurumPlugin;
+import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Authorization;
 import pro.delfik.proxy.command.handling.Mutes;
 import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
-import pro.delfik.util.ByteZip;
 import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.Rank;
@@ -96,6 +95,21 @@ public class Person {
 	private List<String> ignoredPlayers;
 	
 	private Mutes.MuteInfo mute;
+
+	private String last = "", lastLast;
+
+	public void setLast(String last){
+		lastLast = this.last;
+		this.last = last;
+	}
+
+	public String getLast() {
+		return last;
+	}
+
+	public String getLastLast() {
+		return lastLast;
+	}
 
 	public String lastWriter;
 	
@@ -227,7 +241,7 @@ public class Person {
 	}
 
 	public void updateTab(ProxiedPlayer handle){
-		Proxy.i().getScheduler().schedule(AurumPlugin.instance, () -> {
+		Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
 			PlayerListItem item = getTab(handle);
 			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()){
 				Person person = get(player);

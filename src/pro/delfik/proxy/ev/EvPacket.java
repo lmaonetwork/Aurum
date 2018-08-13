@@ -1,4 +1,4 @@
-package pro.delfik.proxy.data;
+package pro.delfik.proxy.ev;
 
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -10,19 +10,22 @@ import pro.delfik.net.packet.PacketPunishment;
 import pro.delfik.net.packet.PacketRead;
 import pro.delfik.net.packet.PacketSSU;
 import pro.delfik.net.packet.PacketSummon;
+import pro.delfik.net.packet.PacketUpdateTop;
 import pro.delfik.net.packet.PacketWrite;
-import pro.delfik.proxy.AurumPlugin;
+import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.handling.Bans;
 import pro.delfik.proxy.command.handling.Kicks;
 import pro.delfik.proxy.command.handling.Mutes;
-import pro.delfik.proxy.connection.PacketEvent;
 import pro.delfik.proxy.connection.Server;
+import pro.delfik.proxy.data.DataIO;
+import pro.delfik.proxy.ev.added.PacketEvent;
+import pro.delfik.proxy.games.SfTop;
 import pro.delfik.util.FileConverter;
 
 import java.util.concurrent.TimeUnit;
 
-public class PacketListener implements Listener {
+public class EvPacket implements Listener{
 	@EventHandler
 	public void event(PacketEvent event) {
 		Packet packet = event.getPacket();
@@ -44,11 +47,10 @@ public class PacketListener implements Listener {
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());
 			if(p != null && info != null) p.connect(info);
 		}else if(packet instanceof PacketInit){
-			Proxy.i().getScheduler().schedule(AurumPlugin.instance, () -> {
+			Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
 				ServerInfo from = Proxy.getServer(((PacketInit) packet).getServer());
 				if(from == null) return;
 				if(from.getName().startsWith("LOBBY_")){
-//					if (from.getName().equals(((PacketInit) packet).getServer())) return;
 					Server server = Server.get(event.getServer());
 					for (Server i : Server.getServers()){
 						ServerInfo info = Proxy.getServer(i.getServer());
@@ -65,9 +67,10 @@ public class PacketListener implements Listener {
 			FileConverter.write(DataIO.getFile(write.getName()), write.getFile());
 		}else if(packet instanceof PacketRead){
 			PacketRead read = (PacketRead)packet;
-			String file = FileConverter.read(DataIO.getFile(read.getRead()));
-			if(file == null)return;
-			Server.get(event.getServer()).send(new PacketWrite(read.getWrite(), file));
-		}
+			byte write[] = FileConverter.read(DataIO.getFile(read.getRead()));
+			if(write == null)return;
+			Server.get(event.getServer()).send(new PacketWrite(read.getWrite(), write));
+		}else if(event.getPacket() instanceof PacketUpdateTop)
+			SfTop.updateTop((PacketUpdateTop)event.getPacket());
 	}
 }

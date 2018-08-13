@@ -19,7 +19,7 @@ public class CommandUpdate extends Command {
 	@Override
 	protected void run(CommandSender sender, String[] args) {
 		requireArgs(args, 1, "[Файл]");
-		String file = FileConverter.read(DataIO.getFile("plugins/" + args[0]));
+		byte file[] = FileConverter.read(DataIO.getFile("plugins/" + args[0]));
 		if (file == null) throw new CustomException("Файл §f" + args[0] + " §cне найден.");
 		String server = args.length == 2 ? args[1] : ((ProxiedPlayer) sender).getServer().getInfo().getName();
 		PacketWrite write = new PacketWrite("plugins/" + args[0], file);

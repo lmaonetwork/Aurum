@@ -2,7 +2,7 @@ package pro.delfik.proxy.command.handling;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
-import pro.delfik.proxy.AurumPlugin;
+import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.util.Rank;
@@ -24,7 +24,7 @@ public class CommandEnd extends Command {
 		}
 		String reason = Converter.mergeArray(args, 0, " ");
 		U.bc(null, "§c§lСервер будет перезагружен через 5 секунд!");
-		Proxy.i().getScheduler().schedule(AurumPlugin.instance, () ->
+		Proxy.i().getScheduler().schedule(Aurum.instance, () ->
 				Proxy.i().stop(reason == null ? "§dСервер перезагружается.\n§dЭто займёт некоторое время." : reason),
 		5, TimeUnit.SECONDS);
 	}

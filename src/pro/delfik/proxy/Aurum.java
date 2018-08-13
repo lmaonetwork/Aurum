@@ -31,7 +31,11 @@ import pro.delfik.proxy.command.handling.PrivateMessages;
 import pro.delfik.proxy.connection.ServerListener;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.data.PacketListener;
+import pro.delfik.proxy.ev.EvChat;
+import pro.delfik.proxy.ev.EvJoin;
+import pro.delfik.proxy.ev.EvPacket;
+import pro.delfik.proxy.ev.EvQuit;
+import pro.delfik.proxy.ev.EvReconnect;
 import pro.delfik.proxy.games.SfTop;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
@@ -52,10 +56,9 @@ import pro.delfik.vk.VKBot;
 import java.io.File;
 import java.util.Map;
 
-public class AurumPlugin extends Plugin {
-	private static int port;
+public class Aurum extends Plugin {
 	private static CryptoUtils cryptoUtils;
-	public static AurumPlugin instance;
+	public static Aurum instance;
 	
 	private static void classLoader() {
 		Rank.class.getCanonicalName();
@@ -63,7 +66,6 @@ public class AurumPlugin extends Plugin {
 		ArrayUtils.class.getCanonicalName();
 		CryptoUtils.class.getCanonicalName();
 		CryptoUtils.Keccak.class.getCanonicalName();
-		ServerType.class.getCanonicalName();
 		ServerInfo.class.getCanonicalName();
 		CryptoUtils.Keccak.Parameters.class.getCanonicalName();
 		Converter.class.getCanonicalName();
@@ -79,21 +81,24 @@ public class AurumPlugin extends Plugin {
 		PacketTop.class.getCanonicalName();
 		PacketTop.Top.class.getCanonicalName();
 	}
-	
+
+	@Override
 	public void onLoad() {
 		instance = this;
 		classLoader();
-		BungeeCord cord = BungeeCord.getInstance();
-		PluginManager manager = cord.pluginManager;
+		events();
+		commands();
+		SkinApplier.init();
+		SkinStorage.init(new File("Core/SkinsHandler"));
+		Scheduler.init();
+		Packet.init();
+		SfTop.init();
+		VKBot.start();
 		Database.enable();
-		manager.registerListener(this, new OnlineHandler());
-		manager.registerListener(this, new ChatHandler());
-		manager.registerListener(this, new PacketListener());
-		this.load();
+		load();
 	}
-	
-	@Override
-	public void onEnable() {
+
+	private void commands(){
 		new CommandOnline();
 		new Authorization("login", "Авторизация на сервере.", "l");
 		new Authorization("register", "Регистрация на сервере", "p", "reg");
@@ -117,7 +122,6 @@ public class AurumPlugin extends Plugin {
 		new Kicks();
 		new Mutes(false);
 		new Mutes(true);
-
 		new CommandUpdate();
 		new CommandPing();
 		new CommandStats();
@@ -126,30 +130,21 @@ public class AurumPlugin extends Plugin {
 		new CommandPassChange();
 		new IPBound();
 		new CommandIgnore();
-		
-		SkinApplier.init();
-		SkinStorage.init(new File("Core/SkinsHandler"));
-		Scheduler.init();
-		Packet.init();
-		SfTop.init();
-		VKBot.start();
-		
+	}
+
+	private void events(){
+		PluginManager manager = BungeeCord.getInstance().pluginManager;
+		manager.registerListener(this, new EvChat());
+		manager.registerListener(this, new EvJoin());
+		manager.registerListener(this, new EvPacket());
+		manager.registerListener(this, new EvQuit());
+		manager.registerListener(this, new EvReconnect());
 	}
 	
 	private void load() {
 		Map<String, String> read = DataIO.readConfig("config");
-		if (read == null) {
-			cryptoUtils = new CryptoUtils("1234567890123456");
-			port = 1234;
-			System.out.println("Configs not found, using default values");
-		} else {
-			cryptoUtils = new CryptoUtils(read.get("crypto"));
-			port = Converter.toInt(read.get("port"));
-			if (port < 1 || port > 65535) {
-				throw new Error("Error from read port, needed 1 - 65535");
-			}
-		}
-		ServerListener.init(port);
+		cryptoUtils = new CryptoUtils(read.get("crypto"));
+		ServerListener.init(Converter.toInt(read.get("port")));
 	}
 	
 	public static CryptoUtils getCryptoUtils() {
@@ -160,6 +155,7 @@ public class AurumPlugin extends Plugin {
 	public void onDisable() {
 		ServerListener.close();
 		SfTop.unload();
+		EvChat.unload();
 	}
 	
 	public void run() {

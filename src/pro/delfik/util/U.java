@@ -20,10 +20,15 @@ public class U {
 	public static boolean ignoreEx(RunnableExc r) {
 		try {
 			r.run(); return true;
-		} catch (Exception ignored) {return false;}
+		} catch (Exception ignored) {
+			return false;
+		}
 	}
 	
-	@FunctionalInterface public interface RunnableExc { void run() throws Exception; }
+	@FunctionalInterface
+	public interface RunnableExc {
+		void run() throws Exception;
+	}
 	
 	// -------------------------------------------- Работа с чатом
 	
@@ -63,6 +68,7 @@ public class U {
 		c.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggest));
 		return c;
 	}
+
 	public static TextComponent run(String text, String hover, String suggest) {
 		TextComponent c = new TextComponent(text);
 		c.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -70,6 +76,7 @@ public class U {
 		c.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, suggest));
 		return c;
 	}
+
 	public static TextComponent create(String text, HoverEvent hover, ClickEvent click) {
 		TextComponent c = new TextComponent(text);
 		c.setHoverEvent(hover);
@@ -119,8 +126,6 @@ public class U {
 		return new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/player " + p.name);
 	}
 	
-	
-	
 	private static HoverEvent getHover(Person p) {
 		return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[] {
 				new TextComponent("§7" + p.getHandle().getDisplayName() + "\n§e> Нажмите для списка действий §e<")
@@ -142,5 +147,4 @@ public class U {
 			return tc;
 		}
 	}
-	
 }

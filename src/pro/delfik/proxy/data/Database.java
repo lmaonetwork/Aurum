@@ -1,7 +1,7 @@
 package pro.delfik.proxy.data;
 
 import net.md_5.bungee.BungeeCord;
-import pro.delfik.proxy.AurumPlugin;
+import pro.delfik.proxy.Aurum;
 
 import java.sql.Connection;
 import java.sql.*;
@@ -31,7 +31,7 @@ public class Database {
 	
 	public static void openConnection() throws SQLException {
 		if (connection != null && !connection.isClosed()) return;
-		BungeeCord.getInstance().getScheduler().schedule(AurumPlugin.instance, () -> {
+		BungeeCord.getInstance().getScheduler().schedule(Aurum.instance, () -> {
 			try {
 				if (connection != null && !connection.isClosed()) return;
 				Class.forName("com.mysql.jdbc.Driver");

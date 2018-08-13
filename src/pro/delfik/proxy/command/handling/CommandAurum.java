@@ -13,6 +13,7 @@ import pro.delfik.proxy.command.NotEnoughArgumentsException;
 import pro.delfik.proxy.connection.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
+import pro.delfik.proxy.ev.EvChat;
 import pro.delfik.proxy.games.SfTop;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.util.Rank;
@@ -52,6 +53,16 @@ public class CommandAurum extends Command {
 		functions.put("serverlist", CommandAurum::serverlist);
 		functions.put("gc", CommandAurum::gc);
 		functions.put("memory", CommandAurum::memory);
+		functions.put("mat", CommandAurum::mat);
+	}
+
+	private static String mat(CommandSender sender, Command command, String[] strings){
+		if(strings.length == 2){
+			EvChat.mat.remove(strings[0]);
+			return "Удалён мат " + strings[0];
+		}
+		EvChat.mat.add(strings[0]);
+		return "Добавлен мат " + strings[0];
 	}
 
 	private static String serverlist(CommandSender sender, Command command, String[] strings) {

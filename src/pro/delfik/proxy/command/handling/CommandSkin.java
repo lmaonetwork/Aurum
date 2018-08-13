@@ -4,7 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import pro.delfik.proxy.AurumPlugin;
+import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.command.Command;
 import pro.delfik.proxy.permissions.Person;
 import pro.delfik.util.Rank;
@@ -30,7 +30,7 @@ public class CommandSkin extends Command {
 		}
 		
 		String skin = args[0];
-		ProxyServer.getInstance().getScheduler().runAsync(AurumPlugin.instance, () -> {
+		ProxyServer.getInstance().getScheduler().runAsync(Aurum.instance, () -> {
 			if (skin.equals("clear")) {
 				try {
 					SkinStorage.removePlayerSkin(p.getName());
