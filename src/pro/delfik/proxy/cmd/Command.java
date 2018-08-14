@@ -47,7 +47,7 @@ public abstract class Command extends net.md_5.bungee.api.plugin.Command impleme
 	@Override
 	public final void execute(CommandSender sender, String[] args) {
 		User user = User.get(sender);
-		if (!(this instanceof Authorization) && !auth && (isAuth(user) || hasRank(user)))return;
+		if (!auth && (isAuth(user) || hasRank(user)))return;
 		try {
 			needArgs(args);
 			run(user, args);

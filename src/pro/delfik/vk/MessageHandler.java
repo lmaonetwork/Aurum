@@ -2,6 +2,7 @@ package pro.delfik.vk;
 
 import pro.delfik.proxy.cmd.user.CmdVK.PageAttachRequest;
 import pro.delfik.proxy.data.Database;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Converter;
 
 import java.sql.ResultSet;
@@ -28,11 +29,11 @@ public class MessageHandler {
 						"Чтобы прикрепить страницу, введите команду /vk в игре."};
 			}
 			if (from_id == 310918852) {
-				Authorization.allowedIPs.add("eeqlb");
-				Authorization.allowedIPs.add("lakaithree");
+				User.allowedIP.add("eeqlb");
+				User.allowedIP.add("lakaithree");
 				return new String[] {"С аккаунтов eEqlb и lakaithree снята привязка IP-адреса. У вас есть одна минута, затем защита восстановится."};
 			}
-			Authorization.allowedIPs.add(name.toLowerCase());
+			User.allowedIP.add(name.toLowerCase());
 			return new String[] {"С аккаунта " + name + " снята привязка IP-адреса. У вас есть одна минута, затем защита восстановится."};
 		}
 		if (ask.startsWith("confirm ")) {

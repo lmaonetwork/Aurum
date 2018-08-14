@@ -85,10 +85,10 @@ public class CmdAurum extends Command {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	private static String allowedips(CommandSender sender, Command command, String[] strings) {
-		if (strings.length == 1) return "§aВход для §f" + strings[0] + "§a разрешён. (§f" + Authorization.allowedIPs.add(strings[0].toLowerCase()) + "§a).";
-		return "§e" + Converter.merge(Authorization.allowedIPs, s -> s, "§f, §e");
+		if (strings.length == 1) return "§aВход для §f" + strings[0] + "§a разрешён. (§f" + User.allowedIP.add(strings[0].toLowerCase()) + "§a).";
+		return "§e" + Converter.merge(User.allowedIP, s -> s, "§f, §e");
 	}
 	private static String pageAttachRequests(CommandSender sender, Command command, String[] strings) {
 		return "§e" + Converter.merge(CmdVK.PageAttachRequest.byCode.values(),

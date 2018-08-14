@@ -17,6 +17,7 @@ import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.Rank;
+import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class User {
+
+	public static final TimedList<String> allowedIP = new TimedList<>(60);
 
 	public static final String path = "players";
 
@@ -63,7 +66,7 @@ public class User {
 			if (lastSeenIP.equals(p.getAddress().getHostName())) {
 				auth = true;
 				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
-			} else if (!Authorization.allowedIPs.contains(name.toLowerCase())) throw new DifferentIPException(name);
+			} else if (!allowedIP.contains(name.toLowerCase())) throw new DifferentIPException(name);
 		}
 		
 		return new User(info, mute, auth);
