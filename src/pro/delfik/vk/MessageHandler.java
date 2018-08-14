@@ -1,7 +1,7 @@
 package pro.delfik.vk;
 
-import pro.delfik.proxy.command.handling.Authorization;
-import pro.delfik.proxy.command.handling.CommandVK.PageAttachRequest;
+import pro.delfik.proxy.cmd.handling.Authorization;
+import pro.delfik.proxy.cmd.handling.CommandVK.PageAttachRequest;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.util.Converter;
 

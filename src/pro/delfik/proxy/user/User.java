@@ -10,8 +10,8 @@ import pro.delfik.net.packet.PacketPex;
 import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.command.handling.Authorization;
-import pro.delfik.proxy.command.handling.Mutes;
+import pro.delfik.proxy.cmd.ex.ExCustom;
+import pro.delfik.proxy.cmd.handling.Authorization;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
@@ -35,6 +35,12 @@ public class User {
 	}
 	
 	private static final HashMap<String, User> list = new HashMap<>();
+
+	static{
+		UserInfo info = new UserInfo("CONSOLE");
+		info.rank = Rank.DEV;
+		list.put("CONSOLE", new User(info, null, true));
+	}
 	
 	public static User get(String name) {
 		return list.get(Converter.smartLowercase(name));
@@ -49,14 +55,12 @@ public class User {
 		if (info == null) return new User(new UserInfo(name, "", 0, Rank.PLAYER,
 			0L, "", false, new ArrayList<>(), false, new ArrayList<>()),null, false);
 		
-		ProxiedPlayer p = Proxy.getPlayer(name);
-		
 		boolean auth = false;
 		Mutes.MuteInfo mute = Mutes.get(name);
 		String lastSeenIP = info.getIp();
-		boolean ipbound = info.ipbound;
 		
 		if (lastSeenIP != null && info.ipbound) {
+			ProxiedPlayer p = Proxy.getPlayer(name);
 			if (lastSeenIP.equals(p.getAddress().getHostName())) {
 				auth = true;
 				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
@@ -73,8 +77,7 @@ public class User {
 		if (!p.authorized) return;
 		PlayerDataManager.save(p.getInfo());
 	}
-	
-	
+
 	public static Collection<User> getAll() {
 		return list.values();
 	}
@@ -129,9 +132,8 @@ public class User {
 	}
 	
 	// Implementation
-	
 	public void msg(Object... o) {
-		U.msg(getHandle(), o);
+		U.msg(getSender(), o);
 	}
 
 	public void kick(String reason) {
@@ -141,9 +143,36 @@ public class User {
 	public String getIP() {return getHandle().getAddress().getHostName();}
 
 	public ServerInfo getServerInfo() {return getHandle().getServer().getInfo();}
-	
+
+	public void updateTab(ProxiedPlayer handle){
+		Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
+			PlayerListItem item = getTab(handle);
+			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()){
+				User user = get(player);
+				player.unsafe().sendPacket(item);
+				if(user != null)
+					handle.unsafe().sendPacket(user.getTab(player));
+			}
+		}, 1, TimeUnit.SECONDS);
+	}
+
+	public void tell(User dest, String msg) {
+		if (isIgnoring(dest.getName())) throw new ExCustom("§cВы не можете писать игроку, который находится у вас в игноре.");
+		if (dest.isIgnoring(dest.getName())) throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
+		lastWriter = dest.getName();
+		msg("§e[§f" + dest.getName() + "§e -> §fВы§e] " + msg);
+		dest.telled(dest, msg);
+	}
+
+	private void telled(User user, String msg){
+		lastWriter = user.getName();
+		msg("§e[§fВы §e-> §f" + user.getName() + "§e] " + msg);
+	}
 	
 	// Getters & Setters
+	public CommandSender getSender(){
+		return name.equals("CONSOLE") ? Proxy.getConsole() : getHandle();
+	}
 
 	public ProxiedPlayer getHandle() {
 		return Proxy.getPlayer(name);
@@ -240,18 +269,6 @@ public class User {
 		return ipbound;
 	}
 
-	public void updateTab(ProxiedPlayer handle){
-		Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
-			PlayerListItem item = getTab(handle);
-			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()){
-				User user = get(player);
-				player.unsafe().sendPacket(item);
-				if(user != null)
-				handle.unsafe().sendPacket(user.getTab(player));
-			}
-		}, 1, TimeUnit.SECONDS);
-	}
-
 	private PlayerListItem getTab(ProxiedPlayer player){
 		PlayerListItem.Item item = new PlayerListItem.Item();
 		item.setUsername(name);
@@ -267,15 +284,14 @@ public class User {
 		return this.ipbound = IPBound;
 	}
 
-	public List<String> getIgnoredPlayers() {
-		return ignoredPlayers;
-	}
 	public void ignore(String player) {
 		ignoredPlayers.add(Converter.smartLowercase(player));
 	}
+
 	public boolean unignore(String player) {
 		return ignoredPlayers.remove(Converter.smartLowercase(player));
 	}
+
 	public boolean isIgnoring(String player) {
 		return ignoredPlayers.contains(Converter.smartLowercase(player));
 	}

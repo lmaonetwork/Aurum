@@ -6,28 +6,33 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import pro.delfik.net.Packet;
 import pro.delfik.net.packet.PacketTop;
-import pro.delfik.proxy.command.handling.Authorization;
-import pro.delfik.proxy.command.handling.Bans;
-import pro.delfik.proxy.command.handling.BansIP;
-import pro.delfik.proxy.command.handling.CommandAlert;
-import pro.delfik.proxy.command.handling.CommandAurum;
-import pro.delfik.proxy.command.handling.CommandEnd;
-import pro.delfik.proxy.command.handling.CommandFM;
-import pro.delfik.proxy.command.handling.CommandGuide;
-import pro.delfik.proxy.command.handling.CommandHub;
-import pro.delfik.proxy.command.handling.CommandIgnore;
-import pro.delfik.proxy.command.handling.Kicks;
-import pro.delfik.proxy.command.handling.CommandOnline;
-import pro.delfik.proxy.command.handling.CommandPassChange;
-import pro.delfik.proxy.command.handling.CommandPing;
-import pro.delfik.proxy.command.handling.CommandSkin;
-import pro.delfik.proxy.command.handling.CommandStats;
-import pro.delfik.proxy.command.handling.CommandStp;
-import pro.delfik.proxy.command.handling.CommandUpdate;
-import pro.delfik.proxy.command.handling.CommandVK;
-import pro.delfik.proxy.command.handling.IPBound;
-import pro.delfik.proxy.command.handling.Mutes;
-import pro.delfik.proxy.command.handling.PrivateMessages;
+import pro.delfik.proxy.cmd.Command;
+import pro.delfik.proxy.cmd.handling.Authorization;
+import pro.delfik.proxy.cmd.moder.CmdBan;
+import pro.delfik.proxy.cmd.moder.CmdBanIP;
+import pro.delfik.proxy.cmd.moder.CmdKick;
+import pro.delfik.proxy.cmd.moder.CmdMute;
+import pro.delfik.proxy.cmd.moder.CmdUnban;
+import pro.delfik.proxy.cmd.moder.CmdUnbanIP;
+import pro.delfik.proxy.cmd.moder.CmdUnmute;
+import pro.delfik.proxy.cmd.handling.CommandAlert;
+import pro.delfik.proxy.cmd.handling.CommandAurum;
+import pro.delfik.proxy.cmd.handling.CommandEnd;
+import pro.delfik.proxy.cmd.moder.CmdFM;
+import pro.delfik.proxy.cmd.handling.CommandGuide;
+import pro.delfik.proxy.cmd.user.CmdHub;
+import pro.delfik.proxy.cmd.user.CmdIgnore;
+import pro.delfik.proxy.cmd.user.CmdOnline;
+import pro.delfik.proxy.cmd.user.CmdPassChange;
+import pro.delfik.proxy.cmd.user.CmdPing;
+import pro.delfik.proxy.cmd.user.CmdSkin;
+import pro.delfik.proxy.cmd.user.CmdReply;
+import pro.delfik.proxy.cmd.user.CmdStats;
+import pro.delfik.proxy.cmd.handling.CommandStp;
+import pro.delfik.proxy.cmd.handling.CommandUpdate;
+import pro.delfik.proxy.cmd.handling.CommandVK;
+import pro.delfik.proxy.cmd.handling.IPBound;
+import pro.delfik.proxy.cmd.user.CmdTell;
 import pro.delfik.proxy.data.ServerListener;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Database;
@@ -99,37 +104,22 @@ public class Aurum extends Plugin {
 	}
 
 	private void commands(){
-		new CommandOnline();
-		new Authorization("login", "Авторизация на сервере.", "l");
-		new Authorization("register", "Регистрация на сервере", "p", "reg");
-		new CommandFM("osk", "Быстрый мут за оскорбление");
-		new CommandFM("flood", "Быстрый мут за флуд");
-		new CommandFM("mt", "Быстрый мут за мат");
-		new CommandFM("caps", "Быстрый мут за капс");
-		new CommandFM("amoral", "Быстрый мут за аморальное поведение");
-		new CommandGuide();
-		new CommandVK();
-		new CommandAurum();
-		new PrivateMessages(false);
-		new PrivateMessages(true);
-		new CommandStp();
-		new Bans(false);
-		new Bans(true);
-		new BansIP(false);
-		new BansIP(true);
-		new CommandAlert();
-		new CommandEnd();
-		new Kicks();
-		new Mutes(false);
-		new Mutes(true);
-		new CommandUpdate();
-		new CommandPing();
-		new CommandStats();
-		new CommandHub();
-		new CommandSkin();
-		new CommandPassChange();
-		new IPBound();
-		new CommandIgnore();
+		for(Command command : new Command[]{
+				new CmdOnline(), new Authorization("login", "Авторизация на сервере.", "l"),
+				new Authorization("register", "Регистрация на сервере", "p", "reg"),
+				new CmdFM("osk", "Быстрый мут за оскорбление"),
+				new CmdFM("flood", "Быстрый мут за флуд"),
+				new CmdFM("mt", "Быстрый мут за мат"),
+				new CmdFM("caps", "Быстрый мут за капс"),
+				new CmdFM("amoral", "Быстрый мут за аморальное поведение"),
+				new CommandGuide(), new CommandVK(), new CommandAurum(),
+				new CmdTell(), new CmdReply(), new CommandStp(),
+				new CmdBanIP(), new CmdUnbanIP(), new CommandAlert(),
+				new CommandEnd(), new CmdKick(), new CmdMute(), new CmdUnmute(),
+				new CommandUpdate(), new CmdPing(), new CmdStats(), new CmdHub(),
+				new CmdSkin(), new CmdPassChange(), new IPBound(), new CmdIgnore(),
+				new CmdBan(), new CmdUnban()
+		}) Proxy.registerCommand(command);
 	}
 
 	private void events(){

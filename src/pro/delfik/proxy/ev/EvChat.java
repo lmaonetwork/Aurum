@@ -5,7 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import pro.delfik.proxy.command.handling.Mutes;
+import pro.delfik.proxy.user.Mutes;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;

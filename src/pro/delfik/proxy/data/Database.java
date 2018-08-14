@@ -44,6 +44,7 @@ public class Database {
 	
 	public static Result sendQuery(String query) {
 		try{
+			if(connection == null)openConnection();
 			Statement statement = connection.createStatement();
 			ResultSet set = statement.executeQuery(query);
 			return new Result(statement, set);
