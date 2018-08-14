@@ -1,4 +1,4 @@
-package pro.delfik.proxy.cmd.handling;
+package pro.delfik.proxy.cmd.kurator;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -9,7 +9,9 @@ import pro.delfik.net.packet.PacketGC;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.CommandProcessor;
+import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.cmd.ex.ExNotEnoughArguments;
+import pro.delfik.proxy.cmd.user.CmdVK;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
@@ -26,8 +28,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.HashMap;
 
-public class CommandAurum extends Command {
-	public CommandAurum() {
+public class CmdAurum extends Command {
+	public CmdAurum() {
 		super("aurum", Rank.KURATOR, "Ты няшка ^^");
 	}
 	
@@ -35,25 +37,25 @@ public class CommandAurum extends Command {
 	public static final HashMap<String, CommandProcessor> functions = new HashMap<>();
 	
 	static {
-		functions.put("send", CommandAurum::send);
-		functions.put("setrank", CommandAurum::setrank);
-		functions.put("sqlquery", CommandAurum::sqlquery);
-		functions.put("sqlupdate", CommandAurum::sqlupdate);
-		functions.put("vimeban", CommandAurum::vimeban);
-		functions.put("echo", CommandAurum::echo);
-		functions.put("info", CommandAurum::info);
-		functions.put("ping", CommandAurum::ping);
-		functions.put("resetpassword", CommandAurum::resetPassword);
-		functions.put("vk", CommandAurum::vk);
-		functions.put("title", CommandAurum::title);
-		functions.put("allowedips", CommandAurum::allowedips);
-		functions.put("pageattachrequests", CommandAurum::pageAttachRequests);
-		functions.put("vkupdate", CommandAurum::vkupdate);
-		functions.put("sftop", CommandAurum::sftop);
-		functions.put("serverlist", CommandAurum::serverlist);
-		functions.put("gc", CommandAurum::gc);
-		functions.put("memory", CommandAurum::memory);
-		functions.put("mat", CommandAurum::mat);
+		functions.put("send", CmdAurum::send);
+		functions.put("setrank", CmdAurum::setrank);
+		functions.put("sqlquery", CmdAurum::sqlquery);
+		functions.put("sqlupdate", CmdAurum::sqlupdate);
+		functions.put("vimeban", CmdAurum::vimeban);
+		functions.put("echo", CmdAurum::echo);
+		functions.put("info", CmdAurum::info);
+		functions.put("ping", CmdAurum::ping);
+		functions.put("resetpassword", CmdAurum::resetPassword);
+		functions.put("vk", CmdAurum::vk);
+		functions.put("title", CmdAurum::title);
+		functions.put("allowedips", CmdAurum::allowedips);
+		functions.put("pageattachrequests", CmdAurum::pageAttachRequests);
+		functions.put("vkupdate", CmdAurum::vkupdate);
+		functions.put("sftop", CmdAurum::sftop);
+		functions.put("serverlist", CmdAurum::serverlist);
+		functions.put("gc", CmdAurum::gc);
+		functions.put("memory", CmdAurum::memory);
+		functions.put("mat", CmdAurum::mat);
 	}
 
 	private static String mat(CommandSender sender, Command command, String[] strings){
@@ -89,7 +91,7 @@ public class CommandAurum extends Command {
 		return "§e" + Converter.merge(Authorization.allowedIPs, s -> s, "§f, §e");
 	}
 	private static String pageAttachRequests(CommandSender sender, Command command, String[] strings) {
-		return "§e" + Converter.merge(CommandVK.PageAttachRequest.byCode.values(),
+		return "§e" + Converter.merge(CmdVK.PageAttachRequest.byCode.values(),
 				s -> s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)", "§f, §e");
 	}
 	
@@ -218,26 +220,20 @@ public class CommandAurum extends Command {
 	}
 	
 	@Override
-	protected void run(CommandSender sender, String[] args) {
-		if (sender instanceof ProxiedPlayer) {
-			User p = User.get(sender);
-			if (!p.isIPBound()) {
-				p.msg("§cДля использования §f/aurum §cнеобходимо включить §f/attachip");
-				return;
-			}
-		}
-		if (args.length == 0) msg(sender, "§c/aurum [", Converter.merge(functions.keySet(), s -> s, "§c, §f"), "§c]");
-		else {
-			String[] a = new String[args.length - 1];
-			System.arraycopy(args, 1, a, 0, a.length);
-			CommandProcessor function = functions.get(args[0].toLowerCase());
-			if (function == null) msg(sender, "prefix", "§cПодкомана §f/aurum " + args[0] + "§c не найдена.");
-			else try {
-				String os = function.process(sender, this, a);
-				if (os != null && os.length() != 0) msg(sender, os);
-			} catch (ExNotEnoughArguments e) {
-				throw new ExNotEnoughArguments(args[0] + " " + e.getMessage());
-			}
+	protected void run(User user, String args[]) {
+		if(!user.getName().equals("CONSOLE") || user.isIPBound())
+			throw new ExCustom("§cДля использования §f/aurum §cнеобходимо включить §f/attachip");
+		if(args.length == 0)
+			throw new ExCustom("§c/aurum [" + Converter.merge(functions.keySet(), s -> s, "§c, §f") + "§c]");
+		String[] a = new String[args.length - 1];
+		System.arraycopy(args, 1, a, 0, a.length);
+		CommandProcessor function = functions.get(args[0].toLowerCase());
+		if(function == null) throw new ExCustom("prefix" + "§cПодкомана §f/aurum " + args[0] + "§c не найдена.");
+		else try{
+			String os = function.process(user.getSender(), this, a);
+			if(os != null && os.length() != 0) user.msg(os);
+		}catch (ExNotEnoughArguments e){
+			throw new ExNotEnoughArguments(args[0] + " " + e.getMessage());
 		}
 	}
 	

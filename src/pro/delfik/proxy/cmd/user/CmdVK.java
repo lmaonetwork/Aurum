@@ -1,11 +1,11 @@
-package pro.delfik.proxy.cmd.handling;
+package pro.delfik.proxy.cmd.user;
 
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.data.Database;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.U;
@@ -14,35 +14,35 @@ import pro.delfik.vk.VK;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CommandVK extends Command {
+public class CmdVK extends Command {
 	
-	public CommandVK() {
+	public CmdVK() {
 		super("vk", Rank.PLAYER, "Привязка страницы ВК к игровому аккаунту");
 	}
 	
 	@Override
-	protected void run(CommandSender sender, String[] args) {
+	protected void run(User user, String[] args) {
 		if (args.length == 0 || args[0].length() == 0) {
-			msg(sender, "§6Привязка страницы VK к игровому аккаунту: §e/vk [sID]");
-			msg(sender, "§6sID - часть адреса страницы после \"§ehttps://vk.com/§6\".");
-			msg(sender, "§6Если ваш адрес - §ehttps://vk.com/id0§6, то ваш sID - §eid0");
+			user.msg("§6Привязка страницы VK к игровому аккаунту: §e/vk [sID]");
+			user.msg("§6sID - часть адреса страницы после \"§ehttps://vk.com/§6\".");
+			user.msg("§6Если ваш адрес - §ehttps://vk.com/id0§6, то ваш sID - §eid0");
 			return;
 		}
-		msg(sender, "§aПроверка страницы...");
+		user.msg("§aПроверка страницы...");
 		Proxy.i().getScheduler().runAsync(Aurum.instance, () -> {
 			int id = VK.getUserID(args[0]);
 			if (id == -1) {
-				msg(sender, "§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");
+				user.msg("§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");
 				return;
 			}
-			PageAttachRequest request = new PageAttachRequest(sender.getName(), id);
-			msg(sender, "§f");
-			msg(sender, "§aЗапрос на привязку страницы §fВКонтакте§a создан.");
-			msg(sender, "§aУ вас есть §f5 минут§a на его подтверждение.");
-			msg(sender, "§aДля подтверждения привязки вам необходимо отправить сообщение");
-			msg(sender, "§f§lconfirm " + request.getCode());
-			msg(sender, "§aВ ЛС нашей группы: §f", U.link("§nvk.com/lmaonetwork§f (Клик)", "https://vk.com/lmaonetwork"));
-			msg(sender, "§f");
+			PageAttachRequest request = new PageAttachRequest(user.getName(), id);
+			user.msg("§f");
+			user.msg("§aЗапрос на привязку страницы §fВКонтакте§a создан.");
+			user.msg("§aУ вас есть §f5 минут§a на его подтверждение.");
+			user.msg("§aДля подтверждения привязки вам необходимо отправить сообщение");
+			user.msg("§f§lconfirm " + request.getCode());
+			user.msg("§aВ ЛС нашей группы: §f", U.link("§nvk.com/lmaonetwork§f (Клик)", "https://vk.com/lmaonetwork"));
+			user.msg("§f");
 		});
 	}
 	

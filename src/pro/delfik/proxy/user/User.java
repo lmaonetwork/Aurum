@@ -11,7 +11,6 @@ import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.cmd.handling.Authorization;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;

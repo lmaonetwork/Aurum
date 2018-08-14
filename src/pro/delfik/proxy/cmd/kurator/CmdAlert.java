@@ -1,21 +1,22 @@
-package pro.delfik.proxy.cmd.handling;
+package pro.delfik.proxy.cmd.kurator;
 
-import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.Proxy;
+import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;
 
-public class CommandAlert extends Command {
+@Cmd(args = 1, help = "[Сообщение]")
+public class CmdAlert extends Command {
 	
-	public CommandAlert() {
+	public CmdAlert() {
 		super("alert", Rank.KURATOR, "Отправить сообщение на все сервера");
 	}
 	
 	@Override
-	protected void run(CommandSender sender, String[] args) {
-		requireArgs(args, 1, "[Сообщение]");
+	protected void run(User user, String[] args) {
 		Proxy.i().broadcast("§e§l[§d§lВнимание§e§l] §e" + U.color(Converter.mergeArray(args, 0, " ")));
 	}
 }
