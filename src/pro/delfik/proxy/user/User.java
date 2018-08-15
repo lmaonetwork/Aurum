@@ -162,13 +162,13 @@ public class User {
 		if (isIgnoring(dest.getName())) throw new ExCustom("§cВы не можете писать игроку, который находится у вас в игноре.");
 		if (dest.isIgnoring(dest.getName())) throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
 		lastWriter = dest.getName();
-		msg("§e[§f" + dest.getName() + "§e -> §fВы§e] " + msg);
-		dest.telled(dest, msg);
+		msg("§e[§fВы §e-> §f" + dest.getName() + "§e] " + msg);
+		dest.telled(this, msg);
 	}
 
 	private void telled(User user, String msg){
 		lastWriter = user.getName();
-		msg("§e[§fВы §e-> §f" + user.getName() + "§e] " + msg);
+		msg("§e[§f" + user.getName() + "§e -> §fВы§e] " + msg);
 	}
 	
 	// Getters & Setters

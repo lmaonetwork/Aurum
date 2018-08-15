@@ -10,7 +10,7 @@ import pro.delfik.util.Rank;
 
 import java.util.ArrayList;
 
-@Cmd(args = 1, help = "[Пароль]")
+@Cmd(args = 1, help = "[Пароль]", auth = true)
 public class CmdRegister extends Command{
 	public CmdRegister(){
 		super("register", Rank.PLAYER, "Регистрация на сервере", "p", "reg");

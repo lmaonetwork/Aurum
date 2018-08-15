@@ -1,23 +1,17 @@
 package pro.delfik.proxy.user;
 
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.util.Rank;
 import pro.delfik.util.Converter;
 import pro.delfik.util.U;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 
 public class Bans {
 	public static void unban(String player, String moderator) {

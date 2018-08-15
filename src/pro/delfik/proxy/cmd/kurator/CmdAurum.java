@@ -221,7 +221,7 @@ public class CmdAurum extends Command {
 	
 	@Override
 	protected void run(User user, String args[]) {
-		if(!user.getName().equals("CONSOLE") || user.isIPBound())
+		if(!user.getName().equals("CONSOLE") && !user.isIPBound())
 			throw new ExCustom("§cДля использования §f/aurum §cнеобходимо включить §f/attachip");
 		if(args.length == 0)
 			throw new ExCustom("§c/aurum [" + Converter.merge(functions.keySet(), s -> s, "§c, §f") + "§c]");

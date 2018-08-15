@@ -15,7 +15,7 @@ public class CmdUnmute extends Command{
 
 	@Override
 	protected void run(User user, String[] args) {
-		if (Mutes.get(args[0]) == null) throw new ExCustom("§eИгрок §f" + args[0] + "§e не замучен.");
+		if (!Mutes.muted(args[0])) throw new ExCustom("§eИгрок §f" + args[0] + "§e не замучен.");
 		Mutes.unmute(args[0], user.getName());
 	}
 }
