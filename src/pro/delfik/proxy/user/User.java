@@ -58,7 +58,7 @@ public class User {
 			0L, "", false, new ArrayList<>(), false, new ArrayList<>()),null, false);
 		
 		boolean auth = false;
-		Mutes.MuteInfo mute = Mutes.get(name);
+		Mute mute = Mute.get(name);
 		String lastSeenIP = info.getIp();
 		
 		if (lastSeenIP != null && info.ipbound) {
@@ -73,11 +73,12 @@ public class User {
 	}
 
 	public static void unload(String name) {
-		User p = get(name);
-		if (p == null) return;
+		User user = get(name);
+		if (user == null) return;
 		list.remove(Converter.smartLowercase(name));
-		if (!p.authorized) return;
-		PlayerDataManager.save(p.getInfo());
+		if (!user.authorized) return;
+		user.mute.write(name);
+		PlayerDataManager.save(user.getInfo());
 	}
 
 	public static Collection<User> getAll() {
@@ -99,7 +100,7 @@ public class User {
 	private List<String> friends;
 	private List<String> ignoredPlayers;
 	
-	private Mutes.MuteInfo mute;
+	private Mute mute;
 
 	private String last = "", lastLast;
 
@@ -118,7 +119,7 @@ public class User {
 
 	public String lastWriter;
 	
-	public User(UserInfo userInfo, Mutes.MuteInfo mute, boolean auth) {
+	public User(UserInfo userInfo, Mute mute, boolean auth) {
 		this.name = userInfo.getName();
 		this.rank = userInfo.getRank();
 		this.password = userInfo.getPassword();
@@ -251,15 +252,16 @@ public class User {
 		return new UserInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers, pmDisabled, friends);
 	}
 	
-	public Mutes.MuteInfo getActiveMute() {
+	public Mute getActiveMute() {
 		return mute;
 	}
 	
-	public void clearMute() {
+	public void clearMute(String moderator) {
 		mute = null;
+		msg("§aТы снова можешь писать в чат. Поблагодари §f" + moderator + "§a за размут.");
 	}
 	
-	public void mute(Mutes.MuteInfo muteInfo) {
+	public void mute(Mute muteInfo) {
 		mute = muteInfo;
 	}
 	

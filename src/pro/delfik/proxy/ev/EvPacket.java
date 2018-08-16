@@ -16,7 +16,7 @@ import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.user.Bans;
 import pro.delfik.proxy.user.Kicks;
-import pro.delfik.proxy.user.Mutes;
+import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.ev.added.PacketEvent;
@@ -37,9 +37,9 @@ public class EvPacket implements Listener{
 			else if(punishment == PacketPunishment.Punishment.UNBAN)
 				Bans.unban(punish.getNick(), punish.getModer());
 			else if(punishment == PacketPunishment.Punishment.MUTE)
-				Mutes.mute(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
+				Mute.mute(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
 			else if(punishment == PacketPunishment.Punishment.UNMUTE)
-				Mutes.unmute(punish.getNick(), punish.getModer());
+				Mute.unmute(punish.getNick(), punish.getModer());
 			else if(punishment == PacketPunishment.Punishment.KICK)
 				Kicks.kick(Proxy.getPlayer(punish.getNick()), punish.getModer(), punish.getReason());
 		}else if(packet instanceof PacketSummon){

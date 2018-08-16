@@ -35,10 +35,6 @@ public class SfTop extends PacketTop.Top{
 		this(nick, 0, 0, 0, 0);
 	}
 	
-	public String toString() {
-		return this.nick + '}' + this.games + '}' + this.wins + '}' + this.beds + '}' + this.deaths;
-	}
-	
 	public static String getAllTop() {
 		StringBuilder sb = new StringBuilder();
 		for (SfTop top : SfTop.top) sb.append(top).append('\n');

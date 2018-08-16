@@ -2,7 +2,7 @@ package pro.delfik.proxy.cmd.moder;
 
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.user.Mutes;
+import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 
@@ -28,7 +28,7 @@ public class CmdFM extends Command{
 	protected void run(User user, String args[]) {
 		String command = getCommand();
 		Rule rule = rules.get(command);
-		Mutes.mute(args[0], rule.reason, rule.time, user.getName());
+		Mute.mute(args[0], rule.reason, rule.time, user.getName());
 	}
 	
 	private static class Rule {

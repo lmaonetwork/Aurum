@@ -1,5 +1,7 @@
 package pro.delfik.proxy.data;
 
+import pro.delfik.util.Byteable;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -31,6 +33,15 @@ public class DataIO {
 		Collections.addAll(list, split);
 		return list;
 	}
+
+	public static void write(String path, List<String> write) {
+		StringBuilder buffer = new StringBuilder();
+		for (String line : write) {
+			buffer.append(line);
+			buffer.append('\n');
+		}
+		writeFile(path, buffer.toString());
+	}
 	
 	public static Map<String, String> readConfig(String path) {
 		Map<String, String> map = new HashMap<>();
@@ -41,15 +52,6 @@ public class DataIO {
 			if(split.length == 2) map.put(split[0], split[1]);
 		}
 		return map;
-	}
-	
-	public static void write(String path, List<String> write) {
-		StringBuilder buffer = new StringBuilder();
-		for (String line : write) {
-			buffer.append(line);
-			buffer.append('\n');
-		}
-		writeFile(path, buffer.toString());
 	}
 	
 	public static void writeConfig(String path, Map<String, String> write) {
@@ -64,23 +66,7 @@ public class DataIO {
 		
 		writeFile(path, buffer.toString());
 	}
-	
-	public static void writeFile(String path, String write) {
-		File file = getFile(path);
-		if (!file.exists()) create(path);
-		
-		BufferedWriter out = null;
-		
-		try {
-			out = new BufferedWriter(new FileWriter(file));
-			out.write(write);
-		} catch (IOException var5) {
-			var5.printStackTrace();
-		}
-		
-		close(out);
-	}
-	
+
 	public static String readFile(String path) {
 		File file = getFile(path);
 		if(!contains(path)) return null;
@@ -100,17 +86,20 @@ public class DataIO {
 		close(in);
 		return sb.toString();
 	}
-
-	public static void writeBytes(String path, byte bytes[]){
+	
+	public static void writeFile(String path, String write) {
 		File file = getFile(path);
 		if (!file.exists()) create(path);
-		BufferedOutputStream out = null;
+		
+		BufferedWriter out = null;
+		
 		try {
-			out = new BufferedOutputStream(new FileOutputStream(file));
-			out.write(bytes);
+			out = new BufferedWriter(new FileWriter(file));
+			out.write(write);
 		} catch (IOException var5) {
 			var5.printStackTrace();
 		}
+		
 		close(out);
 	}
 
@@ -127,6 +116,28 @@ public class DataIO {
 		}
 		close(in);
 		return bytes;
+	}
+
+	public static void writeBytes(String path, byte bytes[]){
+		File file = getFile(path);
+		if (!file.exists()) create(path);
+		BufferedOutputStream out = null;
+		try {
+			out = new BufferedOutputStream(new FileOutputStream(file));
+			out.write(bytes);
+		} catch (IOException var5) {
+			var5.printStackTrace();
+		}
+		close(out);
+	}
+
+	public static <T extends Byteable> T readByteable(String path, Class<T> clazz){
+		byte read[] = readBytes(path);
+		return read == null ? null : Byteable.decode(clazz, read);
+	}
+
+	public static void writeByteable(String path, Byteable byteable){
+		writeBytes(path, byteable.zip().build());
 	}
 	
 	public static void remove(String path) {

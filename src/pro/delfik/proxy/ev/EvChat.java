@@ -5,7 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import pro.delfik.proxy.user.Mutes;
+import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
@@ -98,10 +98,10 @@ public class EvChat implements Listener{
 	}
 
 	private boolean checkMute(ChatEvent event, User user){
-		Mutes.MuteInfo mute = user.getActiveMute();
+		Mute mute = user.getActiveMute();
 		if (mute != null){
-			if (mute.until < System.currentTimeMillis()){
-				Mutes.clear(user.name);
+			if (mute.getUntil() < System.currentTimeMillis()){
+				Mute.clear(user.name);
 				return false;
 			}
 			event.setCancelled(true);
@@ -114,7 +114,7 @@ public class EvChat implements Listener{
 	private boolean antiFlood(ChatEvent event, User user){
 		String message = event.getMessage();
 		if(user.getLast().equals(message) && user.getLastLast().equals(message)){
-			Mutes.mute(user.getName(), "флуд", 30, "Антифлуд");
+			Mute.mute(user.getName(), "флуд", 30, "Антифлуд");
 			user.setLast("");
 			event.setCancelled(true);
 			return true;

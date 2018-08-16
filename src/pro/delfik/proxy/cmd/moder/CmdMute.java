@@ -3,7 +3,7 @@ package pro.delfik.proxy.cmd.moder;
 import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.user.Mutes;
+import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.user.User;
 import pro.delfik.util.Converter;
 import pro.delfik.util.Rank;
@@ -19,7 +19,7 @@ public class CmdMute extends Command{
 
 	@Override
 	protected void run(User user, String[] args) {
-		Mutes.mute(args[0], Converter.mergeArray(args, 2, " "), requireInt(args[1]), user.getName());
+		Mute.mute(args[0], Converter.mergeArray(args, 2, " "), requireInt(args[1]), user.getName());
 	}
 
 	@Override
