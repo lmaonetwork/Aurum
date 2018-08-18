@@ -196,7 +196,7 @@ public class User implements Byteable {
 
 	public void tell(User dest, String msg) {
 		if (isIgnoring(dest.getName())) throw new ExCustom("§cВы не можете писать игроку, который находится у вас в игноре.");
-		if (dest.isIgnoring(dest.getName())) throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
+		if (dest.isIgnoring(getName())) throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
 		lastWriter = dest.getName();
 		msg(U.simple("§e[§fВы §e-> §f" + dest.getName() + "§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + dest.getName()));
 		dest.telled(this, msg);
