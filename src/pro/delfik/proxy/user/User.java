@@ -126,17 +126,17 @@ public class User implements Byteable {
 
 	public String lastWriter;
 
-	public User(ByteUnzip u) {
-		name = u.getString();
-		password = u.getString();
-		rank = Rank.byChar.get((char) u.getInt());
-		online = u.getInt();
-		String lastSeenIP = u.getString();
-		money = u.getInt();
-		ipbound = u.getBoolean();
-		pmDisabled = u.getBoolean();
-		ignoredPlayers = u.getList();
-		friends = u.getList();
+	public User(ByteUnzip unzip) {
+		name = unzip.getString();
+		password = unzip.getString();
+		rank = Rank.byChar.get((char) unzip.getInt());
+		online = unzip.getInt();
+		String lastSeenIP = unzip.getString();
+		money = unzip.getInt();
+		ipbound = unzip.getBoolean();
+		pmDisabled = unzip.getBoolean();
+		ignoredPlayers = unzip.getList();
+		friends = unzip.getList();
 
 		connectedAt = (int) (System.currentTimeMillis() / 60000);
 		mute = Mute.get(name);

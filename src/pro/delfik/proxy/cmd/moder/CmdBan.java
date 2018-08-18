@@ -4,7 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.user.Bans;
+import pro.delfik.proxy.user.Ban;
 import pro.delfik.proxy.user.User;
 import pro.delfik.util.Converter;
 import pro.delfik.util.Rank;
@@ -29,7 +29,7 @@ public class CmdBan extends Command{
 		} catch (NumberFormatException ignored) {
 			skipTime = true;
 		}
-		Bans.ban(args[0], Converter.mergeArray(args, skipTime ? 1 : 2, " "), time, user.getName());
+		Ban.ban(args[0], Converter.mergeArray(args, skipTime ? 1 : 2, " "), time, user.getName());
 	}
 
 	@Override

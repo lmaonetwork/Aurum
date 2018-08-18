@@ -15,8 +15,8 @@ import pro.delfik.net.packet.PacketUpdateTop;
 import pro.delfik.net.packet.PacketWrite;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.user.Bans;
-import pro.delfik.proxy.user.Kicks;
+import pro.delfik.proxy.user.Ban;
+import pro.delfik.proxy.user.Kick;
 import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
@@ -35,15 +35,15 @@ public class EvPacket implements Listener{
 			PacketPunishment punish = (PacketPunishment) packet;
 			PacketPunishment.Punishment punishment = punish.getPunishment();
 			if(punishment == PacketPunishment.Punishment.BAN)
-				Bans.ban(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
+				Ban.ban(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
 			else if(punishment == PacketPunishment.Punishment.UNBAN)
-				Bans.unban(punish.getNick(), punish.getModer());
+				Ban.unban(punish.getNick(), punish.getModer());
 			else if(punishment == PacketPunishment.Punishment.MUTE)
 				Mute.mute(punish.getNick(), punish.getReason(), punish.getTime(), punish.getModer());
 			else if(punishment == PacketPunishment.Punishment.UNMUTE)
 				Mute.unmute(punish.getNick(), punish.getModer());
 			else if(punishment == PacketPunishment.Punishment.KICK)
-				Kicks.kick(Proxy.getPlayer(punish.getNick()), punish.getModer(), punish.getReason());
+				Kick.kick(Proxy.getPlayer(punish.getNick()), punish.getModer(), punish.getReason());
 		}else if(packet instanceof PacketSummon){
 			ProxiedPlayer p = Proxy.getPlayer(((PacketSummon) packet).getPlayer());
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());

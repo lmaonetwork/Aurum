@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Bans {
+public class Ban {
 	public static void unban(String player, String moderator) {
 		try {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
@@ -26,7 +26,7 @@ public class Bans {
 	}
 
 	public static void clear(String nick) {
-		Database.sendUpdate("DELETE FROM Bans WHERE name = '" + nick + "'");
+		Database.sendUpdate("DELETE FROM Ban WHERE name = '" + nick + "'");
 	}
 	
 	public static void ban(String player, String reason, int minutes, String moderator) {
@@ -43,7 +43,7 @@ public class Bans {
 			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
-		Database.sendUpdate("INSERT INTO Bans (name, moderator, time, until, reason) " +
+		Database.sendUpdate("INSERT INTO Ban (name, moderator, time, until, reason) " +
 				"VALUES ('" + player + "', '" + moderator + "', " + start + ", " + until + ", '" + reason + "')" +
 				"ON DUPLICATE KEY UPDATE moderator = '" + moderator + "', time = " + start + ", until = " + until + ", reason = '" + reason + "'");
 	}
@@ -51,7 +51,7 @@ public class Bans {
 	public static BanInfo get(String playername) {
 		Database.Result r = null;
 		try {
-			r = Database.sendQuery("SELECT * FROM Bans WHERE name = '" + playername + "'");
+			r = Database.sendQuery("SELECT * FROM Ban WHERE name = '" + playername + "'");
 			ResultSet res = r.set;
 			if (!res.next()) return null;
 			return new BanInfo(playername, res.getString("moderator"), res.getLong("time"),

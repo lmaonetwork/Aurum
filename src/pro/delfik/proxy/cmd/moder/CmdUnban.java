@@ -3,7 +3,7 @@ package pro.delfik.proxy.cmd.moder;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.user.Bans;
+import pro.delfik.proxy.user.Ban;
 import pro.delfik.proxy.user.User;
 import pro.delfik.util.Rank;
 
@@ -15,8 +15,8 @@ public class CmdUnban extends Command{
 
 	@Override
 	protected void run(User user, String args[]) {
-		if (Bans.get(args[0]) == null) throw new ExCustom("§eИгрок §f" + args[0] + "§e не заблокирован.");
-		Bans.unban(args[0], user.getName());
+		if (Ban.get(args[0]) == null) throw new ExCustom("§eИгрок §f" + args[0] + "§e не заблокирован.");
+		Ban.unban(args[0], user.getName());
 	}
 
 

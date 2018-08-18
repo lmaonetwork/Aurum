@@ -146,6 +146,7 @@ public class Aurum extends Plugin {
 		ServerListener.close();
 		SfTop.unload();
 		EvChat.unload();
+		Scheduler.kill();
 	}
 	
 	public void run() {

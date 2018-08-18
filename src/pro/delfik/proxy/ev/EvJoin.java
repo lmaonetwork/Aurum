@@ -8,8 +8,8 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.Aurum;
-import pro.delfik.proxy.user.Bans;
-import pro.delfik.proxy.user.BansIP;
+import pro.delfik.proxy.user.Ban;
+import pro.delfik.proxy.user.BanIP;
 import pro.delfik.proxy.user.DifferentIPException;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.skins.SkinApplier;
@@ -55,24 +55,24 @@ public class EvJoin implements Listener{
 	}
 
 	private boolean checkBanIP(LoginEvent event){
-		BansIP.BanIPInfo ipInfo = BansIP.getByAddress(event.getConnection().getAddress().getHostName());
+		BanIP.BanIPInfo ipInfo = BanIP.getByAddress(event.getConnection().getAddress().getHostName());
 		if(ipInfo != null){
 			event.setCancelled(true);
-			event.setCancelReason(BansIP.kickMessage(event.getConnection().getName(), ipInfo.ip, ipInfo.reason, ipInfo.moderator));
+			event.setCancelReason(BanIP.kickMessage(event.getConnection().getName(), ipInfo.ip, ipInfo.reason, ipInfo.moderator));
 			return true;
 		}
 		return false;
 	}
 
 	private boolean checkBan(LoginEvent event, String nick){
-		Bans.BanInfo i = Bans.get(nick);
+		Ban.BanInfo i = Ban.get(nick);
 		if(i != null){
 			if(i.until != 0 && i.until < System.currentTimeMillis()){
-				Bans.clear(nick);
+				Ban.clear(nick);
 				return false;
 			}
 			event.setCancelled(true);
-			event.setCancelReason(Bans.kickMessage(nick, i.reason, i.time, i.until, i.moderator));
+			event.setCancelReason(Ban.kickMessage(nick, i.reason, i.time, i.until, i.moderator));
 			return true;
 		}
 		return false;

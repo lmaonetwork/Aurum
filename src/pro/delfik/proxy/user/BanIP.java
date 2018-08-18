@@ -13,12 +13,12 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BansIP {
+public class BanIP {
 	public static void unbanNickname(String player, String moderator) {
 		try {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
 			Server server = moder == null ? null : moder.getServer();
-			Bans.unban(player, moderator);
+			Ban.unban(player, moderator);
 //			U.bc(server, "§7[§e" + moderator + "§7]§a Игрок §e" + player + " §aразбанен.");
 		} catch (Throwable t) {
 			t.printStackTrace();
@@ -49,7 +49,7 @@ public class BansIP {
 		if (p == null) throw new ExUserNotFound(player);
 		final String ip = p.getAddress().getHostName();
 		try {
-			Bans.ban(player, reason, 0, moderator);
+			Ban.ban(player, reason, 0, moderator);
 			U.bc(p.getServer(), "§7[§e" + moderator + "§7]§c Игрок §e" + player + " §cзабанен §eпо IP§c. Причина:§e " + reason);
 			if (p != null) p.disconnect(kickMessage(player, ip, reason, moderator));
 		} catch (Throwable t) {

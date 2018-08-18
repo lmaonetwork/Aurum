@@ -7,12 +7,13 @@ import pro.delfik.proxy.data.DataIO;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.ByteUnzip;
 import pro.delfik.util.ByteZip;
+import pro.delfik.util.Byteable;
 import pro.delfik.util.Converter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SfTop extends PacketTop.Top{
+public class SfTop extends PacketTop.Top {
 	private static final String path = "sf_top";
 
 	private static SfTop[] top = new SfTop[15];
