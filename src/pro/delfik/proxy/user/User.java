@@ -14,6 +14,9 @@ import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
+import pro.delfik.util.ByteUnzip;
+import pro.delfik.util.ByteZip;
+import pro.delfik.util.Byteable;
 import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.Rank;
@@ -27,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class User {
+public class User implements Byteable {
 	public static final TimedHashMap<String, String> outAuth = new TimedHashMap<>(60);
 
 	public static final TimedList<String> allowedIP = new TimedList<>(60);
@@ -92,10 +95,10 @@ public class User {
 	// non-static
 	
 	public final String name; // Ник игрока
-	private long connectedAt; // Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
+	private final int connectedAt; // Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
 	private boolean authorized = false; // Авторизован ли игрок
 	private String password ; // Hash пароля
-	private final long online; // Онлайн до захода на сервер
+	private final int online; // Онлайн до захода на сервер
 	private int money; // Баланс игрока
 	private Rank rank; // Ранг игрока
 	private String server = ""; // Сервер, на котором находится игрок
@@ -122,19 +125,47 @@ public class User {
 	}
 
 	public String lastWriter;
-	
+
+	public User(ByteUnzip u) {
+		name = u.getString();
+		password = u.getString();
+		rank = Rank.byChar.get((char) u.getInt());
+		online = u.getInt();
+		String lastSeenIP = u.getString();
+		money = u.getInt();
+		ipbound = u.getBoolean();
+		pmDisabled = u.getBoolean();
+		ignoredPlayers = u.getList();
+		friends = u.getList();
+
+		connectedAt = (int) (System.currentTimeMillis() / 60000);
+		mute = Mute.get(name);
+
+		if (lastSeenIP != null && ipbound) {
+			ProxiedPlayer p = Proxy.getPlayer(name);
+			String ip = outAuth.get(name);
+			if (lastSeenIP.equals(p.getAddress().getHostName()) || (ip != null && ip.equals(p.getAddress().getHostName()))) {
+				outAuth.remove(name);
+				authorize();
+				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
+			} else if (!allowedIP.contains(name.toLowerCase())) throw new DifferentIPException(name);
+		}
+
+
+	}
+
 	public User(UserInfo userInfo, Mute mute, boolean auth) {
 		this.name = userInfo.getName();
 		this.rank = userInfo.getRank();
 		this.password = userInfo.getPassword();
-		this.online = userInfo.getOnline();
+		this.online = (int) userInfo.getOnline();
 		this.money = userInfo.getMoney();
 		this.mute = mute;
 		this.ipbound = userInfo.isIPBound();
 		this.ignoredPlayers = userInfo.getIgnoredPlayers();
 
 		if (auth) this.authorize();
-		this.connectedAt = System.currentTimeMillis();
+		this.connectedAt = (int) (System.currentTimeMillis() / 60000);
 		list.put(Converter.smartLowercase(name), this);
 	}
 	
@@ -167,13 +198,13 @@ public class User {
 		if (isIgnoring(dest.getName())) throw new ExCustom("§cВы не можете писать игроку, который находится у вас в игноре.");
 		if (dest.isIgnoring(dest.getName())) throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
 		lastWriter = dest.getName();
-		msg("§e[§fВы §e-> §f" + dest.getName() + "§e] " + msg);
+		msg(U.simple("§e[§fВы §e-> §f" + dest.getName() + "§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + dest.getName()));
 		dest.telled(this, msg);
 	}
 
 	private void telled(User user, String msg){
 		lastWriter = user.getName();
-		msg("§e[§f" + user.getName() + "§e -> §fВы§e] " + msg);
+		msg(U.simple("§e[§f" + user.getName() + "§e -> §fВы§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + user.getName()));
 	}
 	
 	// Getters & Setters
@@ -302,5 +333,11 @@ public class User {
 
 	public boolean isIgnoring(String player) {
 		return ignoredPlayers.contains(Converter.smartLowercase(player));
+	}
+
+	@Override
+	public ByteZip zip() {
+		return new ByteZip().add(name).add(password).add(rank.getName().charAt(0)).add(getOnline()).add(getIP())
+					   .add(getMoney()).add(ipbound).add(pmDisabled).add(ignoredPlayers).add(friends);
 	}
 }
