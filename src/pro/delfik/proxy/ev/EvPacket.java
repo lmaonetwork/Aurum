@@ -6,6 +6,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.net.Packet;
 import pro.delfik.net.packet.PacketInit;
+import pro.delfik.net.packet.PacketOutAuth;
 import pro.delfik.net.packet.PacketPunishment;
 import pro.delfik.net.packet.PacketRead;
 import pro.delfik.net.packet.PacketSSU;
@@ -21,6 +22,7 @@ import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.ev.added.PacketEvent;
 import pro.delfik.proxy.user.SfTop;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.FileConverter;
 
 import java.util.concurrent.TimeUnit;
@@ -70,7 +72,10 @@ public class EvPacket implements Listener{
 			byte write[] = FileConverter.read(DataIO.getFile(read.getRead()));
 			if(write == null)return;
 			Server.get(event.getServer()).send(new PacketWrite(read.getWrite(), write));
-		}else if(event.getPacket() instanceof PacketUpdateTop)
-			SfTop.updateTop((PacketUpdateTop)event.getPacket());
+		}else if(packet instanceof PacketUpdateTop){
+			SfTop.updateTop((PacketUpdateTop) event.getPacket());
+		}else if(packet instanceof PacketOutAuth){
+			User.outAuth.put(((PacketOutAuth) packet).getNick(), ((PacketOutAuth) packet).getIp());
+		}
 	}
 }

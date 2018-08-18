@@ -6,6 +6,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Title;
 import pro.delfik.net.packet.PacketGC;
+import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.CommandProcessor;
@@ -56,6 +57,11 @@ public class CmdAurum extends Command {
 		functions.put("gc", CmdAurum::gc);
 		functions.put("memory", CmdAurum::memory);
 		functions.put("mat", CmdAurum::mat);
+		functions.put("ip", CmdAurum::ip);
+	}
+
+	private static String ip(CommandSender sender, Command command, String[] strings){
+		return ((ProxiedPlayer)sender).getAddress().getHostName();
 	}
 
 	private static String mat(CommandSender sender, Command command, String[] strings){

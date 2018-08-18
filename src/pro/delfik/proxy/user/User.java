@@ -17,6 +17,7 @@ import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.util.Converter;
 import pro.delfik.util.CryptoUtils;
 import pro.delfik.util.Rank;
+import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
 
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class User {
+	public static final TimedHashMap<String, String> outAuth = new TimedHashMap<>(60);
 
 	public static final TimedList<String> allowedIP = new TimedList<>(60);
 
@@ -63,7 +65,9 @@ public class User {
 		
 		if (lastSeenIP != null && info.ipbound) {
 			ProxiedPlayer p = Proxy.getPlayer(name);
-			if (lastSeenIP.equals(p.getAddress().getHostName())) {
+			String ip = outAuth.get(name);
+			if (lastSeenIP.equals(p.getAddress().getHostName()) || (ip != null && ip.equals(p.getAddress().getHostName()))) {
+				outAuth.remove(name);
 				auth = true;
 				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
 			} else if (!allowedIP.contains(name.toLowerCase())) throw new DifferentIPException(name);
