@@ -60,6 +60,7 @@ public class User implements Byteable {
 	public static User load(String name) {
 		User u = DataIO.readByteable(getPath(name) + "player", User.class);
 		if(u == null)u = new User(name);
+		list.put(Converter.smartLowercase(name), u);
 		System.out.println(u);
 		return u;
 	}
