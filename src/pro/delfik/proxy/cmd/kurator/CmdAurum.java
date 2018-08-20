@@ -12,12 +12,14 @@ import pro.delfik.proxy.cmd.CommandProcessor;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.cmd.ex.ExNotEnoughArguments;
 import pro.delfik.proxy.cmd.user.CmdVK;
+import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.ev.EvChat;
 import pro.delfik.proxy.user.SfTop;
 import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.user.UserInfo;
 import pro.delfik.util.ArrayUtils;
 import pro.delfik.util.Converter;
 import pro.delfik.util.Rank;
@@ -26,16 +28,17 @@ import pro.delfik.vk.LongPoll;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class CmdAurum extends Command {
 	public CmdAurum() {
 		super("aurum", Rank.KURATOR, "Ты няшка ^^");
 	}
-	
-	
+
+
 	public static final HashMap<String, CommandProcessor> functions = new HashMap<>();
-	
+
 	static {
 		functions.put("send", CmdAurum::send);
 		functions.put("setrank", CmdAurum::setrank);
@@ -57,7 +60,60 @@ public class CmdAurum extends Command {
 		functions.put("memory", CmdAurum::memory);
 		functions.put("mat", CmdAurum::mat);
 		functions.put("ip", CmdAurum::ip);
+		functions.put("movedb", CmdAurum::movedb);
+		functions.put("moveuser", CmdAurum::moveuser);
+		functions.put("readuser", CmdAurum::readuser);
+		functions.put("cleandb", CmdAurum::cleandb);
 	}
+
+	private static String cleandb(CommandSender sender, Command command, String[] strings) {
+		return "";
+	}
+
+	private static String readuser(CommandSender sender, Command command, String[] strings) {
+		requireArgs(strings, 1, "[Ник]");
+		User u = strings.length == 1 ? DataIO.readByteable(User.getPath(strings[0]) + "player.txt", User.class) :
+						 new User(PlayerDataManager.load(strings[0]),null, false);
+		String s = "§a[§f" + u.getName() + "§a: §f" + u.getRank() + "§a-§f" + u.getOnline() +
+						   "§a]\n§a[pass=§f" + u.getPassword().substring(0, 30) +
+						   "...§a]\n§a[ignore=§f" + Converter.merge(u.getIgnoredPlayers(), (st) -> st, "§a-§f") + "§a]";
+		User.unload(strings[0]);
+		return s;
+	}
+
+	private static String movedb(CommandSender sender, Command command, String[] strings) {
+		msg(sender, "§aЗапрашиваем данные у MySQL");
+		Database.Result result = Database.sendQuery("SELECT name FROM Users");
+		ResultSet r = result.set;
+
+		msg(sender, "§aОткрываем новый поток...");
+		new Thread(() -> {
+			try {
+				while(r.next()) {
+					String name = r.getString("name");
+					System.out.println("Переносим " + name);
+					msg(sender, moveuser(sender, command, new String[] {name}));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}).start();
+		return "§aПоток продолжит работать в фоновом режиме.";
+	}
+
+	private static String moveuser(CommandSender sender, Command command, String[] strings) {
+		requireArgs(strings, 1, "[Ник]");
+		UserInfo info = PlayerDataManager.load(strings[0]);
+		if (info == null) {
+			return "§6Не удалось прогрузить " + strings[0] + ", пропускаем.";
+		} else {
+			User u = new User(info, null, false);
+			DataIO.writeByteable(User.getPath(strings[0]) + "player.txt", u);
+			User.unload(strings[0]);
+			return "§e" + strings[0] + "§a успешно перенесён.";
+		}
+	}
+
 
 	private static String ip(CommandSender sender, Command command, String[] strings){
 		return ((ProxiedPlayer)sender).getAddress().getHostName();
@@ -99,8 +155,8 @@ public class CmdAurum extends Command {
 		return "§e" + Converter.merge(CmdVK.PageAttachRequest.byCode.values(),
 				s -> s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)", "§f, §e");
 	}
-	
-	
+
+
 	private static String title(CommandSender sender, Command command, String[] args) {
 		Title title = new Title();
 		title.setText(Converter.mergeArray(args, 0, " ").replace('&', '§'));
@@ -108,8 +164,8 @@ public class CmdAurum extends Command {
 		((ProxiedPlayer) sender).unsafe().sendPacket(title);
 		return null;
 	}
-	
-	
+
+
 	private static String vk(CommandSender sender, Command command, String[] args) {
 		if (args.length == 0) {
 			msg(sender, "§aСервер LongPoll: §f" + LongPoll.getServer());
@@ -122,7 +178,7 @@ public class CmdAurum extends Command {
 		LongPoll.msg(msg, LongPoll.lastPeer);
 		return "§aСообщение успешно отправлено пиру §f" + LongPoll.lastPeer;
 	}
-	
+
 	private static String resetPassword(CommandSender commandSender, Command command, String[] args) {
 		requireArgs(args, 1, "[Игрок]");
 		User p = User.get(args[0]);
@@ -134,24 +190,25 @@ public class CmdAurum extends Command {
 		}
 		return "§aПароль игрока §e" + args[0] + "§a сброшен.";
 	}
-	
+
 	private static String ping(CommandSender commandSender, Command command, String[] strings) {
 		requireArgs(strings, 1, "[Сервер]");
 		Proxy.ifServerOffline(requireServer(strings[0]), () -> msg(commandSender, "§cОффлайн."),
 				ping -> msg(commandSender, "§aОнлайн: §e" + ping.toString()));
 		return null;
 	}
-	
+
 	private static String info(CommandSender commandSender, Command command, String[] args) {
 		requireArgs(args, 1, "[Игрок]");
 		ProxiedPlayer p = requirePlayer(args[0]);
+		msg(commandSender, "§aIP-адрес:§f " + p.getAddress().getAddress().getHostAddress());
 		return "§aUUID: §f" + p.getUniqueId().toString();
 	}
-	
+
 	private static String echo(CommandSender commandSender, Command command, String[] strings) {
 		return U.color(Converter.mergeArray(strings, 0, " "));
 	}
-	
+
 	private static String vimeban(CommandSender commandSender, Command command, String[] strings) {
 		ProxiedPlayer p = ((ProxiedPlayer) commandSender);
 		String r = Converter.mergeArray(strings, 1, " ");
@@ -159,7 +216,7 @@ public class CmdAurum extends Command {
 		+ "\n§cВремя бана: §eнавсегда\n§cВас забанил: §e" + strings[0] + "\n§7* * * * * * * * * * * * * * * * *"));
 		return null;
 	}
-	
+
 	private static String send(CommandSender sender, Command command, String[] args) {
 		requireArgs(args, 2, "[Игрок] [Сервер]");
 		ProxiedPlayer target = requirePlayer(args[0]);
@@ -168,7 +225,7 @@ public class CmdAurum extends Command {
 		msg(target, "prefix", "§6Вы были телепортированы на сервер §e", server, "§6 игроком §e" + sender);
 		return "§aИгрок §f" + args[0] + "§a отправлен на сервер " + args[1];
 	}
-	
+
 	private static String setrank(CommandSender sender, Command command, String[] args) {
 		requireArgs(args, 2, "[Игрок] [Ранг]");
 		Rank rank = requireRank(args[1]);
@@ -177,7 +234,7 @@ public class CmdAurum extends Command {
 		PlayerDataManager.setRank(args[0], rank);
 		return "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent();
 	}
-	
+
 	private static String sqlquery(CommandSender sender, Command command, String[] args) {
 		try {
 			requireRank(sender, Rank.ADMIN);
@@ -203,7 +260,7 @@ public class CmdAurum extends Command {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	private static String sqlupdate(CommandSender commandSender, Command command, String[] args) {
 		requireRank(commandSender, Rank.ADMIN);
 		return "§aОбновлено §e" + Database.sendUpdate(ArrayUtils.toString(args)) + "§a записей.";
@@ -223,7 +280,7 @@ public class CmdAurum extends Command {
 	private static String memory(CommandSender commandSender, Command command, String[] args){
 		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " занятой оперативной памяти";
 	}
-	
+
 	@Override
 	protected void run(User user, String args[]) {
 		if(!user.getName().equals("CONSOLE") && !user.isIPBound())
@@ -241,7 +298,7 @@ public class CmdAurum extends Command {
 			throw new ExNotEnoughArguments(args[0] + " " + e.getMessage());
 		}
 	}
-	
+
 	@Override
 	protected Iterable<String> tabComplete(CommandSender sender, String arg, int number) {
 		if (number == 0) return Converter.tabComplete(functions.keySet(), s -> s, arg);

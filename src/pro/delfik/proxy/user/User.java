@@ -36,6 +36,7 @@ public class User implements Byteable {
 	public static final TimedList<String> allowedIP = new TimedList<>(60);
 
 	public static final String path = "players";
+	private String lastIP;
 
 	public static String getPath(String nick){
 		return path + "/" + Converter.smartLowercase(nick) + "/";
@@ -84,7 +85,7 @@ public class User implements Byteable {
 		if (user == null) return;
 		list.remove(Converter.smartLowercase(name));
 		if (!user.authorized) return;
-		user.mute.write(name);
+		if (user.mute != null) user.mute.write(name);
 		PlayerDataManager.save(user.getInfo());
 	}
 
@@ -129,7 +130,7 @@ public class User implements Byteable {
 	public User(ByteUnzip unzip) {
 		name = unzip.getString();
 		password = unzip.getString();
-		rank = Rank.byChar.get((char) unzip.getInt());
+		rank = Rank.byChar.get((char) unzip.getByte());
 		online = unzip.getInt();
 		String lastSeenIP = unzip.getString();
 		money = unzip.getInt();
@@ -178,7 +179,13 @@ public class User implements Byteable {
 		getHandle().disconnect(new TextComponent(reason));
 	}
 
-	public String getIP() {return getHandle().getAddress().getHostName();}
+	public String getIP() {
+		ProxiedPlayer p = getHandle();
+		return p == null ? "" : p.getAddress().getAddress().getHostAddress();
+	}
+	public String getLastIP() {
+		return lastIP;
+	}
 
 	public ServerInfo getServerInfo() {return getHandle().getServer().getInfo();}
 
@@ -206,7 +213,7 @@ public class User implements Byteable {
 		lastWriter = user.getName();
 		msg(U.simple("§e[§f" + user.getName() + "§e -> §fВы§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + user.getName()));
 	}
-	
+
 	// Getters & Setters
 	public CommandSender getSender(){
 		return name.equals("CONSOLE") ? Proxy.getConsole() : getHandle();
@@ -215,7 +222,7 @@ public class User implements Byteable {
 	public ProxiedPlayer getHandle() {
 		return Proxy.getPlayer(name);
 	}
-	
+
 	public boolean isAuthorized() {
 		return authorized;
 	}
@@ -225,7 +232,7 @@ public class User implements Byteable {
 		Server server = server();
 		if (server != null) server.send(new PacketAuth(name));
 	}
-	
+
 	public void setRank(Rank rank) {
 		this.rank = rank;
 		server().send(new PacketPex(name, rank));
@@ -253,7 +260,7 @@ public class User implements Byteable {
 		server().send(new PacketUser(name, rank, authorized, online, money));
 		updateTab(getHandle());
 	}
-	
+
 	public void earn(int money) {
 		this.money += money;
 		updateMoney();
@@ -262,15 +269,15 @@ public class User implements Byteable {
 		this.money -= money;
 		updateMoney();
 	}
-	
+
 	private void updateMoney() {
 		Database.sendUpdate("UPDATE Users SET money = " + money + " WHERE name = " + Converter.smartLowercase(name));
 	}
-	
+
 	public long getMoney() {
 		return money;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -278,32 +285,32 @@ public class User implements Byteable {
 	public void setPassword(String password) {
 		this.password = password.length() == 0 ? "" : CryptoUtils.getHash(password);
 	}
-	
+
 	public long getOnline() {
 		return System.currentTimeMillis() - connectedAt + online;
 	}
-	
+
 	public UserInfo getInfo() {
 		return new UserInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers, pmDisabled, friends);
 	}
-	
+
 	public Mute getActiveMute() {
 		return mute;
 	}
-	
+
 	public void clearMute(String moderator) {
 		mute = null;
 		msg("§aТы снова можешь писать в чат. Поблагодари §f" + moderator + "§a за размут.");
 	}
-	
+
 	public void mute(Mute muteInfo) {
 		mute = muteInfo;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public boolean isIPBound() {
 		return ipbound;
 	}
@@ -318,7 +325,7 @@ public class User implements Byteable {
 		list.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
 		return list;
 	}
-	
+
 	public boolean setIPBound(boolean IPBound) {
 		return this.ipbound = IPBound;
 	}
@@ -334,10 +341,14 @@ public class User implements Byteable {
 	public boolean isIgnoring(String player) {
 		return ignoredPlayers.contains(Converter.smartLowercase(player));
 	}
+	public List<String> getIgnoredPlayers() {
+		return ignoredPlayers;
+	}
 
 	@Override
 	public ByteZip zip() {
-		return new ByteZip().add(name).add(password).add(rank.getName().charAt(0)).add(getOnline()).add(getIP())
+		return new ByteZip().add(name).add(password).add(rank.getByte()).add(getOnline()).add(getIP())
 					   .add(getMoney()).add(ipbound).add(pmDisabled).add(ignoredPlayers).add(friends);
 	}
+
 }

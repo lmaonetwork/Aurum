@@ -4,28 +4,35 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.cmd.ex.ExUserNotFound;
-import pro.delfik.proxy.data.Database;
+import pro.delfik.proxy.data.DataIO;
+import pro.delfik.util.ByteUnzip;
+import pro.delfik.util.ByteZip;
+import pro.delfik.util.Byteable;
 import pro.delfik.util.U;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BanIP {
-	public static void unbanNickname(String player, String moderator) {
-		try {
-			ProxiedPlayer moder = Proxy.getPlayer(moderator);
-			Server server = moder == null ? null : moder.getServer();
-			Ban.unban(player, moderator);
-//			U.bc(server, "§7[§e" + moderator + "§7]§a Игрок §e" + player + " §aразбанен.");
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-		clearNick(player);
+public class BanIP implements Byteable {
+
+	private final String moderator, reason;
+
+	public BanIP(String reason, String moderator) {
+		this.reason = reason;
+		this.moderator = moderator;
 	}
+	public BanIP(ByteUnzip unzip) {
+		reason = unzip.getString();
+		moderator = unzip.getString();
+	}
+	@Override
+	public ByteZip zip() {
+		return new ByteZip().add(reason).add(moderator);
+	}
+
 	public static void unbanIP(String address, String moderator) {
+		DataIO.remove("bans-ip/" + address + ".txt");
+		if (moderator == null) return;
 		try {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
 			Server server = moder == null ? null : moder.getServer();
@@ -33,33 +40,12 @@ public class BanIP {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		clearIP(address);
 	}
 	
-	public static void clearNick(String nick) {
-		Database.sendUpdate("DELETE FROM BanIP WHERE name = '" + nick + "'");
-	}
-	
-	public static void clearIP(String ip) {
-		Database.sendUpdate("DELETE FROM BanIP WHERE ip = '" + ip + "'");
-	}
-	
-	public static void banPlayer(String player, String reason, String moderator) {
-		ProxiedPlayer p = Proxy.getPlayer(player);
-		if (p == null) throw new ExUserNotFound(player);
-		final String ip = p.getAddress().getHostName();
-		try {
-			Ban.ban(player, reason, 0, moderator);
-			U.bc(p.getServer(), "§7[§e" + moderator + "§7]§c Игрок §e" + player + " §cзабанен §eпо IP§c. Причина:§e " + reason);
-			if (p != null) p.disconnect(kickMessage(player, ip, reason, moderator));
-		} catch (Throwable t) {
-			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
-			t.printStackTrace();
-		}
-		Database.sendUpdate("INSERT INTO BanIP (name, ip, moderator, reason) " +
-									"VALUES ('" + player + "', '" + ip + "', '" + moderator + "', '" + reason + "')");
-	}
-	public static void banIP(String ip, String reason, String moderator) {
+
+	public static BanIP banIP(String ip, String reason, String moderator) {
+		BanIP ban = new BanIP(reason, moderator);
+		DataIO.writeByteable("bans-ip/" + ip + ".txt", ban);
 		try {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
 			Server server = moder == null ? null : moder.getServer();
@@ -68,62 +54,21 @@ public class BanIP {
 			Proxy.i().broadcast("§c§lПри бане IP-адреса §e" + ip + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
-		Database.sendUpdate("INSERT INTO BanIP (ip, moderator, reason) " +
-									"VALUES ('" + ip + "', '" + moderator + "', '" + reason + "')");
+		return ban;
 	}
 	
-	public static BanIPInfo getByName(String playername) {
-		Database.Result r = null;
-		try {
-			r = Database.sendQuery("SELECT ip, moderator, reason FROM BanIP WHERE name = '" + playername + "'");
-			ResultSet res = r.set;
-			if (!res.next()) return null;
-			return new BanIPInfo(playername, res.getString("ip"), res.getString("moderator"), res.getString("reason"));
-		} catch (SQLException e) {
-			return null;
-		} finally {
-			try {
-				if (r != null) r.st.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		
+	public static BanIP getByName(String playername) {
+		User u = User.get(playername);
+		if (u == null) u = User.load(playername);
+		return get(u.getLastIP());
 	}
-	public static BanIPInfo getByAddress(String ip_address) {
-		Database.Result r = null;
-		try {
-			r = Database.sendQuery("SELECT name, moderator, reason FROM BanIP WHERE ip = '" + ip_address + "'");
-			ResultSet res = r.set;
-			if (!res.next()) return null;
-			return new BanIPInfo(res.getString("name"), ip_address, res.getString("moderator"), res.getString("reason"));
-		} catch (SQLException e) {
-			return null;
-		} finally {
-			try {
-				if (r != null) r.st.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+
+	public static BanIP get(String ip) {
+		return DataIO.readByteable("bans-ip/" + ip + ".txt", BanIP.class);
 	}
-	
-	public static class BanIPInfo {
-		public final String player;
-		public final String ip;
-		public final String moderator;
-		public final String reason;
-		
-		public BanIPInfo(String player, String ip, String moderator, String reason) {
-			this.player = player;
-			this.ip = ip;
-			this.moderator = moderator;
-			this.reason = reason;
-		}
-	}
-	
-	public static BaseComponent kickMessage(String player, String ip, String reason, String moderator) {
+
+
+	public BaseComponent kickMessage(String ip) {
 		return U.constructComponent(
 				"§7* * * * * * * * * * * * * * * * * * *\n",
 				"§cК сожалению, IP-адрес §e" + ip + "§c забанен.\n",

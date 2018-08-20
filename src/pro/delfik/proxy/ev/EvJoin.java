@@ -55,24 +55,25 @@ public class EvJoin implements Listener{
 	}
 
 	private boolean checkBanIP(LoginEvent event){
-		BanIP.BanIPInfo ipInfo = BanIP.getByAddress(event.getConnection().getAddress().getHostName());
-		if(ipInfo != null){
+		String ip = event.getConnection().getAddress().getAddress().getHostAddress();
+		BanIP ban = BanIP.get(ip);
+		if(ban != null){
 			event.setCancelled(true);
-			event.setCancelReason(BanIP.kickMessage(event.getConnection().getName(), ipInfo.ip, ipInfo.reason, ipInfo.moderator));
+			event.setCancelReason(ban.kickMessage(ip));
 			return true;
 		}
 		return false;
 	}
 
 	private boolean checkBan(LoginEvent event, String nick){
-		Ban.BanInfo i = Ban.get(nick);
-		if(i != null){
-			if(i.until != 0 && i.until < System.currentTimeMillis()){
-				Ban.clear(nick);
+		Ban ban = Ban.get(nick);
+		if(ban != null){
+			if(ban.until != 0 && ban.until < System.currentTimeMillis()){
+				Ban.unban(nick, null);
 				return false;
 			}
 			event.setCancelled(true);
-			event.setCancelReason(Ban.kickMessage(nick, i.reason, i.time, i.until, i.moderator));
+			event.setCancelReason(ban.kickMessage(nick));
 			return true;
 		}
 		return false;

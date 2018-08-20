@@ -24,6 +24,10 @@ public class CmdBanIP extends Command{
 			user.msg("§6С таким IP, то он не будет автоматически кикнут.");
 			user.msg("§6Для этого есть §e/ban-ip [Ник игрока]§6.");
 		}
-		else BanIP.banPlayer(args[0], Converter.mergeArray(args, 1, " "), user.getName());
+		else {
+			User u = requirePerson(args[0]);
+			BanIP ban = BanIP.banIP(u.getIP(), Converter.mergeArray(args, 1, " "), user.getName());
+			u.getHandle().disconnect(ban.kickMessage(u.getName()));
+		}
 	}
 }

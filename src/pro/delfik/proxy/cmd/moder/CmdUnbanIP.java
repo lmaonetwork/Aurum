@@ -16,9 +16,8 @@ public class CmdUnbanIP extends Command{
 	@Override
 	protected void run(User user, String args[]) {
 		boolean ip = args[0].contains(".");
-		if ((ip ? BanIP.getByAddress(args[0]) : BanIP.getByName(args[0])) == null)
-			throw new ExCustom((ip ? "§eIP-адрес §f" : "§eИгрок §f") + args[0] + "§e не заблокирован.");
-		if (ip) BanIP.unbanIP(args[0], user.getName());
-		else BanIP.unbanNickname(args[0], user.getName());
+		BanIP ban = ip ? BanIP.get(args[0]) : BanIP.getByName(args[0]);
+		if (ban == null) throw new ExCustom((ip ? "§eIP-адрес §f" : "§eИгрок §f") + args[0] + "§e не заблокирован.");
+		else BanIP.unbanIP(args[0], user.getName());
 	}
 }
