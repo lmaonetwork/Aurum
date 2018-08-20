@@ -44,9 +44,7 @@ public class User implements Byteable {
 	private static final HashMap<String, User> list = new HashMap<>();
 
 	static{
-		UserInfo info = new UserInfo("CONSOLE");
-		info.rank = Rank.DEV;
-		list.put("CONSOLE", new User(info, null, true));
+		list.put("CONSOLE", new User("CONSOLE", Rank.DEV));
 	}
 	
 	public static User get(String name) {
@@ -58,9 +56,15 @@ public class User implements Byteable {
 	}
 	
 	public static User load(String name) {
-		User u = DataIO.readByteable(getPath(name) + "player", User.class);
-		System.out.println(u);
-		return u;
+		try{
+			User u = DataIO.readByteable(getPath(name) + "player", User.class);
+			if(u == null) u = new User(name, Rank.PLAYER);
+			list.put(Converter.smartLowercase(name), u);
+			System.out.println(u);
+			return u;
+		}catch (IllegalArgumentException ex){
+			throw new DifferentIPException(name);
+		}
 	}
 
 	public static void unload(String name) {
@@ -109,6 +113,14 @@ public class User implements Byteable {
 	}
 
 	public String lastWriter;
+
+	public User(String nick, Rank rank){
+		name = nick;
+		this.rank = rank;
+		online = 0;
+
+		connectedAt = (int) (System.currentTimeMillis() / 60000);
+	}
 
 	public User(ByteUnzip unzip) {
 		name = unzip.getString();
