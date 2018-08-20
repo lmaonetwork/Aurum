@@ -59,6 +59,7 @@ public class User implements Byteable {
 	
 	public static User load(String name) {
 		User u = DataIO.readByteable(getPath(name) + "player", User.class);
+		if(u == null)u = new User(name);
 		System.out.println(u);
 		return u;
 	}
@@ -109,6 +110,14 @@ public class User implements Byteable {
 	}
 
 	public String lastWriter;
+
+	public User(String nick){
+		name = nick;
+		rank = Rank.PLAYER;
+		online = 0;
+
+		connectedAt = (int) (System.currentTimeMillis() / 60000);
+	}
 
 	public User(ByteUnzip unzip) {
 		name = unzip.getString();
