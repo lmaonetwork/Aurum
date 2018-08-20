@@ -11,9 +11,9 @@ import pro.delfik.net.packet.PacketUser;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.data.Server;
+import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.data.PlayerDataManager;
+import pro.delfik.proxy.data.Server;
 import pro.delfik.util.ByteUnzip;
 import pro.delfik.util.ByteZip;
 import pro.delfik.util.Byteable;
@@ -24,7 +24,6 @@ import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -59,25 +58,9 @@ public class User implements Byteable {
 	}
 	
 	public static User load(String name) {
-		UserInfo info = PlayerDataManager.load(name);
-		if (info == null) return new User(new UserInfo(name, "", 0, Rank.PLAYER,
-			0L, "", false, new ArrayList<>(), false, new ArrayList<>()),null, false);
-		
-		boolean auth = false;
-		Mute mute = Mute.get(name);
-		String lastSeenIP = info.getIp();
-		
-		if (lastSeenIP != null && info.ipbound) {
-			ProxiedPlayer p = Proxy.getPlayer(name);
-			String ip = outAuth.get(name);
-			if (lastSeenIP.equals(p.getAddress().getHostName()) || (ip != null && ip.equals(p.getAddress().getHostName()))) {
-				outAuth.remove(name);
-				auth = true;
-				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
-			} else if (!allowedIP.contains(name.toLowerCase())) throw new DifferentIPException(name);
-		}
-		
-		return new User(info, mute, auth);
+		User u = DataIO.readByteable(getPath(name) + "player", User.class);
+		System.out.println(u);
+		return u;
 	}
 
 	public static void unload(String name) {
@@ -86,7 +69,7 @@ public class User implements Byteable {
 		list.remove(Converter.smartLowercase(name));
 		if (!user.authorized) return;
 		if (user.mute != null) user.mute.write(name);
-		PlayerDataManager.save(user.getInfo());
+		DataIO.writeByteable(getPath(name) + "player", user);
 	}
 
 	public static Collection<User> getAll() {
@@ -155,6 +138,7 @@ public class User implements Byteable {
 
 	}
 
+	@Deprecated
 	public User(UserInfo userInfo, Mute mute, boolean auth) {
 		this.name = userInfo.getName();
 		this.rank = userInfo.getRank();
