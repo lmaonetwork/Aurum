@@ -135,6 +135,7 @@ public class User implements Byteable {
 		friends = unzip.getList();
 
 		connectedAt = (int) (System.currentTimeMillis() / 60000);
+		list.put(Converter.smartLowercase(name), this);
 		mute = Mute.get(name);
 
 		if (lastSeenIP != null && ipbound) {
