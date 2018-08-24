@@ -15,10 +15,10 @@ public class CmdReply extends Command{
 
 	@Override
 	protected void run(User user, String[] args) {
-		if (user.lastWriter == null) throw new ExCustom("§cВы ещё никому не написали.");
-		User dest = User.get(user.lastWriter);
+		if (user.lastPenPal == null) throw new ExCustom("§cВы ещё никому не написали.");
+		User dest = User.get(user.lastPenPal);
 		if (dest == null) throw new ExCustom("§6Игрок, с которым вы общались, вышел с сервера.");
 		String msg = Converter.mergeArray(args, 0, " ");
-		user.tell(dest, msg);
+		user.sendPM(dest, msg);
 	}
 }

@@ -100,6 +100,7 @@ public class Aurum extends Plugin {
 		Packet.init();
 		SfTop.init();
 		VKBot.start();
+		RequestListener.init();
 		Database.enable();
 		load();
 	}
@@ -147,6 +148,7 @@ public class Aurum extends Plugin {
 		SfTop.unload();
 		EvChat.unload();
 		Scheduler.kill();
+		RequestListener.discontinue();
 	}
 	
 	public void run() {

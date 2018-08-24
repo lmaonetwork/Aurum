@@ -12,7 +12,6 @@ import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.util.ByteUnzip;
 import pro.delfik.util.ByteZip;
@@ -24,49 +23,70 @@ import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class User implements Byteable {
-	public static final TimedHashMap<String, String> outAuth = new TimedHashMap<>(60);
 
+	private static final HashMap<String, User> list = new HashMap<>();
+	public static final TimedHashMap<String, String> outAuth = new TimedHashMap<>(60);
 	public static final TimedList<String> allowedIP = new TimedList<>(60);
 
-	public static final String path = "players";
-	private String lastIP;
-
-	public static String getPath(String nick){
-		return path + "/" + Converter.smartLowercase(nick) + "/";
+	/**
+	 * Путь к личной папке игрока.
+	 * @param nick Ник игрока
+	 * @return Путь к папке в ./Core/
+	 */
+	public static String getPath(String nick) {
+		return "players/" + Converter.smartLowercase(nick) + "/";
 	}
-	
-	private static final HashMap<String, User> list = new HashMap<>();
 
-	static{
+	static {
 		list.put("CONSOLE", new User("CONSOLE", Rank.DEV));
 	}
-	
+
+
+	/**
+	 * Получение юзера по нику.
+	 * @param name Ник игрока.
+	 * @return Если игрок существует, User, иначе null.
+	 */
 	public static User get(String name) {
 		return list.get(Converter.smartLowercase(name));
 	}
 
+	/**
+	 * Получение юзера по отправителю команд BungeeCord.
+	 * @param sender CommandSender банжика.
+	 * @return User, обёртывающий этого сендера.
+	 */
 	public static User get(CommandSender sender) {
 		return list.get(Converter.smartLowercase(sender.getName()));
 	}
-	
+
+	/**
+	 * Прогружает юзера по данным с диска.
+	 * Если на диске ничего нет, регистрирует нового.
+	 * @param name Имя игрока.
+	 * @return Юзер, обёртывающий игрока с заданным ником.
+	 */
 	public static User load(String name) {
-		try{
+		try {
 			User u = DataIO.readByteable(getPath(name) + "player", User.class);
-			if(u == null) u = new User(name, Rank.PLAYER);
-			list.put(Converter.smartLowercase(name), u);
-			System.out.println(u);
+			if (u == null) u = new User(name, Rank.PLAYER);
 			return u;
-		}catch (IllegalArgumentException ex){
+		} catch (IllegalArgumentException ex) {
 			throw new DifferentIPException(name);
 		}
 	}
 
+	/**
+	 * Выгружает юзера из памяти, сохраняя все данные на диск (Если юзер авторизован).
+	 * @param name Имя юзера.
+	 */
 	public static void unload(String name) {
 		User user = get(name);
 		if (user == null) return;
@@ -76,50 +96,40 @@ public class User implements Byteable {
 		DataIO.writeByteable(getPath(name) + "player", user);
 	}
 
+	/**
+	 * @return Все прогруженные юзеры (Включая виртуальных и консоль)
+	 */
 	public static Collection<User> getAll() {
 		return list.values();
 	}
-	
-	// non-static
-	
-	public final String name; // Ник игрока
-	private final int connectedAt; // Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
-	private boolean authorized = false; // Авторизован ли игрок
-	private String password ; // Hash пароля
-	private final int online; // Онлайн до захода на сервер
-	private int money; // Баланс игрока
-	private Rank rank; // Ранг игрока
-	private String server = ""; // Сервер, на котором находится игрок
-	private boolean ipbound; // Разрешён ливход только с сохранённого IP
-	private boolean pmDisabled; // Включён ли ЛС
-	private List<String> friends;
-	private List<String> ignoredPlayers;
-	
-	private Mute mute;
 
-	private String last = "", lastLast;
 
-	public void setLast(String last){
-		lastLast = this.last;
-		this.last = last;
-	}
+	public final String name; 								// Ник игрока
+	private final int connectedAt; 							// Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
+	private final int online; 								// Онлайн до захода на сервер
+	private final List<String> friends;						// Список друзей
+	private final List<String> ignoredPlayers;				// Чёрный список
+	private boolean authorized 			= false; 			// Авторизован ли игрок
+	private String password 			= ""; 				// Hash пароля
+	private int money 					= 0; 				// Баланс игрока
+	private Rank rank 					= Rank.PLAYER; 		// Ранг игрока
+	private String server 				= ""; 				// Сервер, на котором находится игрок
+	private boolean ipbound				= false;			// Разрешён ли вход только с сохранённого IP
+	private boolean pmDisabled			= false; 			// Откючён ли ЛС
+	private String lastIP				= "";				// Последний IP, с которого был выполнен вход.
+	public String lastPenPal			= null;				// Последний человек, с которым игрок общался в лс.
+	private Mute mute 					= null;				// Данные о муте игрока
+	private String last = "", lastLast  = null;				// Последние сообщения игрока
+	private volatile String forcedIP	= null;				// IP, который будет принудительно сохранён при выходе с сервера.
 
-	public String getLast() {
-		return last;
-	}
-
-	public String getLastLast() {
-		return lastLast;
-	}
-
-	public String lastWriter;
-
-	public User(String nick, Rank rank){
-		name = nick;
+	public User(String nick, Rank rank) {
+		this.name = nick;
 		this.rank = rank;
-		online = 0;
-
-		connectedAt = (int) (System.currentTimeMillis() / 60000);
+		this.online = 0;
+		this.connectedAt = (int) (System.currentTimeMillis() / 60000);
+		this.friends = new ArrayList<>();
+		this.ignoredPlayers = new ArrayList<>();
+		list.put(Converter.smartLowercase(name), this);
 	}
 
 	public User(ByteUnzip unzip) {
@@ -161,59 +171,87 @@ public class User implements Byteable {
 		this.mute = mute;
 		this.ipbound = userInfo.isIPBound();
 		this.ignoredPlayers = userInfo.getIgnoredPlayers();
+		this.friends = userInfo.getFriends();
 
 		if (auth) this.authorize();
 		this.connectedAt = (int) (System.currentTimeMillis() / 60000);
 		list.put(Converter.smartLowercase(name), this);
 	}
-	
-	// Implementation
-	public void msg(Object... o) {
-		U.msg(getSender(), o);
+
+	@Override
+	public ByteZip zip() {
+		return new ByteZip()
+					   .add(name)
+					   .add(password)
+					   .add(rank.getByte())
+					   .add(getOnline())
+					   .add(forcedIP == null ? getIP() : forcedIP)
+					   .add(getMoney())
+					   .add(ipbound)
+					   .add(pmDisabled)
+					   .add(ignoredPlayers)
+					   .add(friends);
 	}
 
-	public void kick(String reason) {
-		getHandle().disconnect(new TextComponent(reason));
+
+	// Implementation
+	public void msg(Object... o) {U.msg(getSender(), o);}
+
+	public void kick(String reason) {getHandle().disconnect(new TextComponent(reason));}
+
+	public void updateTab(ProxiedPlayer handle) {
+		Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
+			PlayerListItem item = getTab(handle);
+			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()) {
+				User user = get(player);
+				player.unsafe().sendPacket(item);
+				if (user != null)
+					handle.unsafe().sendPacket(user.getTab(player));
+			}
+		}, 1, TimeUnit.SECONDS);
+	}
+
+	public void sendPM(User dest, String msg) {
+		if (!hasRank(Rank.DEV)) {
+			if (isIgnoring(dest.getName()))
+				throw new ExCustom("§cВы не можете писать игроку из чёрного списка.");
+			if (dest.isIgnoring(getName()))
+				throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
+			if (pmDisabled) {
+				msg("§cУ вас выключены приватные сообщения. ", U.run("(§a§nВключить§f)", "§f>> §a§lВключить §f<<", "/ignore @a"));
+				throw new ExCustom(null);
+			}
+			if (dest.pmDisabled)
+				throw new ExCustom("§cИгрок отключил приватные сообщения.");
+		}
+		lastPenPal = dest.getName();
+		msg(U.simple("§e[§fВы §e-> §f" + dest.getName() + "§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + dest.getName()));
+		dest.recievePM(this, msg);
+	}
+
+	private void recievePM(User user, String msg) {
+		lastPenPal = user.getName();
+		msg(U.simple("§e[§f" + user.getName() + "§e -> §fВы§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + user.getName()));
+	}
+
+	// Getters & Setters
+
+
+	public CommandSender getSender() {
+		return name.equals("CONSOLE") ? Proxy.getConsole() : getHandle();
 	}
 
 	public String getIP() {
 		ProxiedPlayer p = getHandle();
 		return p == null ? "" : p.getAddress().getAddress().getHostAddress();
 	}
+
 	public String getLastIP() {
 		return lastIP;
 	}
 
-	public ServerInfo getServerInfo() {return getHandle().getServer().getInfo();}
-
-	public void updateTab(ProxiedPlayer handle){
-		Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
-			PlayerListItem item = getTab(handle);
-			for (ProxiedPlayer player : handle.getServer().getInfo().getPlayers()){
-				User user = get(player);
-				player.unsafe().sendPacket(item);
-				if(user != null)
-					handle.unsafe().sendPacket(user.getTab(player));
-			}
-		}, 1, TimeUnit.SECONDS);
-	}
-
-	public void tell(User dest, String msg) {
-		if (isIgnoring(dest.getName())) throw new ExCustom("§cВы не можете писать игроку, который находится у вас в игноре.");
-		if (dest.isIgnoring(getName())) throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
-		lastWriter = dest.getName();
-		msg(U.simple("§e[§fВы §e-> §f" + dest.getName() + "§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + dest.getName()));
-		dest.telled(this, msg);
-	}
-
-	private void telled(User user, String msg){
-		lastWriter = user.getName();
-		msg(U.simple("§e[§f" + user.getName() + "§e -> §fВы§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + user.getName()));
-	}
-
-	// Getters & Setters
-	public CommandSender getSender(){
-		return name.equals("CONSOLE") ? Proxy.getConsole() : getHandle();
+	public ServerInfo getServerInfo() {
+		return getHandle().getServer().getInfo();
 	}
 
 	public ProxiedPlayer getHandle() {
@@ -239,12 +277,24 @@ public class User implements Byteable {
 	public Rank getRank() {
 		return rank;
 	}
+	public void setLast(String last) {
+		lastLast = this.last;
+		this.last = last;
+	}
+
+	public String getLast() {
+		return last;
+	}
+
+	public String getLastLast() {
+		return lastLast;
+	}
 
 	public boolean hasRank(Rank rank) {
 		return isAuthorized() && this.rank.ordinal() <= rank.ordinal();
 	}
 
-	public Server server(){
+	public Server server() {
 		return Server.get(getServer());
 	}
 
@@ -260,23 +310,19 @@ public class User implements Byteable {
 
 	public void earn(int money) {
 		this.money += money;
-		updateMoney();
-	}
-	public void disburse(int money) {
-		this.money -= money;
-		updateMoney();
 	}
 
-	private void updateMoney() {
-		Database.sendUpdate("UPDATE Users SET money = " + money + " WHERE name = " + Converter.smartLowercase(name));
+	public void disburse(int money) {
+		this.money -= money;
 	}
+
 
 	public long getMoney() {
 		return money;
 	}
 
 	public String getPassword() {
-		return password;
+		return password == null ? "" : password;
 	}
 
 	public void setPassword(String password) {
@@ -297,6 +343,7 @@ public class User implements Byteable {
 
 	public void clearMute(String moderator) {
 		mute = null;
+		if (moderator.equals(name)) return;
 		msg("§aТы снова можешь писать в чат. Поблагодари §f" + moderator + "§a за размут.");
 	}
 
@@ -312,13 +359,13 @@ public class User implements Byteable {
 		return ipbound;
 	}
 
-	private PlayerListItem getTab(ProxiedPlayer player){
+	private PlayerListItem getTab(ProxiedPlayer player) {
 		PlayerListItem.Item item = new PlayerListItem.Item();
 		item.setUsername(name);
 		item.setDisplayName(rank.getNameColor() + name);
 		item.setUuid(player.getUniqueId());
 		PlayerListItem list = new PlayerListItem();
-		list.setItems(new PlayerListItem.Item[]{item});
+		list.setItems(new PlayerListItem.Item[] {item});
 		list.setAction(PlayerListItem.Action.UPDATE_DISPLAY_NAME);
 		return list;
 	}
@@ -338,14 +385,17 @@ public class User implements Byteable {
 	public boolean isIgnoring(String player) {
 		return ignoredPlayers.contains(Converter.smartLowercase(player));
 	}
+
 	public List<String> getIgnoredPlayers() {
 		return ignoredPlayers;
 	}
 
-	@Override
-	public ByteZip zip() {
-		return new ByteZip().add(name).add(password).add(rank.getByte()).add(getOnline()).add(getIP())
-					   .add(getMoney()).add(ipbound).add(pmDisabled).add(ignoredPlayers).add(friends);
+
+	public boolean togglePM() {
+		return this.pmDisabled = !pmDisabled;
 	}
 
+	public void setForcedIP(String forcedIP) {
+		this.forcedIP = forcedIP;
+	}
 }

@@ -16,6 +16,6 @@ public class CmdTell extends Command{
 	protected void run(User user, String[] args) {
 		User dest = requirePerson(args[0]);
 		String msg = Converter.mergeArray(args, 1, " ");
-		user.tell(dest, msg);
+		user.sendPM(dest, msg);
 	}
 }

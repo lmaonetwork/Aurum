@@ -9,6 +9,6 @@ public class ExCustom extends RuntimeException {
     }
 
     public void execute(CommandSender sender, String command){
-        U.msg(sender, getMessage());
+        if (getMessage() != null) U.msg(sender, getMessage());
     }
 }
