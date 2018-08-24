@@ -212,18 +212,15 @@ public class User implements Byteable {
 	}
 
 	public void sendPM(User dest, String msg) {
-		if (!hasRank(Rank.DEV)) {
-			if (isIgnoring(dest.getName()))
-				throw new ExCustom("§cВы не можете писать игроку из чёрного списка.");
-			if (dest.isIgnoring(getName()))
-				throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
-			if (pmDisabled) {
-				msg("§cУ вас выключены приватные сообщения. ", U.run("(§a§nВключить§f)", "§f>> §a§lВключить §f<<", "/ignore @a"));
-				throw new ExCustom(null);
-			}
-			if (dest.pmDisabled)
-				throw new ExCustom("§cИгрок отключил приватные сообщения.");
+		if(isIgnoring(dest.getName()))
+			throw new ExCustom("§cВы не можете писать игроку из чёрного списка.");
+		if(dest.isIgnoring(getName()))
+			throw new ExCustom("§cВы находитесь в чёрном списке у игрока §e" + dest.getName() + "§c.");
+		if(pmDisabled){
+			msg("§cУ вас выключены приватные сообщения. ", U.run("(§a§nВключить§f)", "§f>> §a§lВключить §f<<", "/ignore @a"));
+			throw new ExCustom(null);
 		}
+		if(dest.pmDisabled) throw new ExCustom("§cИгрок отключил приватные сообщения.");
 		lastPenPal = dest.getName();
 		msg(U.simple("§e[§fВы §e-> §f" + dest.getName() + "§e] " + msg, "§f>> §e§lОтветить §f<<", "/msg " + dest.getName()));
 		dest.recievePM(this, msg);
