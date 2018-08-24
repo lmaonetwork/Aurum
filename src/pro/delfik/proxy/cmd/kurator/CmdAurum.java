@@ -121,10 +121,10 @@ public class CmdAurum extends Command {
 
 	private static String mat(CommandSender sender, Command command, String[] strings){
 		if(strings.length == 2){
-			EvChat.mat.remove(strings[0]);
+			EvChat.mat.remove(strings[0] + " ");
 			return "Удалён мат " + strings[0];
 		}
-		EvChat.mat.add(strings[0]);
+		EvChat.mat.add(strings[0] + " ");
 		return "Добавлен мат " + strings[0];
 	}
 
