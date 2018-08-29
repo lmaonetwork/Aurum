@@ -4,7 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Converter;
+import implario.util.Converter;
 
 import java.util.Collection;
 import java.util.Collections;

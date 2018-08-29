@@ -4,8 +4,8 @@ import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.CryptoUtils;
-import pro.delfik.util.Rank;
+import implario.util.CryptoUtils;
+import implario.util.Rank;
 
 @Cmd(args = 1, help = "[Пароль]", auth = true)
 public class CmdLogin extends Command{

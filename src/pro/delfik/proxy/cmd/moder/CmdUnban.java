@@ -5,7 +5,7 @@ import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.user.Ban;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
+import implario.util.Rank;
 
 @Cmd(args = 1, help = "[Игрок]")
 public class CmdUnban extends Command{

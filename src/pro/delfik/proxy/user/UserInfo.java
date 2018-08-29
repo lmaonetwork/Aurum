@@ -1,6 +1,6 @@
 package pro.delfik.proxy.user;
 
-import pro.delfik.util.Rank;
+import implario.util.Rank;
 
 import java.util.ArrayList;
 import java.util.List;

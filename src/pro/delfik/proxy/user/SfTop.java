@@ -1,14 +1,13 @@
 package pro.delfik.proxy.user;
 
-import pro.delfik.net.packet.PacketTop;
-import pro.delfik.net.packet.PacketUpdateTop;
+import implario.net.packet.PacketTop;
+import implario.net.packet.PacketUpdateTop;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.util.ArrayUtils;
-import pro.delfik.util.ByteUnzip;
-import pro.delfik.util.ByteZip;
-import pro.delfik.util.Byteable;
-import pro.delfik.util.Converter;
+import implario.util.ArrayUtils;
+import implario.util.ManualByteUnzip;
+import implario.util.ManualByteZip;
+import implario.util.Converter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +95,7 @@ public class SfTop extends PacketTop.Top {
 		top.deaths = top.deaths + top.getDeaths();
 		top.games = top.games + 1;
 		top.wins = top.wins + (packet.isWin() ? 1 : 0);
-		DataIO.writeBytes(User.getPath(packet.getNick()) + path, new ByteZip()
+		DataIO.writeBytes(User.getPath(packet.getNick()) + path, new ManualByteZip()
 				.add(top.games).add(top.wins).add(top.beds).add(top.deaths).build());
 		checkTop(top);
 	}
@@ -112,7 +111,7 @@ public class SfTop extends PacketTop.Top {
 			int deaths = Converter.toInt(list.get(3));
 			return games != -1 && wins != -1 && beds != -1 && deaths != -1 ? new SfTop(nick, games, wins, beds, deaths) : null;
 		}else{
-			ByteUnzip unzip = new ByteUnzip(array);
+			ManualByteUnzip unzip = new ManualByteUnzip(array);
 			return new SfTop(nick, unzip.getInt(), unzip.getInt(), unzip.getInt(), unzip.getInt());
 		}
 	}

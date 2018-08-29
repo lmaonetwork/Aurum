@@ -4,8 +4,8 @@ import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
-import pro.delfik.util.CryptoUtils;
+import implario.util.Rank;
+import implario.util.CryptoUtils;
 
 @Cmd(args = 2, help = "[Старый пароль] [Новый пароль]")
 public class CmdPassChange extends Command {

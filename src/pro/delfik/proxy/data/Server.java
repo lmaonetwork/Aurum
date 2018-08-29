@@ -1,9 +1,9 @@
 package pro.delfik.proxy.data;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import pro.delfik.net.P2P;
-import pro.delfik.net.Packet;
-import pro.delfik.net.packet.PacketUser;
+import implario.net.P2P;
+import implario.net.Packet;
+import implario.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.user.User;
 

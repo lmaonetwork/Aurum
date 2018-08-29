@@ -1,14 +1,14 @@
 package pro.delfik.proxy.cmd.admin;
 
-import pro.delfik.net.packet.PacketWrite;
+import implario.net.packet.PacketWrite;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.cmd.ex.ExServerNotFound;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.FileConverter;
-import pro.delfik.util.Rank;
+import implario.util.FileConverter;
+import implario.util.Rank;
 
 public class CmdUpdate extends Command {
 	public CmdUpdate() {

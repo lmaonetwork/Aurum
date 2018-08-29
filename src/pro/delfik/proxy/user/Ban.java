@@ -5,16 +5,16 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.util.ByteUnzip;
-import pro.delfik.util.ByteZip;
-import pro.delfik.util.Byteable;
-import pro.delfik.util.Converter;
+import implario.util.ManualByteUnzip;
+import implario.util.ManualByteZip;
+import implario.util.ManualByteable;
+import implario.util.Converter;
 import pro.delfik.util.U;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Ban implements Byteable {
+public class Ban implements ManualByteable {
 
 	public final String reason, moderator;
 	public final long start, until;
@@ -25,7 +25,7 @@ public class Ban implements Byteable {
 		this.start = start;
 		this.until = until;
 	}
-	public Ban(ByteUnzip unzip) {
+	public Ban(ManualByteUnzip unzip) {
 		reason = unzip.getString();
 		moderator = unzip.getString();
 		start = unzip.getLong();
@@ -68,8 +68,8 @@ public class Ban implements Byteable {
 	}
 
 	@Override
-	public ByteZip zip() {
-		return new ByteZip().add(reason).add(moderator).add(start).add(until);
+	public ManualByteZip zip() {
+		return new ManualByteZip().add(reason).add(moderator).add(start).add(until);
 	}
 
 	public BaseComponent kickMessage(String player) {

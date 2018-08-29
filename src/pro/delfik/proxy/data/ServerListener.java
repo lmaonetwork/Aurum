@@ -1,13 +1,13 @@
 package pro.delfik.proxy.data;
 
 import net.md_5.bungee.BungeeCord;
-import pro.delfik.net.Listener;
-import pro.delfik.net.P2P;
-import pro.delfik.net.Packet;
-import pro.delfik.net.packet.PacketInit;
+import implario.net.Listener;
+import implario.net.P2P;
+import implario.net.Packet;
+import implario.net.packet.PacketInit;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.ev.added.PacketEvent;
-import pro.delfik.util.Scheduler;
+import implario.util.Scheduler;
 
 import java.io.IOException;
 import java.net.ServerSocket;

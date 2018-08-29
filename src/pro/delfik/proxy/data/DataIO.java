@@ -1,6 +1,6 @@
 package pro.delfik.proxy.data;
 
-import pro.delfik.util.Byteable;
+import implario.util.ManualByteable;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -131,12 +131,12 @@ public class DataIO {
 		close(out);
 	}
 
-	public static <T extends Byteable> T readByteable(String path, Class<T> clazz){
+	public static <T extends ManualByteable> T readByteable(String path, Class<T> clazz){
 		byte read[] = readBytes(path);
-		return read == null ? null : Byteable.decode(clazz, read);
+		return read == null ? null : ManualByteable.decode(clazz, read);
 	}
 
-	public static void writeByteable(String path, Byteable byteable){
+	public static void writeByteable(String path, ManualByteable byteable){
 		writeBytes(path, byteable.zip().build());
 	}
 	

@@ -6,7 +6,7 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
+import implario.util.Rank;
 import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.U;
 import pro.delfik.vk.VK;

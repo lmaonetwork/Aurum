@@ -4,9 +4,8 @@ import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.user.SfTop;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
-import pro.delfik.util.Converter;
-import pro.delfik.util.U;
+import implario.util.Rank;
+import implario.util.Converter;
 
 public class CmdStats extends Command{
 	public CmdStats() {

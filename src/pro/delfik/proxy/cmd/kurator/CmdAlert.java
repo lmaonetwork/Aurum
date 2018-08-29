@@ -4,8 +4,8 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
-import pro.delfik.util.Converter;
+import implario.util.Rank;
+import implario.util.Converter;
 import pro.delfik.util.U;
 
 @Cmd(args = 1, help = "[Сообщение]")

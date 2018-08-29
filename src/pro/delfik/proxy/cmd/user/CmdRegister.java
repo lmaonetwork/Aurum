@@ -6,7 +6,7 @@ import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.user.UserInfo;
-import pro.delfik.util.Rank;
+import implario.util.Rank;
 
 import java.util.ArrayList;
 

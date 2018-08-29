@@ -5,7 +5,7 @@ import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import pro.delfik.net.packet.PacketSSU;
+import implario.net.packet.PacketSSU;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.user.User;

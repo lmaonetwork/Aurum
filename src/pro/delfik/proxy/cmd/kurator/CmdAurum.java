@@ -5,7 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Title;
-import pro.delfik.net.packet.PacketGC;
+import implario.net.packet.PacketGC;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.CommandProcessor;
@@ -20,9 +20,9 @@ import pro.delfik.proxy.ev.EvChat;
 import pro.delfik.proxy.user.SfTop;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.user.UserInfo;
-import pro.delfik.util.ArrayUtils;
-import pro.delfik.util.Converter;
-import pro.delfik.util.Rank;
+import implario.util.ArrayUtils;
+import implario.util.Converter;
+import implario.util.Rank;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 
@@ -286,7 +286,7 @@ public class CmdAurum extends Command {
 		if(!user.getName().equals("CONSOLE") && !user.isIPBound())
 			throw new ExCustom("§cДля использования §f/aurum §cнеобходимо включить §f/attachip");
 		if(args.length == 0)
-			throw new ExCustom("§c/aurum [" + Converter.merge(functions.keySet(), s -> s, "§c, §f") + "§c]");
+			throw new ExCustom("§c/aurum [§f" + Converter.merge(functions.keySet(), s -> s, "§c, §f") + "§c]");
 		String[] a = new String[args.length - 1];
 		System.arraycopy(args, 1, a, 0, a.length);
 		CommandProcessor function = functions.get(args[0].toLowerCase());

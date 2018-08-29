@@ -2,13 +2,12 @@ package pro.delfik.proxy.cmd.user;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
-import pro.delfik.util.Converter;
+import implario.util.Rank;
+import implario.util.Converter;
 
 import java.util.Collections;
 

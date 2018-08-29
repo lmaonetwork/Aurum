@@ -2,8 +2,8 @@ package pro.delfik.proxy.data;
 
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.user.UserInfo;
-import pro.delfik.util.Converter;
-import pro.delfik.util.Rank;
+import implario.util.Converter;
+import implario.util.Rank;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

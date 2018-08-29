@@ -8,9 +8,9 @@ import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
-import pro.delfik.util.Scheduler;
-import pro.delfik.util.StringUtils;
+import implario.util.Rank;
+import implario.util.Scheduler;
+import implario.util.StringUtils;
 
 import java.util.HashMap;
 

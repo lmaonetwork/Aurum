@@ -4,8 +4,8 @@ import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Converter;
-import pro.delfik.util.Rank;
+import implario.util.Converter;
+import implario.util.Rank;
 
 @Cmd(args = 1, help = "[Сообщение]")
 public class CmdReply extends Command{

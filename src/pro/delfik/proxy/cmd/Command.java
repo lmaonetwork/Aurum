@@ -11,8 +11,8 @@ import pro.delfik.proxy.cmd.ex.ExNotEnoughPermissions;
 import pro.delfik.proxy.cmd.ex.ExUserNotFound;
 import pro.delfik.proxy.cmd.ex.ExServerNotFound;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
-import pro.delfik.util.Converter;
+import implario.util.Rank;
+import implario.util.Converter;
 import pro.delfik.util.U;
 
 import java.text.SimpleDateFormat;

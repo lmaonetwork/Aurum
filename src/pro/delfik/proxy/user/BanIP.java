@@ -5,15 +5,15 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.util.ByteUnzip;
-import pro.delfik.util.ByteZip;
-import pro.delfik.util.Byteable;
+import implario.util.ManualByteUnzip;
+import implario.util.ManualByteZip;
+import implario.util.ManualByteable;
 import pro.delfik.util.U;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BanIP implements Byteable {
+public class BanIP implements ManualByteable {
 
 	private final String moderator, reason;
 
@@ -21,13 +21,13 @@ public class BanIP implements Byteable {
 		this.reason = reason;
 		this.moderator = moderator;
 	}
-	public BanIP(ByteUnzip unzip) {
+	public BanIP(ManualByteUnzip unzip) {
 		reason = unzip.getString();
 		moderator = unzip.getString();
 	}
 	@Override
-	public ByteZip zip() {
-		return new ByteZip().add(reason).add(moderator);
+	public ManualByteZip zip() {
+		return new ManualByteZip().add(reason).add(moderator);
 	}
 
 	public static void unbanIP(String address, String moderator) {

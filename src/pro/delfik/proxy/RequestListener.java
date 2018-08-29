@@ -1,7 +1,7 @@
 package pro.delfik.proxy;
 
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.CryptoUtils;
+import implario.util.CryptoUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

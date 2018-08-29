@@ -3,7 +3,7 @@ package pro.delfik.proxy.cmd.user;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
+import implario.util.Rank;
 
 @Cmd(args = 1, help = "[a]")
 public class CommandGuide extends Command{

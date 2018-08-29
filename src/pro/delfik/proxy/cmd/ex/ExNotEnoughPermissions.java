@@ -1,6 +1,6 @@
 package pro.delfik.proxy.cmd.ex;
 
-import pro.delfik.util.Rank;
+import implario.util.Rank;
 
 public class ExNotEnoughPermissions extends ExCustom {
 	public ExNotEnoughPermissions(Rank required) {

@@ -4,13 +4,13 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.util.ByteUnzip;
-import pro.delfik.util.ByteZip;
-import pro.delfik.util.Byteable;
-import pro.delfik.util.Converter;
+import implario.util.ManualByteUnzip;
+import implario.util.ManualByteZip;
+import implario.util.ManualByteable;
+import implario.util.Converter;
 import pro.delfik.util.U;
 
-public class Mute implements Byteable{
+public class Mute implements ManualByteable {
 	private static final String path = "mute";
 
 	public static void unmute(String player, String moderator) {
@@ -51,7 +51,7 @@ public class Mute implements Byteable{
 	private final long until;
 	private final String reason;
 
-	public Mute(ByteUnzip unzip){
+	public Mute(ManualByteUnzip unzip){
 		this.moderator = unzip.getString();
 		this.until = unzip.getLong();
 		this.reason = unzip.getString();
@@ -84,8 +84,8 @@ public class Mute implements Byteable{
 	}
 
 	@Override
-	public ByteZip zip() {
-		return new ByteZip().add(moderator).add(until).add(reason);
+	public ManualByteZip zip() {
+		return new ManualByteZip().add(moderator).add(until).add(reason);
 	}
 	
 	private static void denyMessage(ProxiedPlayer p, String reason, long remainMillis, String moderator) {

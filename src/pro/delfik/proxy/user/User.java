@@ -5,20 +5,20 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
-import pro.delfik.net.packet.PacketAuth;
-import pro.delfik.net.packet.PacketPex;
-import pro.delfik.net.packet.PacketUser;
+import implario.net.packet.PacketAuth;
+import implario.net.packet.PacketPex;
+import implario.net.packet.PacketUser;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
-import pro.delfik.util.ByteUnzip;
-import pro.delfik.util.ByteZip;
-import pro.delfik.util.Byteable;
-import pro.delfik.util.Converter;
-import pro.delfik.util.CryptoUtils;
-import pro.delfik.util.Rank;
+import implario.util.ManualByteUnzip;
+import implario.util.ManualByteZip;
+import implario.util.ManualByteable;
+import implario.util.Converter;
+import implario.util.CryptoUtils;
+import implario.util.Rank;
 import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class User implements Byteable {
+public class User implements ManualByteable {
 
 	private static final HashMap<String, User> list = new HashMap<>();
 	public static final TimedHashMap<String, String> outAuth = new TimedHashMap<>(60);
@@ -132,7 +132,7 @@ public class User implements Byteable {
 		list.put(Converter.smartLowercase(name), this);
 	}
 
-	public User(ByteUnzip unzip) {
+	public User(ManualByteUnzip unzip) {
 		name = unzip.getString();
 		password = unzip.getString();
 		rank = Rank.byChar.get((char) unzip.getByte());
@@ -179,8 +179,8 @@ public class User implements Byteable {
 	}
 
 	@Override
-	public ByteZip zip() {
-		return new ByteZip()
+	public ManualByteZip zip() {
+		return new ManualByteZip()
 					   .add(name)
 					   .add(password)
 					   .add(rank.getByte())

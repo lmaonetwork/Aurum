@@ -1,12 +1,11 @@
 package pro.delfik.proxy.cmd.user;
 
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.user.User;
-import pro.delfik.util.Rank;
+import implario.util.Rank;
 import pro.delfik.proxy.skins.MojangAPI;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;

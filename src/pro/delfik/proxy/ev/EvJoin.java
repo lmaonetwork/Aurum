@@ -13,8 +13,8 @@ import pro.delfik.proxy.user.BanIP;
 import pro.delfik.proxy.user.DifferentIPException;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.skins.SkinApplier;
-import pro.delfik.util.Scheduler;
-import pro.delfik.util.StringUtils;
+import implario.util.Scheduler;
+import implario.util.StringUtils;
 import pro.delfik.util.U;
 
 import java.util.concurrent.TimeUnit;
