@@ -29,7 +29,7 @@ public class U {
 	public interface RunnableExc {
 		void run() throws Exception;
 	}
-	
+
 	// -------------------------------------------- Работа с чатом
 	
 	public static final char[] COLOR_CHARS = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',

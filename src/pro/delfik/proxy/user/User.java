@@ -151,7 +151,7 @@ public class User implements ManualByteable {
 		if (lastSeenIP != null && ipbound) {
 			ProxiedPlayer p = Proxy.getPlayer(name);
 			String ip = outAuth.get(name);
-			if (lastSeenIP.equals(p.getAddress().getHostName()) || (ip != null && ip.equals(p.getAddress().getHostName()))) {
+			if (lastSeenIP.equals(p.getAddress().getAddress().getHostAddress()) || (ip != null && ip.equals(p.getAddress().getHostName()))) {
 				outAuth.remove(name);
 				authorize();
 				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");

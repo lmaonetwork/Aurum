@@ -278,7 +278,7 @@ public class EvChat implements Listener{
 			} else {
 				char c = s.charAt(0);
 				Char magic = (Char)this.map.get(c);
-				return magic == null ? false : magic.contains(s.substring(1, s.length()));
+				return magic != null && magic.contains(s.substring(1, s.length()));
 			}
 		}
 

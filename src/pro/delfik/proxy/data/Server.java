@@ -34,6 +34,7 @@ public class Server {
 		this.server = server;
 		this.p2p = p2p;
 		servers.put(server, this);
+		System.out.println(server);
 		for(ProxiedPlayer player : Proxy.getServer(server).getPlayers()){
 			User user = User.get(player.getName());
 			send(new PacketUser(user.getName(), user.getRank(), user.isAuthorized(), user.getOnline(), ((int) user.getMoney())));
