@@ -14,12 +14,7 @@ public class EvReconnect implements Listener{
 	@EventHandler
 	public void event(ServerConnectEvent event) {
 		User p = User.get(event.getPlayer());
-		if (p == null) {
-			System.out.println("pidor is null " + event.getPlayer().getName());
-			return;
-		} else {
-			System.out.println("igrok is not null " + event.getPlayer().getName());
-		}
+		if (p == null) return;
 		if (!event.getTarget().getName().equals("LOBBY_1"))
 			Server.get("LOBBY_1").send(new PacketSSU(p.getServer(),
 					Proxy.getServer(p.getServer()).getPlayers().size() - 1));

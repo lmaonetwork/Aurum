@@ -310,7 +310,6 @@ public class User implements ManualByteable {
 
 	public void setServer(String server) {
 		this.server = server;
-		System.out.println(authorized + "");
 		server().send(new PacketUser(name, rank, authorized, online, money));
 		updateTab(getHandle());
 	}

@@ -1,13 +1,14 @@
 package pro.delfik.proxy.user;
 
+import implario.net.Packet;
 import implario.net.packet.PacketTop;
 import implario.net.packet.PacketUpdateTop;
-import pro.delfik.proxy.data.Server;
-import pro.delfik.proxy.data.DataIO;
 import implario.util.ArrayUtils;
+import implario.util.Converter;
 import implario.util.ManualByteUnzip;
 import implario.util.ManualByteZip;
-import implario.util.Converter;
+import pro.delfik.proxy.data.DataIO;
+import pro.delfik.proxy.data.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,14 @@ public class SfTop extends PacketTop.Top {
 			}
 		}
 		if(Server.get("SF_1") == null)return;
-		Server.get("SF_1").send(new PacketTop(top));
+		System.out.println("before:");
+		for (SfTop sfTop : top) System.out.println(sfTop);
+		System.out.println("after:");
+		PacketTop packet = new PacketTop(top);
+		for (PacketTop.Top sfTop : ((PacketTop) Packet.getPacket(packet.zip())).getTop()) {
+			System.out.println(sfTop);
+		}
+		Server.get("SF_1").send(packet);
 	}
 	
 	private static void addTop(SfTop player, int top) {
@@ -115,7 +123,12 @@ public class SfTop extends PacketTop.Top {
 			return new SfTop(nick, unzip.getInt(), unzip.getInt(), unzip.getInt(), unzip.getInt());
 		}
 	}
-	
+
+	@Override
+	public String toString() {
+		return nick + "-" + games + "-" + wins + "-" + beds + "-" + deaths;
+	}
+
 	public boolean equals(Object object) {
 		return object instanceof SfTop && ((SfTop)object).nick.equals(this.nick);
 	}

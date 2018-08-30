@@ -72,10 +72,9 @@ public class EvChat implements Listener{
 	private boolean adminChat(ChatEvent event, User user){
 		if(user.hasRank(Rank.BUILDER) && event.getMessage().startsWith("%")){
 			event.setCancelled(true);
-			String message = "§c§o%A% " + user.getRank().getNameColor() + user.name + "§7§o: §f§o" + event.getMessage().substring(1);
+			String message = "§c§o%staff" + user.getRank().getNameColor() + " " + user.name + "§7§o: §f§o" + event.getMessage().substring(1);
 			for (User receiver : User.getAll())
-				if (receiver.hasRank(Rank.BUILDER))
-					receiver.msg(message);
+				if (receiver.hasRank(Rank.BUILDER)) receiver.msg(message);
 			return true;
 		}
 		return false;
@@ -201,7 +200,7 @@ public class EvChat implements Listener{
 		map.put('x', 'х');
 		map.put('l', 'л');
 		map.put('n', 'п');
-		nyas = new String[]{"мяу", "meow", "меов", "ня", "nya", "горрила", "арангутанг"};
+		nyas = new String[]{"мяу", "meow", "меов", "ня", "nya", "капибара", "шмыг", "апчхи", "кхе"};
 	}
 	public static class Char {
 		private final HashMap<Character, Char> map = new HashMap();
