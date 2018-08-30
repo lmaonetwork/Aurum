@@ -1,24 +1,25 @@
 package pro.delfik.proxy.user;
 
+import implario.net.packet.PacketAuth;
+import implario.net.packet.PacketPex;
+import implario.net.packet.PacketUser;
+import implario.util.Coder;
+import implario.util.Converter;
+import implario.util.CryptoUtils;
+import implario.util.ManualByteUnzip;
+import implario.util.ManualByteZip;
+import implario.util.ManualByteable;
+import implario.util.Rank;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
-import implario.net.packet.PacketAuth;
-import implario.net.packet.PacketPex;
-import implario.net.packet.PacketUser;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
-import implario.util.ManualByteUnzip;
-import implario.util.ManualByteZip;
-import implario.util.ManualByteable;
-import implario.util.Converter;
-import implario.util.CryptoUtils;
-import implario.util.Rank;
 import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
@@ -45,7 +46,7 @@ public class User implements ManualByteable {
 	}
 
 	static {
-		list.put("CONSOLE", new User("CONSOLE", Rank.DEV));
+		list.put("CONSOLE", new User("CONSOLE", Rank.DEV, true));
 	}
 
 
@@ -76,7 +77,7 @@ public class User implements ManualByteable {
 	public static User load(String name) {
 		try {
 			User u = DataIO.readByteable(getPath(name) + "player", User.class);
-			if (u == null) u = new User(name, Rank.PLAYER);
+			if (u == null) u = new User(name, Rank.PLAYER, false);
 			return u;
 		} catch (IllegalArgumentException ex) {
 			throw new DifferentIPException(name);
@@ -122,13 +123,14 @@ public class User implements ManualByteable {
 	private String last = "", lastLast  = null;				// Последние сообщения игрока
 	private volatile String forcedIP	= null;				// IP, который будет принудительно сохранён при выходе с сервера.
 
-	public User(String nick, Rank rank) {
+	public User(String nick, Rank rank, boolean auth) {
 		this.name = nick;
 		this.rank = rank;
 		this.online = 0;
 		this.connectedAt = (int) (System.currentTimeMillis() / 60000);
 		this.friends = new ArrayList<>();
 		this.ignoredPlayers = new ArrayList<>();
+		this.authorized = auth;
 		list.put(Converter.smartLowercase(name), this);
 	}
 
@@ -148,17 +150,19 @@ public class User implements ManualByteable {
 		list.put(Converter.smartLowercase(name), this);
 		mute = Mute.get(name);
 
-		if (lastSeenIP != null && ipbound) {
+		if (lastSeenIP != null && lastSeenIP.length() != 0 && ipbound) {
 			ProxiedPlayer p = Proxy.getPlayer(name);
-			String ip = outAuth.get(name);
-			if (lastSeenIP.equals(p.getAddress().getAddress().getHostAddress()) || (ip != null && ip.equals(p.getAddress().getHostName()))) {
+			String playerIP = p.getAddress().getAddress().getHostAddress();
+			String outAuthIP = outAuth.get(name);
+			if (outAuthIP != null && outAuthIP.equals(p.getAddress().getHostName())) {
 				outAuth.remove(name);
+				lastSeenIP = playerIP;
+			}
+			if (lastSeenIP.equals(playerIP)) {
 				authorize();
 				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
 			} else if (!allowedIP.contains(name.toLowerCase())) throw new DifferentIPException(name);
 		}
-
-
 	}
 
 	@Deprecated
@@ -262,7 +266,12 @@ public class User implements ManualByteable {
 	public void authorize() {
 		authorized = true;
 		Server server = server();
-		if (server != null) server.send(new PacketAuth(name));
+		if (server != null) {
+			PacketAuth packet = new PacketAuth(name);
+			System.out.println(Coder.toString(packet.zip()));
+			server.send(packet);
+		}
+		else throw new IllegalStateException("Игрок " + name + " не смог авторизоваться на null-сервере " + server);
 	}
 
 	public void setRank(Rank rank) {
@@ -301,6 +310,7 @@ public class User implements ManualByteable {
 
 	public void setServer(String server) {
 		this.server = server;
+		System.out.println(authorized + "");
 		server().send(new PacketUser(name, rank, authorized, online, money));
 		updateTab(getHandle());
 	}
