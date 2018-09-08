@@ -82,13 +82,10 @@ public class SfTop extends PacketTop.Top {
 			}
 		}
 		if(Server.get("SF_1") == null)return;
-		System.out.println("before:");
-		for (SfTop sfTop : top) System.out.println(sfTop);
-		System.out.println("after:");
-		PacketTop packet = new PacketTop(top);
-		for (PacketTop.Top sfTop : ((PacketTop) Packet.getPacket(packet.zip())).getTop()) {
-			System.out.println(sfTop);
-		}
+		PacketTop.Top tops[] = new PacketTop.Top[top.length];
+		for(int i = 0; i < top.length; i++)
+			tops[i] = new PacketTop.Top(top[i].nick, top[i].wins, top[i].games);
+		PacketTop packet = new PacketTop(tops);
 		Server.get("SF_1").send(packet);
 	}
 	
@@ -147,6 +144,10 @@ public class SfTop extends PacketTop.Top {
 	
 	public int getDeaths() {
 		return this.deaths;
+	}
+
+	public PacketTop.Top getTop(){
+		return new PacketTop.Top(nick, wins, games);
 	}
 
 	public static void init(){
