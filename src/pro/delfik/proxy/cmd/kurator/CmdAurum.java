@@ -1,11 +1,12 @@
 package pro.delfik.proxy.cmd.kurator;
 
+import implario.net.packet.PacketGC;
+import implario.util.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Title;
-import implario.net.packet.PacketGC;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.CommandProcessor;
@@ -14,22 +15,22 @@ import pro.delfik.proxy.cmd.ex.ExNotEnoughArguments;
 import pro.delfik.proxy.cmd.user.CmdVK;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.ev.EvChat;
+import pro.delfik.proxy.user.Ban;
 import pro.delfik.proxy.user.SfTop;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.user.UserInfo;
-import implario.util.ArrayUtils;
-import implario.util.Converter;
-import implario.util.Rank;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Random;
+
+import static implario.util.StringUtils.random;
 
 public class CmdAurum extends Command {
 	public CmdAurum() {
@@ -60,60 +61,103 @@ public class CmdAurum extends Command {
 		functions.put("memory", CmdAurum::memory);
 		functions.put("mat", CmdAurum::mat);
 		functions.put("ip", CmdAurum::ip);
-		functions.put("movedb", CmdAurum::movedb);
-		functions.put("moveuser", CmdAurum::moveuser);
 		functions.put("readuser", CmdAurum::readuser);
 		functions.put("cleandb", CmdAurum::cleandb);
+		functions.put("detachip", CmdAurum::detachip);
+		functions.put("ban", CmdAurum::ban);
+		functions.put("rui", CmdAurum::readuserinfo);
+		functions.put("wui", CmdAurum::writeuserinfo);
+	}
+
+	private static String readuserinfo(CommandSender sender, Command command, String[] args) {
+		requireArgs(args, 1, "[Ник]");
+		long start = System.currentTimeMillis();
+		UserInfo i = User.a(args[0]);
+		msg(sender, "§aUserInfo§d" + UserInfo.Version.values()[i.version] + " §a-§e" + i.name + "§a-§e" + i.rank.getNameColor() + i.rank.getName().charAt(0));
+		msg(sender, "§aPasswd: '§e" + i.passhash.substring(0, 20) + "§a...'");
+		msg(sender, "§aIP: '§e" + i.lastIP + "§a'");
+		msg(sender, "§aPMdisabled: §e" + i.pmDisabled + "§a; IPattached: §e" + i.ipAttached + "§a; DarkTheme: §e" + i.darkTheme);
+		msg(sender, "§aIgnored: §e" + Converter.merge(i.ignored, s -> s, "§a.§e"));
+		msg(sender, "§aFriends: §e" + Converter.merge(i.friends, s -> s, "§a.§e"));
+		msg(sender, "§aMoney: §e" + i.money + "§a; Online: §e" + i.online);
+		return "§dОперация успешно выполнена за §f" + (System.currentTimeMillis() - start) + "§ds.";
+	}
+
+	private static String writeuserinfo(CommandSender sender, Command cmd, String[] args) {
+		requireArgs(args, 1, "[Ник]");
+		Random r = new Random();
+		UserInfo i = new UserInfo(args[0], CryptoUtils.getHash(random(10)), Rank.random(), Math.abs(r.nextInt()),
+				"54.32.40.112", Math.abs(r.nextInt()), false, false, Converter.asList(random(8), random(8)),
+				Converter.asList(random(8), random(8)), r.nextBoolean());
+		User.save(i);
+		msg(sender, "§7UserInfo§d" + UserInfo.Version.values()[i.version] + " §7-§e" + i.name + "§7-§e" + i.rank.getNameColor() + i.rank.getName().charAt(0));
+		msg(sender, "§7Passwd: '§e" + i.passhash.substring(0, 20) + "§7...'");
+		msg(sender, "§7IP: '§e" + i.lastIP + "§7'");
+		msg(sender, "§7PMdisabled: §e" + i.pmDisabled + "§7; IPattached: §e" + i.ipAttached + "§7; DarkTheme: §e" + i.darkTheme);
+		msg(sender, "§7Ignored: §e" + Converter.merge(i.ignored, s -> s, "§7.§e"));
+		msg(sender, "§7Friends: §e" + Converter.merge(i.friends, s -> s, "§7.§e"));
+		msg(sender, "§7Money: §e" + i.money + "§7; Online: §e" + i.online);
+		return "§aЗапись прошла успешно.";
+	}
+
+	private static String ban(CommandSender sender, Command command, String[] args) {
+		requireArgs(args, 2, "[Модератор] [Игрок] (Время) (Причина)");
+		int minutes = 0;
+		String reason = "Не указана.";
+		if (args.length > 2) {
+			try {
+				minutes = Integer.parseInt(args[2]);
+				if (args.length > 3) {
+					reason = Converter.mergeArray(args, 3, " ");
+				}
+			} catch (NumberFormatException ex) {
+				reason = Converter.mergeArray(args, 2, " ");
+			}
+		}
+		Ban.ban(args[1], reason, minutes, args[0]);
+		return null;
+	}
+
+	private static String detachip(CommandSender sender, Command command, String[] args) {
+		requireArgs(args, 1, "[Игрок]");
+		User p = User.loadOffline(args[0]);
+		p.setIPBound(false);
+		User.unload(args[0]);
+		return "§aС игрока §f" + args[0] + "§a снята привязка IP-адреса.";
 	}
 
 	private static String cleandb(CommandSender sender, Command command, String[] strings) {
-		return "";
+		File dir = new File("Core/players");
+		File[] pfiles = dir.listFiles();
+		StringBuilder b = new StringBuilder();
+		int s = 0, t = 0;
+		for (File f : pfiles) {
+			if (!f.isDirectory()) continue;
+			File file = new File("Core/players/" + f.getName() + "/player.txt");
+			if (!file.exists()) {
+				b.append(f.getName()).append(", ");
+				t++;
+				if (++s > 9) {
+					s = 0;
+					msg(sender, b.toString());
+					b = new StringBuilder();
+				}
+				for (File stuff : f.listFiles()) stuff.delete();
+				f.delete();
+			}
+		}
+		return b.toString() + "\n§a" + t + " всего.";
 	}
 
 	private static String readuser(CommandSender sender, Command command, String[] strings) {
 		requireArgs(strings, 1, "[Ник]");
-		User u = strings.length == 1 ? DataIO.readByteable(User.getPath(strings[0]) + "player.txt", User.class) :
-						 new User(PlayerDataManager.load(strings[0]),null, false);
+		User u = DataIO.readByteable(User.getPath(strings[0]) + "player.txt", User.class);
 		String s = "§a[§f" + u.getName() + "§a: §f" + u.getRank() + "§a-§f" + u.getOnline() +
 						   "§a]\n§a[pass=§f" + u.getPassword().substring(0, 30) +
 						   "...§a]\n§a[ignore=§f" + Converter.merge(u.getIgnoredPlayers(), (st) -> st, "§a-§f") + "§a]";
 		User.unload(strings[0]);
 		return s;
 	}
-
-	private static String movedb(CommandSender sender, Command command, String[] strings) {
-		msg(sender, "§aЗапрашиваем данные у MySQL");
-		Database.Result result = Database.sendQuery("SELECT name FROM Users");
-		ResultSet r = result.set;
-
-		msg(sender, "§aОткрываем новый поток...");
-		new Thread(() -> {
-			try {
-				while(r.next()) {
-					String name = r.getString("name");
-					System.out.println("Переносим " + name);
-					msg(sender, moveuser(sender, command, new String[] {name}));
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}).start();
-		return "§aПоток продолжит работать в фоновом режиме.";
-	}
-
-	private static String moveuser(CommandSender sender, Command command, String[] strings) {
-		requireArgs(strings, 1, "[Ник]");
-		UserInfo info = PlayerDataManager.load(strings[0]);
-		if (info == null) {
-			return "§6Не удалось прогрузить " + strings[0] + ", пропускаем.";
-		} else {
-			User u = new User(info, null, false);
-			DataIO.writeByteable(User.getPath(strings[0]) + "player.txt", u);
-			User.unload(strings[0]);
-			return "§e" + strings[0] + "§a успешно перенесён.";
-		}
-	}
-
 
 	private static String ip(CommandSender sender, Command command, String[] strings){
 		return ((ProxiedPlayer)sender).getAddress().getHostName();
@@ -231,7 +275,8 @@ public class CmdAurum extends Command {
 		Rank rank = requireRank(args[1]);
 		if (sender instanceof ProxiedPlayer && !User.get(sender).hasRank(rank))
 			return "§cВы не можете выдавать ранги выше собственного.";
-		PlayerDataManager.setRank(args[0], rank);
+		User u = requirePerson(args[0]);
+		u.setRank(rank);
 		return "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent();
 	}
 
