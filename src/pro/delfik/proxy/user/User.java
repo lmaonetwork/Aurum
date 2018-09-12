@@ -3,13 +3,7 @@ package pro.delfik.proxy.user;
 import implario.net.packet.PacketAuth;
 import implario.net.packet.PacketPex;
 import implario.net.packet.PacketUser;
-import implario.util.Coder;
-import implario.util.Converter;
-import implario.util.CryptoUtils;
-import implario.util.ManualByteUnzip;
-import implario.util.ManualByteZip;
-import implario.util.ManualByteable;
-import implario.util.Rank;
+import implario.util.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -69,6 +63,16 @@ public class User implements ManualByteable {
 	}
 
 	/**
+	 * Прогрузка пользователя только для модификации, когда игрок находится в оффлайне.
+	 */
+	public static User loadOffline(String name) {
+		allowedIP.add(name.toLowerCase());
+		User u = DataIO.readByteable(getPath(name) + "player", User.class);
+		allowedIP.remove(name.toLowerCase());
+		return u;
+	}
+
+	/**
 	 * Прогружает юзера по данным с диска.
 	 * Если на диске ничего нет, регистрирует нового.
 	 * @param name Имя игрока.
@@ -82,6 +86,16 @@ public class User implements ManualByteable {
 		} catch (IllegalArgumentException ex) {
 			throw new DifferentIPException(name);
 		}
+	}
+
+	public static UserInfo a(String name) {
+		ByteUnzip unzip = new ByteUnzip(DataIO.readBytes(getPath(name) + "player"));
+		return UserInfo.Version.unzip(unzip);
+	}
+
+	public static void save(UserInfo info) {
+		ManualByteZip zip = info.zip();
+		DataIO.writeBytes(getPath(info.name) + "player", zip.build());
 	}
 
 	/**
@@ -108,12 +122,12 @@ public class User implements ManualByteable {
 	public final String name; 								// Ник игрока
 	private final int connectedAt; 							// Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
 	private final int online; 								// Онлайн до захода на сервер
+	private Rank rank;								 		// Ранг игрока
 	private final List<String> friends;						// Список друзей
 	private final List<String> ignoredPlayers;				// Чёрный список
 	private boolean authorized 			= false; 			// Авторизован ли игрок
 	private String password 			= ""; 				// Hash пароля
 	private int money 					= 0; 				// Баланс игрока
-	private Rank rank 					= Rank.PLAYER; 		// Ранг игрока
 	private String server 				= ""; 				// Сервер, на котором находится игрок
 	private boolean ipbound				= false;			// Разрешён ли вход только с сохранённого IP
 	private boolean pmDisabled			= false; 			// Откючён ли ЛС
@@ -122,6 +136,7 @@ public class User implements ManualByteable {
 	private Mute mute 					= null;				// Данные о муте игрока
 	private String last = "", lastLast  = null;				// Последние сообщения игрока
 	private volatile String forcedIP	= null;				// IP, который будет принудительно сохранён при выходе с сервера.
+	private boolean darkTheme			= false;			// ТЁМНАЯ ТЕМА!!!111 АААААааааААААА
 
 	public User(String nick, Rank rank, boolean auth) {
 		this.name = nick;
@@ -132,6 +147,21 @@ public class User implements ManualByteable {
 		this.ignoredPlayers = new ArrayList<>();
 		this.authorized = auth;
 		list.put(Converter.smartLowercase(name), this);
+	}
+
+	public User(UserInfo info) {
+		name = info.name;
+		connectedAt = (int) (System.currentTimeMillis() / 60000);
+		online = info.online;
+		rank = info.rank;
+		friends = info.friends;
+		ignoredPlayers = info.ignored;
+		password = info.passhash;
+		money = info.money;
+		ipbound = info.ipAttached;
+		pmDisabled = info.pmDisabled;
+		lastIP = info.lastIP;
+		mute = Mute.get(name);
 	}
 
 	public User(ManualByteUnzip unzip) {
@@ -150,6 +180,7 @@ public class User implements ManualByteable {
 		list.put(Converter.smartLowercase(name), this);
 		mute = Mute.get(name);
 
+		if (!allowedIP.contains(name.toLowerCase()))
 		if (lastSeenIP != null && lastSeenIP.length() != 0 && ipbound) {
 			ProxiedPlayer p = Proxy.getPlayer(name);
 			String playerIP = p.getAddress().getAddress().getHostAddress();
@@ -161,26 +192,10 @@ public class User implements ManualByteable {
 			if (lastSeenIP.equals(playerIP)) {
 				authorize();
 				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
-			} else if (!allowedIP.contains(name.toLowerCase())) throw new DifferentIPException(name);
+			} else throw new DifferentIPException(name);
 		}
 	}
 
-	@Deprecated
-	public User(UserInfo userInfo, Mute mute, boolean auth) {
-		this.name = userInfo.getName();
-		this.rank = userInfo.getRank();
-		this.password = userInfo.getPassword();
-		this.online = (int) userInfo.getOnline();
-		this.money = userInfo.getMoney();
-		this.mute = mute;
-		this.ipbound = userInfo.isIPBound();
-		this.ignoredPlayers = userInfo.getIgnoredPlayers();
-		this.friends = userInfo.getFriends();
-
-		if (auth) this.authorize();
-		this.connectedAt = (int) (System.currentTimeMillis() / 60000);
-		list.put(Converter.smartLowercase(name), this);
-	}
 
 	@Override
 	public ManualByteZip zip() {
@@ -335,12 +350,12 @@ public class User implements ManualByteable {
 		this.password = password.length() == 0 ? "" : CryptoUtils.getHash(password);
 	}
 
-	public long getOnline() {
-		return System.currentTimeMillis() - connectedAt + online;
+	public int getOnline() {
+		return (int) (System.currentTimeMillis() / 60000) - connectedAt + online;
 	}
 
 	public UserInfo getInfo() {
-		return new UserInfo(name, password, money, rank, getOnline(), getIP(), ipbound, ignoredPlayers, pmDisabled, friends);
+		return new UserInfo(name, password, rank, getOnline(), getIP(), money, ipbound, pmDisabled, ignoredPlayers, friends, darkTheme);
 	}
 
 	public Mute getActiveMute() {
