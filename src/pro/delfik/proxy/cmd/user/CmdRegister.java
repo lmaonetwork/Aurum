@@ -1,14 +1,10 @@
 package pro.delfik.proxy.cmd.user;
 
+import implario.util.Rank;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.data.PlayerDataManager;
 import pro.delfik.proxy.user.User;
-import pro.delfik.proxy.user.UserInfo;
-import implario.util.Rank;
-
-import java.util.ArrayList;
 
 @Cmd(args = 1, help = "[Пароль]", auth = true)
 public class CmdRegister extends Command{
@@ -25,13 +21,8 @@ public class CmdRegister extends Command{
 			throw new ExCustom("Вы уже зарегистрированы, пожалуйста, авторизуйтесь командой §e/login [Пароль]§c.");
 		if(input.length() < 3) throw new ExCustom("§cДлина пароля не может быть меньше трёх символов.");
 		user.setPassword(input);
-		registerNewPlayer(user.getName(), user.getPassword());
-
 		user.authorize();
 		user.msg("§aВы успешно зарегистрировались!");
 	}
 
-	private static void registerNewPlayer(String name, String passhash) {
-		PlayerDataManager.save(new UserInfo(name, passhash, 0, Rank.PLAYER, 0L, "", false, new ArrayList<>(), false, new ArrayList<>()));
-	}
 }
