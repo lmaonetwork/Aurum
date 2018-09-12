@@ -1,6 +1,5 @@
 package pro.delfik.proxy.user;
 
-import implario.net.Packet;
 import implario.net.packet.PacketTop;
 import implario.net.packet.PacketUpdateTop;
 import implario.util.ArrayUtils;
@@ -96,8 +95,8 @@ public class SfTop extends PacketTop.Top {
 	public static void updateTop(PacketUpdateTop packet){
 		SfTop top = getPerson(packet.getNick());
 		if(top == null)top = new SfTop(packet.getNick());
-		top.beds = top.beds + top.getBeds();
-		top.deaths = top.deaths + top.getDeaths();
+		top.beds = top.beds + packet.getBeds();
+		top.deaths = top.deaths + packet.getDeaths();
 		top.games = top.games + 1;
 		top.wins = top.wins + (packet.isWin() ? 1 : 0);
 		DataIO.writeBytes(User.getPath(packet.getNick()) + path, new ManualByteZip()
