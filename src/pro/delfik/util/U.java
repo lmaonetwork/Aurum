@@ -46,7 +46,7 @@ public class U {
 	}
 	
 	public static void msg(CommandSender s, Object... o) {
-		s.sendMessage(constructComponent(o));
+		if (s != null) s.sendMessage(constructComponent(o));
 	}
 	
 	public static void bc(Server server, Object... o) {

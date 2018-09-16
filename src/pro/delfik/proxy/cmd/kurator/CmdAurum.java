@@ -20,7 +20,7 @@ import pro.delfik.proxy.ev.EvChat;
 import pro.delfik.proxy.user.Ban;
 import pro.delfik.proxy.user.SfTop;
 import pro.delfik.proxy.user.User;
-import pro.delfik.proxy.user.UserInfo;
+import implario.util.UserInfo;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 
@@ -67,12 +67,22 @@ public class CmdAurum extends Command {
 		functions.put("ban", CmdAurum::ban);
 		functions.put("rui", CmdAurum::readuserinfo);
 		functions.put("wui", CmdAurum::writeuserinfo);
+		functions.put("sudo", CmdAurum::sudo);
+	}
+
+	private static String sudo(CommandSender sender, Command command, String[] args) {
+		requireRank(sender, Rank.CEKPET);
+		requireArgs(args, 2, "[Игрок] [Сообщение]");
+		User u = requirePerson(args[0]);
+		String message = Converter.mergeArray(args, 1, " ");
+		u.getHandle().chat(message);
+		return null;
 	}
 
 	private static String readuserinfo(CommandSender sender, Command command, String[] args) {
 		requireArgs(args, 1, "[Ник]");
 		long start = System.currentTimeMillis();
-		UserInfo i = User.a(args[0]);
+		UserInfo i = User.read(args[0]);
 		msg(sender, "§aUserInfo§d" + UserInfo.Version.values()[i.version] + " §a-§e" + i.name + "§a-§e" + i.rank.getNameColor() + i.rank.getName().charAt(0));
 		msg(sender, "§aPasswd: '§e" + i.passhash.substring(0, 20) + "§a...'");
 		msg(sender, "§aIP: '§e" + i.lastIP + "§a'");
@@ -90,7 +100,7 @@ public class CmdAurum extends Command {
 				"54.32.40.112", Math.abs(r.nextInt()), false, false, Converter.asList(random(8), random(8)),
 				Converter.asList(random(8), random(8)), r.nextBoolean());
 		User.save(i);
-		msg(sender, "§7UserInfo§d" + UserInfo.Version.values()[i.version] + " §7-§e" + i.name + "§7-§e" + i.rank.getNameColor() + i.rank.getName().charAt(0));
+		msg(sender, "§7UserInfo§d" + UserInfo.Version.values()[i.version] + "§7-§e" + i.name + "§7-§e" + i.rank.getNameColor() + i.rank.getName().charAt(0));
 		msg(sender, "§7Passwd: '§e" + i.passhash.substring(0, 20) + "§7...'");
 		msg(sender, "§7IP: '§e" + i.lastIP + "§7'");
 		msg(sender, "§7PMdisabled: §e" + i.pmDisabled + "§7; IPattached: §e" + i.ipAttached + "§7; DarkTheme: §e" + i.darkTheme);

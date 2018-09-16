@@ -20,6 +20,7 @@ import pro.delfik.proxy.cmd.admin.CmdEnd;
 import pro.delfik.proxy.cmd.moder.CmdFM;
 import pro.delfik.proxy.cmd.user.CmdLogin;
 import pro.delfik.proxy.cmd.user.CmdRegister;
+import pro.delfik.proxy.cmd.user.CmdTheme;
 import pro.delfik.proxy.cmd.user.CommandGuide;
 import pro.delfik.proxy.cmd.user.CmdHub;
 import pro.delfik.proxy.cmd.user.CmdIgnore;
@@ -86,6 +87,7 @@ public class Aurum extends Plugin {
 		SfTop.class.getCanonicalName();
 		PacketTop.class.getCanonicalName();
 		PacketTop.Top.class.getCanonicalName();
+		U.PlayerWrapper.class.getCanonicalName();
 	}
 
 	@Override
@@ -119,7 +121,7 @@ public class Aurum extends Plugin {
 				new CmdEnd(), new CmdKick(), new CmdMute(), new CmdUnmute(),
 				new CmdUpdate(), new CmdPing(), new CmdStats(), new CmdHub(),
 				new CmdSkin(), new CmdPassChange(), new CmdAttachIP(), new CmdIgnore(),
-				new CmdBan(), new CmdUnban()
+				new CmdBan(), new CmdUnban(), new CmdTheme()
 		}) Proxy.registerCommand(command);
 	}
 

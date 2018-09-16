@@ -37,7 +37,7 @@ public class Server {
 		System.out.println(server);
 		for(ProxiedPlayer player : Proxy.getServer(server).getPlayers()){
 			User user = User.get(player.getName());
-			send(new PacketUser(user.getName(), user.getRank(), user.isAuthorized(), user.getOnline(), ((int) user.getMoney())));
+			send(new PacketUser(user.getInfo(), user.isAuthorized()));
 		}
 	}
 

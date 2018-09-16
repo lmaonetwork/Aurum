@@ -1,9 +1,19 @@
 package pro.delfik.proxy.user;
 
 import implario.net.packet.PacketAuth;
+import implario.net.packet.PacketChangeTheme;
 import implario.net.packet.PacketPex;
 import implario.net.packet.PacketUser;
-import implario.util.*;
+import implario.util.ByteUnzip;
+import implario.util.ByteZip;
+import implario.util.Coder;
+import implario.util.Converter;
+import implario.util.CryptoUtils;
+import implario.util.ManualByteUnzip;
+import implario.util.ManualByteZip;
+import implario.util.ManualByteable;
+import implario.util.Rank;
+import implario.util.UserInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -80,22 +90,27 @@ public class User implements ManualByteable {
 	 */
 	public static User load(String name) {
 		try {
+			if (DataIO.contains(getPath(name) + "person")) {
+				UserInfo info = read(name);
+				return new User(info);
+			}
 			User u = DataIO.readByteable(getPath(name) + "player", User.class);
 			if (u == null) u = new User(name, Rank.PLAYER, false);
 			return u;
 		} catch (IllegalArgumentException ex) {
-			throw new DifferentIPException(name);
+			ex.printStackTrace();
+			return null;
 		}
 	}
 
-	public static UserInfo a(String name) {
-		ByteUnzip unzip = new ByteUnzip(DataIO.readBytes(getPath(name) + "player"));
+	public static UserInfo read(String name) {
+		ByteUnzip unzip = new ByteUnzip(DataIO.readBytes(getPath(name) + "person"));
 		return UserInfo.Version.unzip(unzip);
 	}
 
 	public static void save(UserInfo info) {
-		ManualByteZip zip = info.zip();
-		DataIO.writeBytes(getPath(info.name) + "player", zip.build());
+		ByteZip zip = info.encode();
+		DataIO.writeBytes(getPath(info.name) + "person", zip.build());
 	}
 
 	/**
@@ -108,7 +123,8 @@ public class User implements ManualByteable {
 		list.remove(Converter.smartLowercase(name));
 		if (!user.authorized) return;
 		if (user.mute != null) user.mute.write(name);
-		DataIO.writeByteable(getPath(name) + "player", user);
+//		DataIO.writeByteable(getPath(name) + "player", user);
+		save(user.getInfo());
 	}
 
 	/**
@@ -161,7 +177,9 @@ public class User implements ManualByteable {
 		ipbound = info.ipAttached;
 		pmDisabled = info.pmDisabled;
 		lastIP = info.lastIP;
+		darkTheme = info.darkTheme;
 		mute = Mute.get(name);
+		list.put(Converter.smartLowercase(name), this);
 	}
 
 	public User(ManualByteUnzip unzip) {
@@ -180,20 +198,22 @@ public class User implements ManualByteable {
 		list.put(Converter.smartLowercase(name), this);
 		mute = Mute.get(name);
 
-		if (!allowedIP.contains(name.toLowerCase()))
-		if (lastSeenIP != null && lastSeenIP.length() != 0 && ipbound) {
-			ProxiedPlayer p = Proxy.getPlayer(name);
-			String playerIP = p.getAddress().getAddress().getHostAddress();
-			String outAuthIP = outAuth.get(name);
-			if (outAuthIP != null && outAuthIP.equals(p.getAddress().getHostName())) {
-				outAuth.remove(name);
-				lastSeenIP = playerIP;
-			}
-			if (lastSeenIP.equals(playerIP)) {
-				authorize();
-				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
-			} else throw new DifferentIPException(name);
-		}
+		msg("§aВаши данные обновлены до версии §dUserInfo-V1");
+
+//		if (!allowedIP.contains(name.toLowerCase()))
+//		if (lastSeenIP != null && lastSeenIP.length() != 0 && ipbound) {
+//			ProxiedPlayer p = Proxy.getPlayer(name);
+//			String playerIP = p.getAddress().getAddress().getHostAddress();
+//			String outAuthIP = outAuth.get(name);
+//			if (outAuthIP != null && outAuthIP.equals(p.getAddress().getHostName())) {
+//				outAuth.remove(name);
+//				lastSeenIP = playerIP;
+//			}
+//			if (lastSeenIP.equals(playerIP)) {
+//				authorize();
+//				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
+//			}
+//		}
 	}
 
 
@@ -325,7 +345,7 @@ public class User implements ManualByteable {
 
 	public void setServer(String server) {
 		this.server = server;
-		server().send(new PacketUser(name, rank, authorized, online, money));
+		server().send(new PacketUser(getInfo(), authorized));
 		updateTab(getHandle());
 	}
 
@@ -418,5 +438,11 @@ public class User implements ManualByteable {
 
 	public void setForcedIP(String forcedIP) {
 		this.forcedIP = forcedIP;
+	}
+
+	public String toggleDarkTheme() {
+		darkTheme = !darkTheme;
+		server().send(new PacketChangeTheme(darkTheme, name));
+		return darkTheme ? "§fТёмная тема включена." : "§7Тёмная тема выключена.";
 	}
 }
