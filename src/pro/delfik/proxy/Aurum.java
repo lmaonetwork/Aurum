@@ -43,7 +43,8 @@ import pro.delfik.proxy.ev.EvJoin;
 import pro.delfik.proxy.ev.EvPacket;
 import pro.delfik.proxy.ev.EvQuit;
 import pro.delfik.proxy.ev.EvReconnect;
-import pro.delfik.proxy.user.SfTop;
+import pro.delfik.proxy.modules.Chat;
+import pro.delfik.proxy.modules.SfTop;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
 import implario.util.ArrayIterator;
@@ -61,33 +62,39 @@ import pro.delfik.vk.VK;
 import pro.delfik.vk.VKBot;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class Aurum extends Plugin {
+	private static final List<Runnable> unload = new ArrayList<>();
+
 	private static CryptoUtils cryptoUtils;
 	public static Aurum instance;
 	
 	private static void classLoader() {
-		Rank.class.getCanonicalName();
-		SfTop.class.getCanonicalName();
-		ArrayUtils.class.getCanonicalName();
-		CryptoUtils.class.getCanonicalName();
-		CryptoUtils.Keccak.class.getCanonicalName();
-		ServerInfo.class.getCanonicalName();
-		CryptoUtils.Keccak.Parameters.class.getCanonicalName();
-		Converter.class.getCanonicalName();
-		StringUtils.class.getCanonicalName();
-		ArrayIterator.class.getCanonicalName();
-		TimedList.class.getCanonicalName();
+		U.class.getCanonicalName();
 		VK.class.getCanonicalName();
+		Rank.class.getCanonicalName();
+		Chat.class.getCanonicalName();
+		SfTop.class.getCanonicalName();
+		SfTop.class.getCanonicalName();
 		VKBot.class.getCanonicalName();
 		LongPoll.class.getCanonicalName();
-		MessageHandler.class.getCanonicalName();
-		U.class.getCanonicalName();
-		SfTop.class.getCanonicalName();
+		TimedList.class.getCanonicalName();
 		PacketTop.class.getCanonicalName();
+		Converter.class.getCanonicalName();
+		ArrayUtils.class.getCanonicalName();
+		ServerInfo.class.getCanonicalName();
+		StringUtils.class.getCanonicalName();
+		CryptoUtils.class.getCanonicalName();
 		PacketTop.Top.class.getCanonicalName();
+		ArrayIterator.class.getCanonicalName();
+		MessageHandler.class.getCanonicalName();
 		U.PlayerWrapper.class.getCanonicalName();
+		CryptoUtils.Keccak.class.getCanonicalName();
+		CryptoUtils.Keccak.Parameters.class.getCanonicalName();
 	}
 
 	@Override
@@ -100,11 +107,12 @@ public class Aurum extends Plugin {
 		SkinStorage.init(new File("Core/SkinsHandler"));
 		Scheduler.init();
 		Packet.init();
-		SfTop.init();
 		VKBot.start();
 		RequestListener.init();
 		Database.enable();
-		load();
+		Map<String, String> read = DataIO.readConfig("config");
+		cryptoUtils = new CryptoUtils(read.get("crypto"));
+		ServerListener.init(Converter.toInt(read.get("port")));
 	}
 
 	private void commands(){
@@ -134,26 +142,19 @@ public class Aurum extends Plugin {
 		manager.registerListener(this, new EvReconnect());
 	}
 	
-	private void load() {
-		Map<String, String> read = DataIO.readConfig("config");
-		cryptoUtils = new CryptoUtils(read.get("crypto"));
-		ServerListener.init(Converter.toInt(read.get("port")));
-	}
-	
 	public static CryptoUtils getCryptoUtils() {
 		return cryptoUtils;
+	}
+
+	public static void addUnload(Runnable runnable){
+		unload.add(runnable);
 	}
 	
 	@Override
 	public void onDisable() {
+		unload.forEach(Runnable::run);
 		ServerListener.close();
-		SfTop.unload();
-		EvChat.unload();
 		Scheduler.kill();
 		RequestListener.discontinue();
-	}
-	
-	public void run() {
-		ServerListener.run();
 	}
 }

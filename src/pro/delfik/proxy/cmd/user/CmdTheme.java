@@ -2,7 +2,7 @@ package pro.delfik.proxy.cmd.user;
 
 import implario.util.Rank;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 
 public class CmdTheme extends Command {
 	public CmdTheme() {

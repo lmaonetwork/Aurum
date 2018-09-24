@@ -5,9 +5,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import pro.delfik.proxy.user.Mute;
+import pro.delfik.proxy.modules.Chat;
+import pro.delfik.proxy.modules.Mute;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 import implario.util.Rank;
 import implario.util.Scheduler;
 import implario.util.StringUtils;
@@ -16,45 +17,9 @@ import java.util.HashMap;
 
 public class EvChat implements Listener{
 	private static volatile HashMap<String, Integer> messages = new HashMap<>();
-	private static final char[] dontChar = "\"'!?.,()@#№$%:^*&123457890-_=+~`[]{}\\|/<".toCharArray();
-	private static final HashMap<Character, Character> map = new HashMap<>();
-	private static final String[] nyas;
-
-	public static Char mat = new Char();
-
-	static {
-		String read = DataIO.readFile("config/mat");
-		if (read != null) mat = new Char(read);
-	}
-
-	public static void unload(){
-		DataIO.writeFile("config/mat", mat.toString());
-	}
 
 	public EvChat() {
 		Scheduler.addTask(new Scheduler.RunTask(10, () -> messages = new HashMap<>()));
-	}
-
-	public static String remake(String in) {
-		StringBuilder result = new StringBuilder();
-		char last = 4920;
-		for(char c : in.toCharArray()) {
-			if (last != c && !StringUtils.contains(dontChar, c)) {
-				last = c;
-				result.append(c);
-			}
-		}
-		return remak(result.toString());
-	}
-
-	private static String remak(String in) {
-		StringBuilder buf = new StringBuilder(in.length());
-		for(char c : in.toCharArray()) {
-			Character l = map.get(c);
-			if (l == null) l = c;
-			buf.append(l);
-		}
-		return buf.toString();
 	}
 
 	@EventHandler
@@ -65,7 +30,7 @@ public class EvChat implements Listener{
 		if(checkFlood(event, user))return;
 		if(adminChat(event, user))return;
 		if(checkMute(event, user))return;
-		event.setMessage(applyMat(event.getMessage()));
+		event.setMessage(Chat.applyMat(event.getMessage()));
 		if(antiFlood(event, user))return;
 	}
 
@@ -121,189 +86,4 @@ public class EvChat implements Listener{
 		user.setLast(message);
 		return false;
 	}
-
-	public static String applyMat(String message) {
-		StringBuilder sb = new StringBuilder();
-		String last = "";
-		String[] var3 = message.split(" ");
-		int var4 = var3.length;
-
-		for(int var5 = 0; var5 < var4; ++var5) {
-			String result = var3[var5];
-			result = result.replaceAll("[^A-Za-z0-9А-я\"'!?.,()@#№$%:\\^\\*\\&\\-\\_=+~`\\[\\]\\{\\}\\|\\/<>;Ёё]", "");
-			String remake = remake(result).toLowerCase();
-			if (remake.length() != 0) {
-				if (mat.contains(remake + " ")) {
-					sb.append(last);
-					sb.append(' ');
-					sb.append(toNya());
-					last = "";
-					continue;
-				}
-
-				if (mat.contains(remake(last).toLowerCase() + remake + " ")) {
-					sb.append(toNya());
-					last = "";
-					continue;
-				}
-			}
-
-			sb.append(last);
-			sb.append(' ');
-			last = result;
-		}
-
-		sb.append(last);
-		return remakeToReal(sb.toString()).substring(1);
-	}
-
-	private static String toNya() {
-		return '*' + nyas[(int)(Math.random() * (double)nyas.length)] + "*";
-	}
-
-	private static String remakeToReal(String s) {
-		StringBuilder sb = new StringBuilder();
-		char last = 4920;
-		char lastLast = 4920;
-		char[] var4 = s.toCharArray();
-		int var5 = var4.length;
-
-		for(int var6 = 0; var6 < var5; ++var6) {
-			char c = var4[var6];
-			if (c != last || last != lastLast) {
-				lastLast = last;
-				last = c;
-				sb.append(c);
-			}
-		}
-
-		return sb.toString();
-	}
-
-	static {
-		map.put('6', 'б');
-		map.put('k', 'к');
-		map.put('a', 'а');
-		map.put('o', 'о');
-		map.put('s', 'с');
-		map.put('c', 'с');
-		map.put('b', 'ь');
-		map.put('y', 'у');
-		map.put('p', 'р');
-		map.put('g', 'д');
-		map.put('m', 'м');
-		map.put('z', 'з');
-		map.put('r', 'р');
-		map.put('d', 'д');
-		map.put('e', 'е');
-		map.put('t', 'т');
-		map.put('x', 'х');
-		map.put('l', 'л');
-		map.put('n', 'п');
-		nyas = new String[]{"мяу", "meow", "меов", "ня", "nya", "капибара", "шмыг", "апчхи", "кхе"};
-	}
-	public static class Char {
-		private final HashMap<Character, Char> map = new HashMap();
-
-		public Char() {
-		}
-
-		public Char(String input) {
-			if (input.length() != 0) {
-				String local = "";
-				char ch = '?';
-				String[] var4 = input.split("\n");
-				int var5 = var4.length;
-
-				for(int var6 = 0; var6 < var5; ++var6) {
-					String s = var4[var6];
-					if (s.length() > 0) {
-						char c = s.charAt(0);
-						if (c != '?') {
-							if (ch != '?') {
-								this.map.put(ch, new Char(local));
-								local = "";
-							}
-
-							ch = c;
-						} else {
-							local = local + s.substring(1, s.length()) + "\n";
-						}
-					}
-				}
-
-				if (ch != '?') {
-					this.map.put(ch, new Char(local));
-				}
-
-			}
-		}
-
-		public Char add(String s) {
-			char c = s.charAt(0);
-			Char magic = (Char)this.map.get(c);
-			if (magic == null) {
-				magic = new Char();
-			}
-
-			if (s.length() > 1) {
-				magic.add(s.substring(1, s.length()));
-			}
-
-			this.map.put(c, magic);
-			return this;
-		}
-
-		public boolean remove(String s) {
-			if (this.map.size() == 0) {
-				return true;
-			} else {
-				Char c = (Char)this.map.get(s.charAt(0));
-				if (c == null) {
-					return false;
-				} else {
-					if (c.remove(s.substring(1, s.length()))) {
-						this.map.remove(s.charAt(0));
-					}
-
-					return this.map.size() == 0;
-				}
-			}
-		}
-
-		public boolean contains(String s) {
-			if (s.length() == 0) {
-				return true;
-			} else {
-				char c = s.charAt(0);
-				Char magic = (Char)this.map.get(c);
-				return magic != null && magic.contains(s.substring(1, s.length()));
-			}
-		}
-
-		public String toString() {
-			if (this.map.size() == 0) {
-				return "";
-			} else {
-				StringBuilder s = new StringBuilder();
-				Character[] keys = (Character[])this.map.keySet().toArray(new Character[0]);
-				Char[] values = (Char[])this.map.values().toArray(new Char[0]);
-				int size = keys.length;
-
-				for(int i = 0; i < size; ++i) {
-					s.append("\n" + keys[i]);
-					String[] var6 = values[i].toString().split("\n");
-					int var7 = var6.length;
-
-					for(int var8 = 0; var8 < var7; ++var8) {
-						String a = var6[var8];
-						s.append("?" + a + '\n');
-					}
-				}
-
-				return s.toString();
-			}
-		}
-	}
-
 }

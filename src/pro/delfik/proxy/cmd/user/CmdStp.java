@@ -5,7 +5,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 import implario.util.Rank;
 import implario.util.Converter;
 

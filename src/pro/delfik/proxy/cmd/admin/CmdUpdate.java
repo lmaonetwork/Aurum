@@ -6,7 +6,7 @@ import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.cmd.ex.ExServerNotFound;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 import implario.util.FileConverter;
 import implario.util.Rank;
 

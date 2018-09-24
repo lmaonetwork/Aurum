@@ -2,7 +2,7 @@ package pro.delfik.vk;
 
 import pro.delfik.proxy.cmd.user.CmdVK.PageAttachRequest;
 import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 import implario.util.Converter;
 
 import java.sql.ResultSet;

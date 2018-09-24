@@ -5,7 +5,7 @@ import implario.util.Rank;
 import net.md_5.bungee.api.chat.TextComponent;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 import pro.delfik.util.U;
 
 import java.util.List;

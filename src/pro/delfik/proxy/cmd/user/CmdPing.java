@@ -2,7 +2,7 @@ package pro.delfik.proxy.cmd.user;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 import implario.util.Rank;
 
 public class CmdPing extends Command{

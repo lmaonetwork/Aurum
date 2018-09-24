@@ -1,4 +1,4 @@
-package pro.delfik.proxy.user;
+package pro.delfik.proxy.modules;
 
 import implario.net.packet.PacketTop;
 import implario.net.packet.PacketUpdateTop;
@@ -6,6 +6,8 @@ import implario.util.ArrayUtils;
 import implario.util.Converter;
 import implario.util.ManualByteUnzip;
 import implario.util.ManualByteZip;
+import pro.delfik.proxy.Aurum;
+import pro.delfik.proxy.User;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
 
@@ -34,17 +36,15 @@ public class SfTop extends PacketTop.Top {
 	private SfTop(String nick){
 		this(nick, 0, 0, 0, 0);
 	}
-	
-	public static String getAllTop() {
-		StringBuilder sb = new StringBuilder();
-		for (SfTop top : SfTop.top) sb.append(top).append('\n');
-		return sb.toString();
-	}
-	
-	public static void unload() {
-		List<String> write = new ArrayList<>();
-		for (SfTop top : top) if (top != null) write.add(top.nick);
-		DataIO.write("top/sf", write);
+
+	static{
+		List<String> in = DataIO.read("top/sf");
+		if (in != null) for (String top : in) checkTop(getPerson(top));
+		Aurum.addUnload(() -> {
+			List<String> write = new ArrayList<>();
+			for (SfTop top : top) if (top != null) write.add(top.nick);
+			DataIO.write("top/sf", write);
+		});
 	}
 	
 	public static void checkTop(SfTop player) {
@@ -147,11 +147,6 @@ public class SfTop extends PacketTop.Top {
 
 	public PacketTop.Top getTop(){
 		return new PacketTop.Top(nick, wins, games);
-	}
-
-	public static void init(){
-		List<String> in = DataIO.read("top/sf");
-		if (in != null) for (String top : in) checkTop(getPerson(top));
 	}
 
 	private static boolean contains(String contains) {

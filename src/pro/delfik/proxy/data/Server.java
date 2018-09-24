@@ -5,7 +5,7 @@ import implario.net.P2P;
 import implario.net.Packet;
 import implario.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 
 import java.util.Collection;
 import java.util.HashMap;

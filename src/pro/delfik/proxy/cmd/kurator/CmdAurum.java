@@ -17,9 +17,10 @@ import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.ev.EvChat;
-import pro.delfik.proxy.user.Ban;
-import pro.delfik.proxy.user.SfTop;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.modules.Ban;
+import pro.delfik.proxy.modules.Chat;
+import pro.delfik.proxy.modules.SfTop;
+import pro.delfik.proxy.User;
 import implario.util.UserInfo;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
@@ -175,10 +176,10 @@ public class CmdAurum extends Command {
 
 	private static String mat(CommandSender sender, Command command, String[] strings){
 		if(strings.length == 2){
-			EvChat.mat.remove(strings[0] + " ");
+			Chat.remMat(strings[0]);
 			return "Удалён мат " + strings[0];
 		}
-		EvChat.mat.add(strings[0] + " ");
+		Chat.addMat(strings[0] + " ");
 		return "Добавлен мат " + strings[0];
 	}
 

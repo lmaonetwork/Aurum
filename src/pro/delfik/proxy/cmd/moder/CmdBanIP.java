@@ -2,8 +2,8 @@ package pro.delfik.proxy.cmd.moder;
 
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.user.BanIP;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.modules.BanIP;
+import pro.delfik.proxy.User;
 import implario.util.Converter;
 import implario.util.Rank;
 

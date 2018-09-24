@@ -4,7 +4,7 @@ import implario.util.Rank;
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 
 @Cmd(args = 1, help = "[Пароль]", auth = true)
 public class CmdRegister extends Command{

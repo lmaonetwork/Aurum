@@ -2,8 +2,8 @@ package pro.delfik.proxy.cmd.user;
 
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
-import pro.delfik.proxy.user.SfTop;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.modules.SfTop;
+import pro.delfik.proxy.User;
 import implario.util.Rank;
 import implario.util.Converter;
 

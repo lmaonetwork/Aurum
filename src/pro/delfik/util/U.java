@@ -8,7 +8,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.User;
 
 import java.util.function.Function;
 

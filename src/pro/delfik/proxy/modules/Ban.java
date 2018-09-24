@@ -1,4 +1,4 @@
-package pro.delfik.proxy.user;
+package pro.delfik.proxy.modules;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -9,6 +9,7 @@ import implario.util.ManualByteUnzip;
 import implario.util.ManualByteZip;
 import implario.util.ManualByteable;
 import implario.util.Converter;
+import pro.delfik.proxy.User;
 import pro.delfik.util.U;
 
 import java.text.SimpleDateFormat;

@@ -20,11 +20,11 @@ import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.ev.added.PacketEvent;
-import pro.delfik.proxy.user.Ban;
-import pro.delfik.proxy.user.Kick;
-import pro.delfik.proxy.user.Mute;
-import pro.delfik.proxy.user.SfTop;
-import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.modules.Ban;
+import pro.delfik.proxy.modules.Kick;
+import pro.delfik.proxy.modules.Mute;
+import pro.delfik.proxy.modules.SfTop;
+import pro.delfik.proxy.User;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

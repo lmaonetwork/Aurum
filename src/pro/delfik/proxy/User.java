@@ -1,4 +1,4 @@
-package pro.delfik.proxy.user;
+package pro.delfik.proxy;
 
 import implario.net.packet.PacketAuth;
 import implario.net.packet.PacketChangeTheme;
@@ -19,11 +19,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
-import pro.delfik.proxy.Aurum;
-import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
+import pro.delfik.proxy.modules.Mute;
 import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
@@ -52,8 +51,6 @@ public class User implements ManualByteable {
 	static {
 		list.put("CONSOLE", new User("CONSOLE", Rank.DEV, true));
 	}
-
-
 	/**
 	 * Получение юзера по нику.
 	 * @param name Ник игрока.
@@ -123,7 +120,6 @@ public class User implements ManualByteable {
 		list.remove(Converter.smartLowercase(name));
 		if (!user.authorized) return;
 		if (user.mute != null) user.mute.write(name);
-//		DataIO.writeByteable(getPath(name) + "player", user);
 		save(user.getInfo());
 	}
 
@@ -133,7 +129,6 @@ public class User implements ManualByteable {
 	public static Collection<User> getAll() {
 		return list.values();
 	}
-
 
 	public final String name; 								// Ник игрока
 	private final int connectedAt; 							// Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
@@ -187,7 +182,6 @@ public class User implements ManualByteable {
 		password = unzip.getString();
 		rank = Rank.byChar.get((char) unzip.getByte());
 		online = unzip.getInt();
-		String lastSeenIP = unzip.getString();
 		money = unzip.getInt();
 		ipbound = unzip.getBoolean();
 		pmDisabled = unzip.getBoolean();
