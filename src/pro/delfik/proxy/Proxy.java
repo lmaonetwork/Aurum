@@ -54,8 +54,6 @@ public class Proxy {
 		BungeeCord.getInstance().getLogger().log(level, message);
 	}
 
-
-	// тестовый комментарий
 	public static void ifServerOffline(ServerInfo server, Runnable offline, Consumer<ServerPing> online) {
 		server.ping((ping, error) -> {
 			synchronized (server) {
