@@ -1,13 +1,18 @@
 package pro.delfik.proxy.cmd.kurator;
 
 import implario.net.packet.PacketGC;
-import implario.util.*;
+import implario.util.ArrayUtils;
+import implario.util.Converter;
+import implario.util.CryptoUtils;
+import implario.util.Rank;
+import implario.util.UserInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Title;
 import pro.delfik.proxy.Proxy;
+import pro.delfik.proxy.User;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.CommandProcessor;
 import pro.delfik.proxy.cmd.ex.ExCustom;
@@ -16,12 +21,9 @@ import pro.delfik.proxy.cmd.user.CmdVK;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.Server;
-import pro.delfik.proxy.ev.EvChat;
 import pro.delfik.proxy.modules.Ban;
 import pro.delfik.proxy.modules.Chat;
 import pro.delfik.proxy.modules.SfTop;
-import pro.delfik.proxy.User;
-import implario.util.UserInfo;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 
@@ -339,8 +341,6 @@ public class CmdAurum extends Command {
 
 	@Override
 	protected void run(User user, String args[]) {
-		if(!user.getName().equals("CONSOLE") && !user.isIPBound())
-			throw new ExCustom("§cДля использования §f/aurum §cнеобходимо включить §f/attachip");
 		if(args.length == 0)
 			throw new ExCustom("§c/aurum [§f" + Converter.merge(functions.keySet(), s -> s, "§c, §f") + "§c]");
 		String[] a = new String[args.length - 1];
