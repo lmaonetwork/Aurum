@@ -48,7 +48,7 @@ public class MojangAPI {
 	{
 		try
 		{
-			String output = readURLProxy("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
+			String output = readURL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
 			
 			String sigbeg = "\",\"signature\":\"";
 			String mid = "[{\"name\":\"textures\",\"value\":\"";
@@ -118,7 +118,7 @@ public class MojangAPI {
 	{
 		try
 		{
-			String output = readURLProxy("https://api.mojang.com/users/profiles/minecraft/" + name);
+			String output = readURL("https://api.mojang.com/users/profiles/minecraft/" + name);
 			if (output.isEmpty()) {
 				throw new SkinRequestException("LOCAL.NOT_PREMIUM посылает вас нахуй");
 			}

@@ -24,17 +24,11 @@ public class ProxyManager {
 	public static List<String> updateProxies() {
 		proxies = new ArrayList<>();
 		String url = "https://getmeproxy.com/api/v1.0/api.php?key=c84d1076312bcf1e875c94d4e20692f5&checked=1&s=5&list=text";
-		try {
-			proxies = readURL(url);
-		} catch (IOException e) {
-			System.out.print("[SkinsRestorer] We couldn't update the proxy list. This usually indicates a firewall problem. A detailed error is below.");
-			e.printStackTrace();
-		}
+		proxies = readURL(url);
 		return proxies;
 	}
 	
-	private static List<String> readURL(String url)
-			throws IOException {
+	private static List<String> readURL(String url) {
 		try {
 			HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
 			
