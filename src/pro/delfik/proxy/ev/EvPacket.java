@@ -11,6 +11,7 @@ import implario.net.packet.PacketSummon;
 import implario.net.packet.PacketUpdateTop;
 import implario.net.packet.PacketWrite;
 import implario.util.FileConverter;
+import implario.util.Rank;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
@@ -49,7 +50,11 @@ public class EvPacket implements Listener {
 		} else if (packet instanceof PacketSummon) {
 			ProxiedPlayer p = Proxy.getPlayer(((PacketSummon) packet).getPlayer());
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());
-			if (p != null && info != null) p.connect(info);
+			User u = User.get(p);
+			if (p != null && info != null) {
+				if (info.getName().startsWith("BW_") && !u.hasRank(Rank.TESTER)) u.msg("§cBedWars доступен с ранга §aТестер§c.");
+				else p.connect(info);
+			}
 		} else if (packet instanceof PacketInit) {
 			Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
 				ServerInfo from = Proxy.getServer(((PacketInit) packet).getServer());
