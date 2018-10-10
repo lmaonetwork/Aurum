@@ -1,7 +1,6 @@
 package pro.delfik.proxy.cmd.kurator;
 
 import implario.net.packet.PacketGC;
-import implario.util.ArrayUtils;
 import implario.util.Converter;
 import implario.util.CryptoUtils;
 import implario.util.Rank;
@@ -19,7 +18,6 @@ import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.cmd.ex.ExNotEnoughArguments;
 import pro.delfik.proxy.cmd.user.CmdVK;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.data.Database;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.modules.Ban;
 import pro.delfik.proxy.modules.Chat;
@@ -27,9 +25,6 @@ import pro.delfik.proxy.modules.SfTop;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 
-import java.io.File;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -46,8 +41,6 @@ public class CmdAurum extends Command {
 	static {
 		functions.put("send", CmdAurum::send);
 		functions.put("setrank", CmdAurum::setrank);
-		functions.put("sqlquery", CmdAurum::sqlquery);
-		functions.put("sqlupdate", CmdAurum::sqlupdate);
 		functions.put("vimeban", CmdAurum::vimeban);
 		functions.put("echo", CmdAurum::echo);
 		functions.put("info", CmdAurum::info);
@@ -65,7 +58,6 @@ public class CmdAurum extends Command {
 		functions.put("mat", CmdAurum::mat);
 		functions.put("ip", CmdAurum::ip);
 		functions.put("readuser", CmdAurum::readuser);
-		functions.put("cleandb", CmdAurum::cleandb);
 		functions.put("detachip", CmdAurum::detachip);
 		functions.put("ban", CmdAurum::ban);
 		functions.put("rui", CmdAurum::readuserinfo);
@@ -137,29 +129,6 @@ public class CmdAurum extends Command {
 		p.setIPBound(false);
 		User.unload(args[0]);
 		return "§aС игрока §f" + args[0] + "§a снята привязка IP-адреса.";
-	}
-
-	private static String cleandb(CommandSender sender, Command command, String[] strings) {
-		File dir = new File("Core/players");
-		File[] pfiles = dir.listFiles();
-		StringBuilder b = new StringBuilder();
-		int s = 0, t = 0;
-		for (File f : pfiles) {
-			if (!f.isDirectory()) continue;
-			File file = new File("Core/players/" + f.getName() + "/player.txt");
-			if (!file.exists()) {
-				b.append(f.getName()).append(", ");
-				t++;
-				if (++s > 9) {
-					s = 0;
-					msg(sender, b.toString());
-					b = new StringBuilder();
-				}
-				for (File stuff : f.listFiles()) stuff.delete();
-				f.delete();
-			}
-		}
-		return b.toString() + "\n§a" + t + " всего.";
 	}
 
 	private static String readuser(CommandSender sender, Command command, String[] strings) {
@@ -241,9 +210,10 @@ public class CmdAurum extends Command {
 		User p = User.get(args[0]);
 		if (p != null) p.setPassword("");
 		else {
-			int i;
-			i = Database.sendUpdate("UPDATE Users SET passhash = '' WHERE name = '" + args[0] + "'");
-			if (i == 0) return "§eУ игрока §f" + args[0] + "§e итак нет пароля.";
+			UserInfo i = User.read(args[0]);
+			if (i == null) return "§cИгрок §e" + args[0] + "§c не зарегистрирован.";
+			i.passhash = "";
+			User.save(i);
 		}
 		return "§aПароль игрока §e" + args[0] + "§a сброшен.";
 	}
@@ -275,12 +245,31 @@ public class CmdAurum extends Command {
 	}
 
 	private static String send(CommandSender sender, Command command, String[] args) {
-		requireArgs(args, 2, "[Игрок] [Сервер]");
-		ProxiedPlayer target = requirePlayer(args[0]);
+		requireArgs(args, 2, "[Игрок|@Сервер|@a] [Сервер] (-e)");
 		ServerInfo server = requireServer(args[1]);
+		if (args[0].equals("@a")) {
+			for (ProxiedPlayer p : Proxy.getPlayers()) {
+				msg(p, "prefix", "§6Вы были телепортированы на сервер §e", server, "§6 игроком §e" + sender);
+				p.connect(server);
+			}
+			msg(sender, "§aВсе онлайн-игроки отправлены на сервер ", server);
+			return null;
+		}
+		if (args[0].startsWith("@")) {
+			ServerInfo from = requireServer(args[0].substring(1));
+			for (ProxiedPlayer p : from.getPlayers()) {
+				if (p == sender && args.length > 2 && args[2].equals("-e")) continue;
+				msg(p, "prefix", "§6Вы были телепортированы на сервер §e", server, "§6 игроком §e" + sender);
+				p.connect(server);
+			}
+			msg(sender, "§aВсе игроки сервера ", from, "§a отправлены на сервер ", server);
+			return null;
+		}
+		ProxiedPlayer target = requirePlayer(args[0]);
 		target.connect(server);
 		msg(target, "prefix", "§6Вы были телепортированы на сервер §e", server, "§6 игроком §e" + sender);
-		return "§aИгрок §f" + args[0] + "§a отправлен на сервер " + args[1];
+		msg(sender, "§aИгрок ", target, "§a был отправлен на сервер ", server);
+		return null;
 	}
 
 	private static String setrank(CommandSender sender, Command command, String[] args) {
@@ -288,40 +277,16 @@ public class CmdAurum extends Command {
 		Rank rank = requireRank(args[1]);
 		if (sender instanceof ProxiedPlayer && !User.get(sender).hasRank(rank))
 			return "§cВы не можете выдавать ранги выше собственного.";
-		User u = requirePerson(args[0]);
-		u.setRank(rank);
-		return "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent();
-	}
-
-	private static String sqlquery(CommandSender sender, Command command, String[] args) {
-		try {
-			requireRank(sender, Rank.ADMIN);
-			Database.Result res = Database.sendQuery(ArrayUtils.toString(args));
-			ResultSet result = res.set;
-			ResultSetMetaData metadata = result.getMetaData();
-			int columnCount = metadata.getColumnCount();
-			StringBuilder stringBuilder = new StringBuilder("§fКолонки: §e");
-			for (int i = 1; i <= columnCount; i++) stringBuilder.append(metadata.getColumnName(i)).append("§f, §e");
-			msg(sender, stringBuilder.toString());
-			int r = 0;
-			while (result.next()) {
-				StringBuilder row = new StringBuilder("§e").append(r).append(". §a");
-				r++;
-				for (int i = 1; i <= columnCount; i++) {
-					row.append(result.getString(i)).append("§f, §a");
-				}
-				msg(sender, row.toString());
-			}
-			res.st.close();
-			return "§aЗапрос к базе данных успешно отправлен.";
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		User u = User.get(args[0]);
+		if (u != null) {
+			u.setRank(rank);
+			return "§aИгроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent();
 		}
-	}
-
-	private static String sqlupdate(CommandSender commandSender, Command command, String[] args) {
-		requireRank(commandSender, Rank.ADMIN);
-		return "§aОбновлено §e" + Database.sendUpdate(ArrayUtils.toString(args)) + "§a записей.";
+		UserInfo info = User.read(args[0]);
+		if (info == null) return "§cИгрок §e" + args[0] + "§c не зарегистрирован.";
+		info.rank = rank;
+		User.save(info);
+		return "§aОффлайн-игроку §f" + args[0] + "§a был выдан ранг §f" + rank.represent();
 	}
 
 	private static String gc(CommandSender commandSender, Command command, String[] args){
