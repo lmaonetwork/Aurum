@@ -1,19 +1,11 @@
 package pro.delfik.proxy.cmd.user;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import pro.delfik.proxy.Aurum;
-import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.data.Database;
-import pro.delfik.proxy.User;
 import implario.util.Rank;
+import pro.delfik.proxy.User;
+import pro.delfik.proxy.cmd.Command;
 import pro.delfik.util.TimedHashMap;
-import pro.delfik.util.U;
-import pro.delfik.vk.VK;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+// ToDo: Вернуть к жизни привязку страниц к VK.
 public class CmdVK extends Command {
 	
 	public CmdVK() {
@@ -22,43 +14,33 @@ public class CmdVK extends Command {
 	
 	@Override
 	protected void run(User user, String[] args) {
-		if (args.length == 0 || args[0].length() == 0) {
-			user.msg("§6Привязка страницы VK к игровому аккаунту: §e/vk [sID]");
-			user.msg("§6sID - часть адреса страницы после \"§ehttps://vk.com/§6\".");
-			user.msg("§6Если ваш адрес - §ehttps://vk.com/id0§6, то ваш sID - §eid0");
-			return;
-		}
-		user.msg("§aПроверка страницы...");
-		Proxy.i().getScheduler().runAsync(Aurum.instance, () -> {
-			int id = VK.getUserID(args[0]);
-			if (id == -1) {
-				user.msg("§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");
-				return;
-			}
-			PageAttachRequest request = new PageAttachRequest(user.getName(), id);
-			user.msg("§f");
-			user.msg("§aЗапрос на привязку страницы §fВКонтакте§a создан.");
-			user.msg("§aУ вас есть §f5 минут§a на его подтверждение.");
-			user.msg("§aДля подтверждения привязки вам необходимо отправить сообщение");
-			user.msg("§f§lconfirm " + request.getCode());
-			user.msg("§aВ ЛС нашей группы: §f", U.link("§nvk.com/lmaonetwork§f (Клик)", "https://vk.com/lmaonetwork"));
-			user.msg("§f");
-		});
+		user.msg("§eВ разработке.");
+//		if (args.length == 0 || args[0].length() == 0) {
+//			user.msg("§6Привязка страницы VK к игровому аккаунту: §e/vk [sID]");
+//			user.msg("§6sID - часть адреса страницы после \"§ehttps://vk.com/§6\".");
+//			user.msg("§6Если ваш адрес - §ehttps://vk.com/id0§6, то ваш sID - §eid0");
+//			return;
+//		}
+//		user.msg("§aПроверка страницы...");
+//		Proxy.i().getScheduler().runAsync(Aurum.instance, () -> {
+//			int id = VK.getUserID(args[0]);
+//			if (id == -1) {
+//				user.msg("§cСтраница §f" + args[0] + "§c не найдена. (" + VK.query("users.get", "user_ids=" + args[0]) + ")");
+//				return;
+//			}
+//			PageAttachRequest request = new PageAttachRequest(user.getName(), id);
+//			user.msg("§f");
+//			user.msg("§aЗапрос на привязку страницы §fВКонтакте§a создан.");
+//			user.msg("§aУ вас есть §f5 минут§a на его подтверждение.");
+//			user.msg("§aДля подтверждения привязки вам необходимо отправить сообщение");
+//			user.msg("§f§lconfirm " + request.getCode());
+//			user.msg("§aВ ЛС нашей группы: §f", U.link("§nvk.com/lmaonetwork§f (Клик)", "https://vk.com/lmaonetwork"));
+//			user.msg("§f");
+//		});
 	}
 	
 	public static int getPage(String playername) {
-		Database.Result result = Database.sendQuery("SELECT link FROM VKPages WHERE nickname = '" + playername + "'");
-		try {
-			ResultSet set = result.set;
-			if (!set.next()) return -1;
-			return set.getInt("link");
-		} catch (SQLException ex) {
-			return -1;
-		} finally {
-			try {
-				result.st.close();
-			} catch (SQLException ignored) {}
-		}
+		return -1;
 	}
 	
 	public static class PageAttachRequest {
@@ -88,10 +70,10 @@ public class CmdVK extends Command {
 		}
 		
 		public void confirm() {
-			Database.sendUpdate("INSERT INTO VKPages (nickname, link) VALUES ('" + player + "', '" + page + "') ON DUPLICATE KEY UPDATE link = '" + page + "'");
-			byCode.remove(code);
-			ProxiedPlayer p = Proxy.getPlayer(player);
-			if (p != null) msg(p, "§aСтраница §fvk.com/id" + page + "§a успешно привязана к аккаунту.");
+//			Database.sendUpdate("INSERT INTO VKPages (nickname, link) VALUES ('" + player + "', '" + page + "') ON DUPLICATE KEY UPDATE link = '" + page + "'");
+//			byCode.remove(code);
+//			ProxiedPlayer p = Proxy.getPlayer(player);
+//			if (p != null) msg(p, "§aСтраница §fvk.com/id" + page + "§a успешно привязана к аккаунту.");
 		}
 	}
 }
