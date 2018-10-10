@@ -8,6 +8,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -64,5 +65,9 @@ public class Proxy {
 				}
 			}
 		});
+	}
+
+	public static Collection<ProxiedPlayer> getPlayers() {
+		return i().getPlayers();
 	}
 }
