@@ -25,6 +25,11 @@ public class CmdStp extends Command {
 			user.msg("§cТребуемый ранг - " + Rank.BUILDER.represent());
 			return;
 		}
+		if (args[0].startsWith("BW_") && !user.hasRank(Rank.TESTER)){
+			user.msg("§cТебе нельзя заходить на сервер @§f" + args[0] + "§c.");
+			user.msg("§cТребуемый ранг - " + Rank.TESTER.represent());
+			return;
+		}
 		user.getHandle().connect(i);
 		user.msg("§aВы были телепортированы на сервер §f" + i);
 	}
