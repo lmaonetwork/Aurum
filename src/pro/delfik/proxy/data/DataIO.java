@@ -147,7 +147,8 @@ public class DataIO {
 	public static void create(String path) {
 		File file = getFile(path);
 		file.getParentFile().mkdirs();
-		
+		file.getParentFile().mkdir();
+
 		try {
 			file.createNewFile();
 		} catch (IOException var3) {

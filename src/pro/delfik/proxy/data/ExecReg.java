@@ -9,11 +9,19 @@ import __google_.util.ByteUnzip;
 public class ExecReg implements Exec {
     @Override
     public void accept(NetServer server) {
-        ByteUnzip unzip = new ByteUnzip(server.response().getContent());
-        String nick = unzip.getString();
-        byte rsaKey[] = unzip.getBytes();
-        if(rsaKey.length != 294 || new RSA(rsaKey) == null || DataIO.getFile("players/" + nick).exists())return;
-        DataIO.writeBytes("players/" + nick + "/public.key", rsaKey);
-        server.setResponse(new Response(0));
+        try {
+            ByteUnzip unzip = new ByteUnzip(server.response().getContent());
+            String nick = unzip.getString();
+            System.out.println("Nickname: " + nick);
+            byte rsaKey[] = unzip.getBytes();
+            System.out.println(rsaKey.length);
+            if(rsaKey.length != 294 || new RSA(rsaKey) == null || DataIO.getFile("players/" + nick).exists())return;
+
+            DataIO.writeBytes("players/" + nick + "/public.key", rsaKey);
+            server.setResponse(new Response(0));
+        } catch (Throwable e) {
+            System.out.println(e.getClass().getSimpleName());
+            e.printStackTrace();
+        }
     }
 }
