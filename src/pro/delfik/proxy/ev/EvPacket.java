@@ -1,23 +1,15 @@
 package pro.delfik.proxy.ev;
 
 import implario.net.Packet;
-import implario.net.packet.PacketCheckUpdate;
-import implario.net.packet.PacketInit;
-import implario.net.packet.PacketOutAuth;
-import implario.net.packet.PacketPunishment;
-import implario.net.packet.PacketRead;
-import implario.net.packet.PacketSSU;
-import implario.net.packet.PacketSummon;
-import implario.net.packet.PacketUpdateTop;
-import implario.net.packet.PacketWrite;
+import implario.net.packet.*;
 import implario.util.FileConverter;
-import implario.util.Rank;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
+import pro.delfik.proxy.User;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.ev.added.PacketEvent;
@@ -25,7 +17,6 @@ import pro.delfik.proxy.modules.Ban;
 import pro.delfik.proxy.modules.Kick;
 import pro.delfik.proxy.modules.Mute;
 import pro.delfik.proxy.modules.SfTop;
-import pro.delfik.proxy.User;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -51,10 +42,7 @@ public class EvPacket implements Listener {
 			ProxiedPlayer p = Proxy.getPlayer(((PacketSummon) packet).getPlayer());
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());
 			User u = User.get(p);
-			if (p != null && info != null) {
-				if (info.getName().startsWith("BW_") && !u.hasRank(Rank.TESTER)) u.msg("§cBedWars доступен с ранга §aТестер§c.");
-				else p.connect(info);
-			}
+			if (p != null && info != null) p.connect(info);
 		} else if (packet instanceof PacketInit) {
 			Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
 				ServerInfo from = Proxy.getServer(((PacketInit) packet).getServer());
