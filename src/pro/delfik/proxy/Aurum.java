@@ -15,6 +15,7 @@ import pro.delfik.proxy.cmd.kurator.CmdAurum;
 import pro.delfik.proxy.cmd.moder.*;
 import pro.delfik.proxy.cmd.user.*;
 import pro.delfik.proxy.data.DataIO;
+import pro.delfik.proxy.data.PublicConnector;
 import pro.delfik.proxy.data.ServerListener;
 import pro.delfik.proxy.ev.*;
 import pro.delfik.proxy.modules.Chat;
@@ -78,6 +79,7 @@ public class Aurum extends Plugin {
 		Map<String, String> read = DataIO.readConfig("config");
 		cryptoUtils = new CryptoUtils(read.get("crypto"));
 		ServerListener.init(Converter.toInt(read.get("port")));
+		PublicConnector.enable();
 	}
 
 	private void commands(){
@@ -121,5 +123,6 @@ public class Aurum extends Plugin {
 		ServerListener.close();
 		Scheduler.kill();
 		RequestListener.discontinue();
+		PublicConnector.disable();
 	}
 }
