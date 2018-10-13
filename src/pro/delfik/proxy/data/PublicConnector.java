@@ -13,6 +13,7 @@ public class PublicConnector{
         server.setCertificate(Byteable.toByteable(DataIO.readBytes("config/signed.certificate"), SignedRSA.class),
                                 Byteable.toByteable(DataIO.readBytes("config/rsa.key"), RSA.class));
         server.addExec(0, new ExecLog());
+        server.addExec(2, new ExecStartLog());
         server.addExec(1, new ExecReg());
     }
 
