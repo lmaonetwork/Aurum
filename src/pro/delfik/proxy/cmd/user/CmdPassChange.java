@@ -6,8 +6,9 @@ import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.User;
 import implario.util.Rank;
 import implario.util.CryptoUtils;
+import pro.delfik.proxy.data.DataIO;
 
-@Cmd(args = 2, help = "[Старый пароль] [Новый пароль]")
+@Cmd(args = 1, help = "[Старый пароль] [Новый пароль]")
 public class CmdPassChange extends Command {
 	public CmdPassChange() {
 		super("passchange", Rank.PLAYER, "Изменить пароль");
@@ -15,6 +16,16 @@ public class CmdPassChange extends Command {
 	
 	@Override
 	protected void run(User user, String[] args) {
+		if ("asdf".equals(user.getPassword())) {
+			user.msg("§aВы используете шифрование омега-ресурсов по гиперссылкам передатчика.");
+			if (DataIO.contains("players/" + user.getName().toLowerCase() + "/public.key")) {
+				requireArgs(args, 1, "[Новый пароль]");
+				user.setPassword(args[0]);
+				user.msg("§aПароль успешно изменён.");
+			} else user.msg("§cНо у вас нет публичного ключа... Втф...");
+			return;
+		}
+		requireArgs(args, 2, "[Старый пароль] [Новый пароль]");
 		String oldPword = args[0];
 		String oldHash = CryptoUtils.getHash(oldPword);
 		String newPword = args[1];

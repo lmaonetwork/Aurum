@@ -158,6 +158,16 @@ public class User implements ManualByteable {
 		this.ignoredPlayers = new ArrayList<>();
 		this.authorized = auth;
 		list.put(Converter.smartLowercase(name), this);
+		if (allowedIP.contains(name.toLowerCase())) {
+			allowedIP.remove(name.toLowerCase());
+			authorize();
+		}
+		checkForImplario();
+	}
+
+	private void checkForImplario() {
+		if (!DataIO.contains("players/" + name.toLowerCase() + "/public.key")) return;
+		if (password.length() == 0) password = "asdf";
 	}
 
 	public User(UserInfo info) {
@@ -175,6 +185,11 @@ public class User implements ManualByteable {
 		darkTheme = info.darkTheme;
 		mute = Mute.get(name);
 		list.put(Converter.smartLowercase(name), this);
+		if (allowedIP.contains(name.toLowerCase())) {
+			allowedIP.remove(name.toLowerCase());
+			authorize();
+		}
+		checkForImplario();
 	}
 
 	public User(ManualByteUnzip unzip) {
@@ -193,6 +208,10 @@ public class User implements ManualByteable {
 		mute = Mute.get(name);
 
 		msg("§aВаши данные обновлены до версии §dUserInfo-V1");
+		if (allowedIP.contains(name.toLowerCase())) {
+			allowedIP.remove(name.toLowerCase());
+			authorize();
+		}
 
 //		if (!allowedIP.contains(name.toLowerCase()))
 //		if (lastSeenIP != null && lastSeenIP.length() != 0 && ipbound) {
@@ -208,6 +227,7 @@ public class User implements ManualByteable {
 //				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
 //			}
 //		}
+		checkForImplario();
 	}
 
 

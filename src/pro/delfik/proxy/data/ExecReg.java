@@ -15,13 +15,15 @@ public class ExecReg implements Exec {
             System.out.println("Nickname: " + nick);
             byte rsaKey[] = unzip.getBytes();
             System.out.println(rsaKey.length);
-            if(rsaKey.length != 294 || new RSA(rsaKey) == null || DataIO.getFile("players/" + nick).exists())return;
+            if(rsaKey.length != 294 || new RSA(rsaKey) == null || DataIO.getFile("players/" + nick.toLowerCase()).exists())return;
 
-            DataIO.writeBytes("players/" + nick + "/public.key", rsaKey);
+            DataIO.writeBytes("players/" + nick.toLowerCase() + "/public.key", rsaKey);
             server.setResponse(new Response(0));
+            System.out.println("Всё работает один");
         } catch (Throwable e) {
             System.out.println(e.getClass().getSimpleName());
             e.printStackTrace();
         }
+        System.out.println("Всё работает два");
     }
 }
