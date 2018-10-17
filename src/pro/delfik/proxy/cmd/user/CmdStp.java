@@ -9,7 +9,7 @@ import pro.delfik.proxy.User;
 import implario.util.Rank;
 import implario.util.Converter;
 
-import java.util.Collections;
+import java.util.*;
 
 @Cmd(args = 1, help = "[Сервер]")
 public class CmdStp extends Command {
