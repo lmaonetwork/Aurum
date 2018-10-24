@@ -83,7 +83,7 @@ public class SfTop extends PacketTop.Top {
 		if(Server.get("SF_1") == null)return;
 		PacketTop.Top tops[] = new PacketTop.Top[top.length];
 		for(int i = 0; i < top.length; i++)
-			tops[i] = top[i].getTop();
+			tops[i] = top[i] == null ? new PacketTop.Top("null", 0, 0) : top[i].getTop();
 		PacketTop packet = new PacketTop(tops);
 		Server.get("SF_1").send(packet);
 	}
