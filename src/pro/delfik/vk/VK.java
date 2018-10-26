@@ -22,11 +22,11 @@ import java.util.List;
 public class VK {
 
 	public static String query(String method) {
-		return get("https://api.vk.com/method/" + method, "v=3&access_token=" + VKBot.token);
+		return get("https://api.vk.com/method/" + method, "v=5.81&access_token=" + VKBot.token);
 	}
 
 	public static String query(String method, String params) {
-		return get("https://api.vk.com/method/" + method, "v=3&access_token=" + VKBot.token + "&" + params);
+		return get("https://api.vk.com/method/" + method, "v=5.81&access_token=" + VKBot.token + "&" + params);
 	}
 
 
