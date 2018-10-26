@@ -21,6 +21,10 @@ public class Logger {
         Exceptions.runThrowsEx(() -> writer.write(type + ": " + message + '\n'));
     }
 
+    public static void flush(){
+        Exceptions.runThrowsEx(writer::flush);
+    }
+
     public static void close(){
         Exceptions.runThrowsEx(() -> {
             writer.flush();

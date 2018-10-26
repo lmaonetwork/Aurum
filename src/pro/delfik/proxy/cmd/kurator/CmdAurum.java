@@ -27,6 +27,7 @@ import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import static implario.util.StringUtils.random;
@@ -64,6 +65,23 @@ public class CmdAurum extends Command {
 		functions.put("rui", CmdAurum::readuserinfo);
 		functions.put("wui", CmdAurum::writeuserinfo);
 		functions.put("sudo", CmdAurum::sudo);
+		functions.put("history", CmdAurum::history);
+		functions.put("flush", CmdAurum::flush);
+	}
+
+	private static String flush(CommandSender sender, Command command, String[] args){
+		requireRank(sender, Rank.ADMIN);
+		Logger.flush();
+		return "чото записалось";
+	}
+
+	private static String history(CommandSender sender, Command command, String[] args){
+		requireRank(sender, Rank.ADMIN);
+		requireArgs(args, 2, "[Игрок] [Тип]");
+		List<String> lines = DataIO.read("log");
+		for(String line : lines)
+			if(line.contains(args[0]) && line.contains(args[1]))sender.sendMessage(line);
+		return "";
 	}
 
 	private static String sudo(CommandSender sender, Command command, String[] args) {

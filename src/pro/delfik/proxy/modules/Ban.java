@@ -63,7 +63,7 @@ public class Ban implements ManualByteable {
 			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
-		Logger.log("Ban", moderator + " ban " + moderator + " time " + new Date().toString() +
+		Logger.log("Ban", moderator + " ban " + player + " time " + new Date().toString() +
 				" reason: \"" + reason + "\" minutes " + minutes);
 		DataIO.writeByteable(User.getPath(player) + "ban", ban);
 	}
