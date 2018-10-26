@@ -25,6 +25,7 @@ import pro.delfik.proxy.modules.SfTop;
 import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
+import pro.delfik.vk.VK;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +68,12 @@ public class CmdAurum extends Command {
 		functions.put("sudo", CmdAurum::sudo);
 		functions.put("history", CmdAurum::history);
 		functions.put("flush", CmdAurum::flush);
+		functions.put("lp", CmdAurum::longpoll);
+	}
+
+	private static String longpoll(CommandSender commandSender, Command command, String[] strings) {
+		requireArgs(strings, 2, "[Метод] [Аргументы]...");
+		return VK.query(strings[0], Converter.mergeArray(strings, 1, "&"));
 	}
 
 	private static String flush(CommandSender sender, Command command, String[] args){
