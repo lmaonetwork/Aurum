@@ -10,6 +10,7 @@ import implario.util.ManualByteZip;
 import implario.util.ManualByteable;
 import implario.util.Converter;
 import pro.delfik.proxy.User;
+import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 
 import java.text.SimpleDateFormat;
@@ -35,6 +36,7 @@ public class Ban implements ManualByteable {
 
 	public static void unban(String player, String moderator) {
 		DataIO.remove(User.getPath(player) + "ban.txt");
+		Logger.log("Unban", moderator + " unban " + player + " time " + new Date().toString());
 		if (moderator == null) return;
 		try {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
@@ -61,6 +63,8 @@ public class Ban implements ManualByteable {
 			Proxy.i().broadcast("§c§lПри бане ирока §e" + player + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
+		Logger.log("Ban", moderator + " ban " + moderator + " time " + new Date().toString() +
+				" reason: \"" + reason + "\" minutes " + minutes);
 		DataIO.writeByteable(User.getPath(player) + "ban", ban);
 	}
 	
