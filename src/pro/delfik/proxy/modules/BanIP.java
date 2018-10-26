@@ -9,6 +9,7 @@ import implario.util.ManualByteUnzip;
 import implario.util.ManualByteZip;
 import implario.util.ManualByteable;
 import pro.delfik.proxy.User;
+import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 
 import java.text.SimpleDateFormat;
@@ -33,6 +34,7 @@ public class BanIP implements ManualByteable {
 
 	public static void unbanIP(String address, String moderator) {
 		DataIO.remove("bans-ip/" + address + ".txt");
+		Logger.log("UnbanIP", moderator + " unban " + address + " time " + new Date().toString());
 		if (moderator == null) return;
 		try {
 			ProxiedPlayer moder = Proxy.getPlayer(moderator);
@@ -55,6 +57,8 @@ public class BanIP implements ManualByteable {
 			Proxy.i().broadcast("§c§lПри бане IP-адреса §e" + ip + "§c§l произошла ошибка.");
 			t.printStackTrace();
 		}
+		Logger.log("BanIP", moderator + " ban " + ip + " time " + new Date().toString() +
+				" reason: \"" + reason + "\"");
 		return ban;
 	}
 	

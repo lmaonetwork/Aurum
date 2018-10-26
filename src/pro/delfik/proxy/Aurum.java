@@ -22,6 +22,7 @@ import pro.delfik.proxy.modules.Chat;
 import pro.delfik.proxy.modules.SfTop;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
+import pro.delfik.util.Logger;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
@@ -48,6 +49,7 @@ public class Aurum extends Plugin {
 		SfTop.class.getCanonicalName();
 		SfTop.class.getCanonicalName();
 		VKBot.class.getCanonicalName();
+		Logger.class.getCanonicalName();
 		LongPoll.class.getCanonicalName();
 		TimedList.class.getCanonicalName();
 		PacketTop.class.getCanonicalName();
@@ -124,5 +126,6 @@ public class Aurum extends Plugin {
 		Scheduler.kill();
 		RequestListener.discontinue();
 		PublicConnector.disable();
+		Logger.close();
 	}
 }

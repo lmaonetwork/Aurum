@@ -22,6 +22,7 @@ import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.modules.Ban;
 import pro.delfik.proxy.modules.Chat;
 import pro.delfik.proxy.modules.SfTop;
+import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
 
@@ -277,6 +278,7 @@ public class CmdAurum extends Command {
 		Rank rank = requireRank(args[1]);
 		if (sender instanceof ProxiedPlayer && !User.get(sender).hasRank(rank))
 			return "§cВы не можете выдавать ранги выше собственного.";
+		Logger.log("Perm", sender.getName() + " set " + rank + " " + args[0]);
 		User u = User.get(args[0]);
 		if (u != null) {
 			u.setRank(rank);
