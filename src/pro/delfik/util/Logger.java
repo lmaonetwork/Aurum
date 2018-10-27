@@ -19,6 +19,7 @@ public class Logger {
 
     public static void log(String type, String message){
         Exceptions.runThrowsEx(() -> writer.write(type + ": " + message + '\n'));
+        flush();
     }
 
     public static void flush(){

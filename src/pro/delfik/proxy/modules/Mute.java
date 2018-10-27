@@ -9,10 +9,13 @@ import implario.util.ManualByteZip;
 import implario.util.ManualByteable;
 import implario.util.Converter;
 import pro.delfik.proxy.User;
+import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 
+import java.util.Date;
+
 public class Mute implements ManualByteable {
-	private static final String path = "mute";
+	private static final String path = "/mute";
 
 	public static void unmute(String player, String moderator) {
 		ProxiedPlayer moder = Proxy.getPlayer(moderator);
@@ -20,15 +23,18 @@ public class Mute implements ManualByteable {
 		U.bc(server, "§7[§e" + moderator + "§7]§a Игрок §e" + player + " §aснова может общаться с вами.");
 		User user = User.get(player);
 		if (user != null) user.clearMute(moderator);
+		Logger.log("Unmute", moderator + " unmuted " + player + " time " + new Date().toString());
 		clear(player);
 	}
 
 	public static void clear(String nick) {
-		DataIO.remove(nick + path);
+		DataIO.remove(getPath(nick));
 	}
 	
 	public static void mute(String player, String reason, int minutes, String moderator) {
 		Mute mute = new Mute(moderator, System.currentTimeMillis() + minutes * 60000, reason);
+		Logger.log("Mute", moderator + " mute " + player + " time " + new Date().toString() +
+				" reason: \"" + reason + "\" minutes " + minutes);
 		ProxiedPlayer p = Proxy.getPlayer(player);
 		Server server = p == null ? null : p.getServer();
 		U.bc(server, "§7[§e" + moderator + "§7]§6 Игроку §e" + player + " §6запрещено разговаривать §eна" +
