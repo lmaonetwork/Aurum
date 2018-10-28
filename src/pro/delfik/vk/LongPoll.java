@@ -1,9 +1,10 @@
 package pro.delfik.vk;
 
-import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.net.URLEncoder;
 
 public class LongPoll {
 	protected static String key;
@@ -105,7 +106,7 @@ public class LongPoll {
 	}
 	
 	public static String msg(String message, long peer) {
-		return VK.query("messages.send", "message=" + message.replace(' ', '+') + "&" +
+		return VK.query("messages.send", "message=" + URLEncoder.encode(message) + "&" +
 												 (peer > 2000000000 ? "chat_id=" + (peer - 2000000000) : "user_id=" + peer));
 	}
 	
