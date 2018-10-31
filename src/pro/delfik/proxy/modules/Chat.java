@@ -103,7 +103,7 @@ public class Chat {
 			result = removeUncorrectChars(result);
 			String remake = remake(result).toLowerCase();
 			if (remake.length() != 0) {
-				if (mat.contains(remake + " ")) {
+				if (!remake.equals("и") && mat.contains(remake)) {
 					sb.append(last);
 					sb.append(' ');
 					sb.append(getNya());
@@ -111,7 +111,7 @@ public class Chat {
 					continue;
 				}
 
-				if (mat.contains(remake(last).toLowerCase() + remake + " ")) {
+				if (mat.contains(remake(last).toLowerCase() + remake)) {
 					sb.append(getNya());
 					last = "";
 					continue;
