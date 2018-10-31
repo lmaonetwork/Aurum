@@ -96,8 +96,8 @@ public class LongPoll {
 						lastPeer = peer_id;
 						
 						text = text.replaceAll("\\[.*]", "");
-						String name = VK.getUserName(peer_id > 2000000000 ? from_id : (int) peer_id);
-						for (String msg : MessageHandler.handle(text, from_id, peer_id)) msg(msg, peer_id);
+						String message = MessageHandler.handle(text, from_id, peer_id);
+						if(message.length() > 0) msg(message, peer_id);
 						break;
 				}
 				

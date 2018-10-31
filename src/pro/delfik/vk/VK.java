@@ -87,6 +87,17 @@ public class VK {
 
 		return full_name;
 	}
+
+	public static int getID(String link){
+		String data = query("utils.resolveScreenName", "screen_name=" + link);
+		try{
+			JSONObject obj = new JSONObject(data);
+			JSONObject response = obj.getJSONObject("response");
+			return response.getInt("object_id");
+		} catch (JSONException e){
+			return -1;
+		}
+	}
 	
 	public static int getUserID(String arg) {
 		String data = query("users.get", "user_ids=" + arg);

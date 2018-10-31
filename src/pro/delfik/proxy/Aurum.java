@@ -127,5 +127,6 @@ public class Aurum extends Plugin {
 		RequestListener.discontinue();
 		PublicConnector.disable();
 		Logger.close();
+		VKBot.stop();
 	}
 }
