@@ -19,7 +19,7 @@ public class Admin implements Registeable, Unloadable{
     }
 
     public static void remove(int id){
-        ids.remove(id);
+        ids.remove((Object)id);
     }
 
     public static Iterable<Integer> iterable(){
