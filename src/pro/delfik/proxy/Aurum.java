@@ -1,5 +1,6 @@
 package pro.delfik.proxy;
 
+import __google_.util.FileIO;
 import implario.net.Packet;
 import implario.net.packet.PacketTop;
 import implario.util.*;
@@ -15,6 +16,7 @@ import pro.delfik.proxy.cmd.kurator.CmdAurum;
 import pro.delfik.proxy.cmd.moder.*;
 import pro.delfik.proxy.cmd.user.*;
 import pro.delfik.proxy.data.DataIO;
+import pro.delfik.proxy.data.PrivateConnector;
 import pro.delfik.proxy.data.PublicConnector;
 import pro.delfik.proxy.data.ServerListener;
 import pro.delfik.proxy.ev.*;
@@ -81,6 +83,7 @@ public class Aurum extends Plugin {
 		Map<String, String> read = DataIO.readConfig("config");
 		cryptoUtils = new CryptoUtils(read.get("crypto"));
 		ServerListener.init(Converter.toInt(read.get("port")));
+		PrivateConnector.init(Coder.toInt(FileIO.read("/Minecraft/_GLOBAL/config.txt").split("\n")[0]));
 		PublicConnector.enable();
 	}
 
@@ -128,5 +131,6 @@ public class Aurum extends Plugin {
 		PublicConnector.disable();
 		Logger.close();
 		VKBot.stop();
+		PrivateConnector.close();
 	}
 }
