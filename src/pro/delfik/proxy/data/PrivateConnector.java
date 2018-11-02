@@ -26,12 +26,16 @@ public class PrivateConnector implements NetListener {
     @Override
     public void accept(Response response, Connector connector) {
         Packet packet = Packet.getPacket(response.getContent());
-        System.out.println(packet + " connected");
         if(packet instanceof PacketInit){
             this.server = ((PacketInit) packet).getServer();
             new pro.delfik.proxy.data.Server(server, connector);
         }
         BungeeCord.getInstance().getScheduler().runAsync(Aurum.instance, () -> BungeeCord.getInstance()
                 .pluginManager.callEvent(new PacketEvent(server, packet)));
+    }
+
+    @Override
+    public void closed() {
+        pro.delfik.proxy.data.Server.removeServer(server);
     }
 }
