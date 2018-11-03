@@ -50,15 +50,15 @@ public class Chat {
 	}
 
 	public static void addMat(String mat){
-		Chat.mat.add(remake(mat));
+		Chat.mat.add(applyMat(mat));
 	}
 
 	public static void remMat(String mat){
-		Chat.mat.remove(remake(mat));
+		Chat.mat.remove(remake(removeUncorrectChars(mat)));
 	}
 
 	public static boolean isMat(String mat){
-		return mat.contains(remake(mat));
+		return mat.contains(applyMat(mat));
 	}
 
 	//Нужна синхронность что бы была
@@ -97,33 +97,24 @@ public class Chat {
 
 	public static String applyMat(String message) {
 		StringBuilder sb = new StringBuilder();
-		String last = "";
 
 		for(String result : message.split(" ")) {
 			result = removeUncorrectChars(result);
-			String remake = remake(result).toLowerCase();
-			if (remake.length() != 0) {
-				if (!remake.equals("и") && mat.contains(remake)) {
-					sb.append(last);
-					sb.append(' ');
+			if(result.equalsIgnoreCase("и") || result.equalsIgnoreCase("ии")){
+				sb.append(result);
+			}else {
+				String remake = remake(result).toLowerCase();
+				if (remake.length() != 0 && mat.contains(remake)) {
 					sb.append(getNya());
-					last = "";
-					continue;
-				}
-
-				if (mat.contains(remake(last).toLowerCase() + remake)) {
-					sb.append(getNya());
-					last = "";
-					continue;
-				}
+				} else
+					sb.append(result);
 			}
-
-			sb.append(last);
 			sb.append(' ');
-			last = result;
 		}
 
-		sb.append(last);
-		return removeTrippleChars(sb.toString()).substring(1);
+		String result = sb.toString();
+		if(result.endsWith(" "))result = result.substring(0, result.length() - 1);
+		if(result.startsWith(" "))result = result.substring(1);
+		return removeTrippleChars(result);
 	}
 }
