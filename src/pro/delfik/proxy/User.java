@@ -4,16 +4,7 @@ import implario.net.packet.PacketAuth;
 import implario.net.packet.PacketChangeTheme;
 import implario.net.packet.PacketPex;
 import implario.net.packet.PacketUser;
-import implario.util.ByteUnzip;
-import implario.util.ByteZip;
-import implario.util.Coder;
-import implario.util.Converter;
-import implario.util.CryptoUtils;
-import implario.util.ManualByteUnzip;
-import implario.util.ManualByteZip;
-import implario.util.ManualByteable;
-import implario.util.Rank;
-import implario.util.UserInfo;
+import implario.util.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -33,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class User implements ManualByteable {
+public class User implements Byteable {
 
 	private static final HashMap<String, User> list = new HashMap<>();
 	public static final TimedHashMap<String, String> outAuth = new TimedHashMap<>(60);
@@ -192,7 +183,7 @@ public class User implements ManualByteable {
 		checkForImplario();
 	}
 
-	public User(ManualByteUnzip unzip) {
+	public User(ByteUnzip unzip) {
 		name = unzip.getString();
 		password = unzip.getString();
 		rank = Rank.byChar.get((char) unzip.getByte());
@@ -232,8 +223,8 @@ public class User implements ManualByteable {
 
 
 	@Override
-	public ManualByteZip zip() {
-		return new ManualByteZip()
+	public ByteZip toByteZip() {
+		return new ByteZip()
 					   .add(name)
 					   .add(password)
 					   .add(rank.getByte())

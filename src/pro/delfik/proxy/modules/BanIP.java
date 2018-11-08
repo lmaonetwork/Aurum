@@ -1,13 +1,11 @@
 package pro.delfik.proxy.modules;
 
+import implario.util.*;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.DataIO;
-import implario.util.ManualByteUnzip;
-import implario.util.ManualByteZip;
-import implario.util.ManualByteable;
 import pro.delfik.proxy.User;
 import pro.delfik.util.Logger;
 import pro.delfik.util.U;
@@ -15,7 +13,7 @@ import pro.delfik.util.U;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BanIP implements ManualByteable {
+public class BanIP implements Byteable {
 
 	private final String moderator, reason;
 
@@ -23,13 +21,15 @@ public class BanIP implements ManualByteable {
 		this.reason = reason;
 		this.moderator = moderator;
 	}
+
 	public BanIP(ManualByteUnzip unzip) {
 		reason = unzip.getString();
 		moderator = unzip.getString();
 	}
+
 	@Override
-	public ManualByteZip zip() {
-		return new ManualByteZip().add(reason).add(moderator);
+	public ByteZip toByteZip() {
+		return new ByteZip().add(reason).add(moderator);
 	}
 
 	public static void unbanIP(String address, String moderator) {

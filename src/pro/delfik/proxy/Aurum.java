@@ -18,7 +18,6 @@ import pro.delfik.proxy.cmd.user.*;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.PrivateConnector;
 import pro.delfik.proxy.data.PublicConnector;
-import pro.delfik.proxy.data.ServerListener;
 import pro.delfik.proxy.ev.*;
 import pro.delfik.proxy.modules.Chat;
 import pro.delfik.proxy.modules.SfTop;
@@ -40,7 +39,6 @@ import java.util.Map;
 public class Aurum extends Plugin {
 	private static final List<Runnable> unload = new ArrayList<>();
 
-	private static CryptoUtils cryptoUtils;
 	public static Aurum instance;
 	
 	private static void classLoader() {
@@ -48,7 +46,6 @@ public class Aurum extends Plugin {
 		VK.class.getCanonicalName();
 		Rank.class.getCanonicalName();
 		Chat.class.getCanonicalName();
-		SfTop.class.getCanonicalName();
 		SfTop.class.getCanonicalName();
 		VKBot.class.getCanonicalName();
 		Logger.class.getCanonicalName();
@@ -79,10 +76,7 @@ public class Aurum extends Plugin {
 		Scheduler.init();
 		Packet.init();
 		VKBot.start();
-		RequestListener.init();
 		Map<String, String> read = DataIO.readConfig("config");
-		cryptoUtils = new CryptoUtils(read.get("crypto"));
-		ServerListener.init(Converter.toInt(read.get("port")));
 		PrivateConnector.init(Coder.toInt(FileIO.read("/Minecraft/_GLOBAL/config.txt").split("\n")[0]));
 		PublicConnector.enable();
 	}
@@ -113,10 +107,6 @@ public class Aurum extends Plugin {
 		manager.registerListener(this, new EvQuit());
 		manager.registerListener(this, new EvReconnect());
 	}
-	
-	public static CryptoUtils getCryptoUtils() {
-		return cryptoUtils;
-	}
 
 	public static void addUnload(Runnable runnable){
 		unload.add(runnable);
@@ -125,9 +115,7 @@ public class Aurum extends Plugin {
 	@Override
 	public void onDisable() {
 		unload.forEach(Runnable::run);
-		ServerListener.close();
 		Scheduler.kill();
-		RequestListener.discontinue();
 		PublicConnector.disable();
 		Logger.close();
 		VKBot.stop();

@@ -88,8 +88,10 @@ public class CmdAurum extends Command {
 		List<String> lines = DataIO.read("log");
 		args[0] = args[0].toLowerCase();
 		args[1] = args[1].toLowerCase();
-		for(String line : lines)
-			if(line.toLowerCase().contains(args[0]) && line.contains(args[1]))sender.sendMessage(line);
+		for(String line : lines) {
+			line = line.toLowerCase();
+			if (line.contains(args[0]) && line.contains(args[1])) sender.sendMessage(line);
+		}
 		return "";
 	}
 
