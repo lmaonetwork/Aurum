@@ -92,8 +92,12 @@ public class CmdAurum extends Command {
 		requireRank(sender, Rank.ADMIN);
 		requireArgs(args, 2, "[Игрок] [Тип]");
 		List<String> lines = DataIO.read("log");
-		for(String line : lines)
-			if(line.contains(args[0]) && line.contains(args[1]))sender.sendMessage(line);
+		args[0] = args[0].toLowerCase();
+		args[1] = args[1].toLowerCase();
+		for(String line : lines) {
+			line = line.toLowerCase();
+			if (line.contains(args[0]) && line.contains(args[1])) sender.sendMessage(line);
+		}
 		return "";
 	}
 
