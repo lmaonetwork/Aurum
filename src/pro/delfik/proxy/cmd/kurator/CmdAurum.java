@@ -1,10 +1,7 @@
 package pro.delfik.proxy.cmd.kurator;
 
 import implario.net.packet.PacketGC;
-import implario.util.Converter;
-import implario.util.CryptoUtils;
-import implario.util.Rank;
-import implario.util.UserInfo;
+import implario.util.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -32,6 +29,8 @@ import java.util.List;
 import java.util.Random;
 
 import static implario.util.StringUtils.random;
+import static pro.delfik.proxy.modules.SfTop.checkTop;
+import static pro.delfik.proxy.modules.SfTop.getPerson;
 
 public class CmdAurum extends Command {
 	public CmdAurum() {
@@ -69,6 +68,13 @@ public class CmdAurum extends Command {
 		functions.put("history", CmdAurum::history);
 		functions.put("flush", CmdAurum::flush);
 		functions.put("lp", CmdAurum::longpoll);
+		functions.put("mlg", CmdAurum::mlg);
+	}
+	private static String mlg(CommandSender commandSender, Command command, String[] strings) {
+		requireArgs(strings, 5, "[Ник] [Игры] [Победы] [Кровати] [Смерти]");
+		DataIO.writeBytes(User.getPath(strings[0]) + SfTop.path, new ManualByteZip()
+				.add(requireInt(strings[1])).add(requireInt(strings[2])).add(requireInt(strings[3])).add(requireInt(strings[4])).build());
+		return "§aСтатистика §f" + strings[0] + "§a изменена.";
 	}
 
 	private static String longpoll(CommandSender commandSender, Command command, String[] strings) {
@@ -186,7 +192,7 @@ public class CmdAurum extends Command {
 
 	private static String sftop(CommandSender sender, Command command, String[] strings) {
 		requireArgs(strings, 1, "[Игрок]");
-		SfTop.checkTop(SfTop.getPerson(strings[0]));
+		checkTop(getPerson(strings[0]));
 		return "§aПроверка отправлена.";
 	}
 
