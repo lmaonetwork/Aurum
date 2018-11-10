@@ -22,7 +22,7 @@ public class BanIP implements Byteable {
 		this.moderator = moderator;
 	}
 
-	public BanIP(ManualByteUnzip unzip) {
+	public BanIP(ByteUnzip unzip) {
 		reason = unzip.getString();
 		moderator = unzip.getString();
 	}
