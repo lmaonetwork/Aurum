@@ -17,6 +17,8 @@ public class CmdAlert extends Command {
 	
 	@Override
 	protected void run(User user, String[] args) {
-		Proxy.i().broadcast("§e§l[§d§lВнимание§e§l] §e" + U.color(Converter.mergeArray(args, 0, " ")));
+		requireArgs(args, 1, "[Объявление]");
+		if (args[0].equals("-h")) Proxy.i().broadcast(U.color(Converter.mergeArray(args, 1, " ")));
+		else Proxy.i().broadcast("§7[§cВнимание§7] §e" + U.color(Converter.mergeArray(args, 0, " ")));
 	}
 }

@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SfTop extends PacketTop.Top {
-	private static final String path = "sf_top";
+
+	public static final String path = "sf_top";
 
 	private static SfTop[] top = new SfTop[15];
 	private int games;

@@ -14,6 +14,10 @@ public class CmdStats extends Command{
 
 	@Override
 	protected void run(User user, String args[]) {
+		if (user.getServer().startsWith("UHC_")) {
+			user.getHandle().chat("/est");
+			return;
+		}
 		SfTop top = SfTop.getPerson(user.getName());
 		if (top == null) throw new ExCustom("§eТы ещё никогда не играл в §fMLGRush§e. Самое время это исправить!");
 		user.msg("§e\u2b26 Статистика по §fMLGRush §e\u2b26");
