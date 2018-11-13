@@ -95,7 +95,7 @@ public class Aurum extends Plugin {
 				new CmdEnd(), new CmdKick(), new CmdMute(), new CmdUnmute(),
 				new CmdUpdate(), new CmdPing(), new CmdStats(), new CmdHub(),
 				new CmdSkin(), new CmdPassChange(), new CmdAttachIP(), new CmdIgnore(),
-				new CmdBan(), new CmdUnban(), new CmdTheme()
+				new CmdBan(), new CmdUnban(), new CmdTheme(), new CmdStats()
 		}) Proxy.registerCommand(command);
 	}
 
