@@ -1,12 +1,16 @@
 package pro.delfik.proxy.cmd.user;
 
+import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.modules.SfTop;
 import pro.delfik.proxy.User;
 import implario.util.Rank;
 import implario.util.Converter;
+import pro.delfik.proxy.stats.GameStats;
+import pro.delfik.proxy.stats.Top;
 
+@Cmd(args = 1, help = "[Игра]")
 public class CmdStats extends Command{
 	public CmdStats() {
 		super("stats", Rank.PLAYER, "Просмотр статистики");
@@ -18,13 +22,16 @@ public class CmdStats extends Command{
 			user.getHandle().chat("/est");
 			return;
 		}
-		SfTop top = SfTop.getPerson(user.getName());
-		if (top == null) throw new ExCustom("§eТы ещё никогда не играл в §fMLGRush§e. Самое время это исправить!");
-		user.msg("§e\u2b26 Статистика по §fMLGRush §e\u2b26");
-		int beds = top.getBeds(), deaths = top.getDeaths(), games = top.getGames(), wins = top.getWins();
-		user.msg("§a\u1405 §f" + beds + "§a кроват" + Converter.plural(beds, "ь", "и", "ей"));
-		user.msg("§a\u1405 §f" + deaths + "§a смерт" + Converter.plural(deaths, "ь", "и", "ей"));
-		user.msg("§a\u1405 §f" + games + "§a игр" + Converter.plural(games, "а", "ы", "") + " сыграно");
-		user.msg("§a\u1405 §f" + wins + "§a побед" + Converter.plural(wins, "а", "ы", ""));
+		Top top = Top.get(args[0].toUpperCase());
+		if(top == null)throw new ExCustom("Игра не найдена");
+		if(args.length == 2 && args[1].equals("top")){
+			for(String str : top.generateTop().split("\n"))
+				user.msg(str);
+			return;
+		}
+		GameStats stats = top.read(user.getName());
+		if(stats == null)throw new ExCustom("Статистика не найдена");
+		for(String line : stats.toReadableString())
+			user.msg(line);
 	}
 }

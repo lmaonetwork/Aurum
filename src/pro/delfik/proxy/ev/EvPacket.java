@@ -1,5 +1,6 @@
 package pro.delfik.proxy.ev;
 
+import gnu.trove.procedure.TObjectProcedure;
 import implario.net.Packet;
 import implario.net.packet.*;
 import implario.util.FileConverter;
@@ -17,6 +18,7 @@ import pro.delfik.proxy.modules.Ban;
 import pro.delfik.proxy.modules.Kick;
 import pro.delfik.proxy.modules.Mute;
 import pro.delfik.proxy.modules.SfTop;
+import pro.delfik.proxy.stats.Top;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +27,7 @@ public class EvPacket implements Listener {
 	@EventHandler
 	public void event(PacketEvent event) {
 		Packet packet = event.getPacket();
+		System.out.println(packet);
 		if (packet instanceof PacketPunishment) {
 			PacketPunishment punish = (PacketPunishment) packet;
 			PacketPunishment.Punishment punishment = punish.getPunishment();
@@ -41,7 +44,6 @@ public class EvPacket implements Listener {
 		} else if (packet instanceof PacketSummon) {
 			ProxiedPlayer p = Proxy.getPlayer(((PacketSummon) packet).getPlayer());
 			ServerInfo info = Proxy.getServer(((PacketSummon) packet).getServer());
-			User u = User.get(p);
 			if (p != null && info != null) p.connect(info);
 		} else if (packet instanceof PacketInit) {
 			Proxy.i().getScheduler().schedule(Aurum.instance, () -> {
@@ -78,6 +80,13 @@ public class EvPacket implements Listener {
 			if (f.lastModified() <= time) return;
 			Server.get(event.getServer()).send(new PacketWrite("plugins/" + f.getName(), FileConverter.read(f)));
 			System.out.println("[Updater] Успешно обновили " + f.getName() + " на " + event.getServer());
+		}else if(packet instanceof PacketTopUpdate){
+			PacketTopUpdate update = (PacketTopUpdate)packet;
+			System.out.println(update);
+			Top top = Top.get(update.getName());
+			System.out.println(update.getName());
+			System.out.println(top);
+			if(top != null)top.update(update);
 		}
 	}
 }

@@ -15,10 +15,6 @@ public class SFStats implements GameStats{
         deaths = unzip.getInt();
     }
 
-    public SFStats(String name){
-        this.name = name;
-    }
-
     @Override
     public boolean equals(Object o) {
         return o instanceof SFStats && ((SFStats) o).name.equals(name);
@@ -26,7 +22,7 @@ public class SFStats implements GameStats{
 
     @Override
     public String toString() {
-        return name + " " + games + " " + beds + " " + deaths;
+        return name + " " + games + " " + deaths;
     }
 
     @Override

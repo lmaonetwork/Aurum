@@ -23,6 +23,7 @@ import pro.delfik.proxy.modules.Chat;
 import pro.delfik.proxy.modules.SfTop;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
+import pro.delfik.proxy.stats.Top;
 import pro.delfik.util.Logger;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
@@ -44,6 +45,7 @@ public class Aurum extends Plugin {
 	private static void classLoader() {
 		U.class.getCanonicalName();
 		VK.class.getCanonicalName();
+		Top.class.getCanonicalName();
 		Rank.class.getCanonicalName();
 		Chat.class.getCanonicalName();
 		SfTop.class.getCanonicalName();
