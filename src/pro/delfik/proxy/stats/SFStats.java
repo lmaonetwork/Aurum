@@ -22,7 +22,7 @@ public class SFStats implements GameStats{
 
     @Override
     public String toString() {
-        return name + " " + games + " " + deaths;
+        return name + " " + wins + " " + games;
     }
 
     @Override
@@ -59,25 +59,8 @@ public class SFStats implements GameStats{
     public void setName(String name) {
         this.name = name;
     }
-
-    public int getGames() {
-        return games;
-    }
-
-    public int getWins() {
-        return wins;
-    }
-
-    public int getBeds() {
-        return beds;
-    }
-
-    public int getDeaths() {
-        return deaths;
-    }
-
     @Override
     public int criteria() {
-        return getGames();
+        return games;
     }
 }

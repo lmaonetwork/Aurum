@@ -2,7 +2,6 @@ package pro.delfik.proxy;
 
 import __google_.util.FileIO;
 import implario.net.Packet;
-import implario.net.packet.PacketTop;
 import implario.util.*;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -15,14 +14,13 @@ import pro.delfik.proxy.cmd.kurator.CmdAlert;
 import pro.delfik.proxy.cmd.kurator.CmdAurum;
 import pro.delfik.proxy.cmd.moder.*;
 import pro.delfik.proxy.cmd.user.*;
-import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.PrivateConnector;
 import pro.delfik.proxy.data.PublicConnector;
 import pro.delfik.proxy.ev.*;
 import pro.delfik.proxy.modules.Chat;
-import pro.delfik.proxy.modules.SfTop;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
+import pro.delfik.proxy.stats.StatsThread;
 import pro.delfik.proxy.stats.Top;
 import pro.delfik.util.Logger;
 import pro.delfik.util.TimedList;
@@ -35,7 +33,6 @@ import pro.delfik.vk.VKBot;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Aurum extends Plugin {
 	private static final List<Runnable> unload = new ArrayList<>();
@@ -48,18 +45,15 @@ public class Aurum extends Plugin {
 		Top.class.getCanonicalName();
 		Rank.class.getCanonicalName();
 		Chat.class.getCanonicalName();
-		SfTop.class.getCanonicalName();
 		VKBot.class.getCanonicalName();
 		Logger.class.getCanonicalName();
 		LongPoll.class.getCanonicalName();
 		TimedList.class.getCanonicalName();
-		PacketTop.class.getCanonicalName();
 		Converter.class.getCanonicalName();
 		ArrayUtils.class.getCanonicalName();
 		ServerInfo.class.getCanonicalName();
 		StringUtils.class.getCanonicalName();
 		CryptoUtils.class.getCanonicalName();
-		PacketTop.Top.class.getCanonicalName();
 		ArrayIterator.class.getCanonicalName();
 		MessageHandler.class.getCanonicalName();
 		U.PlayerWrapper.class.getCanonicalName();
@@ -78,9 +72,9 @@ public class Aurum extends Plugin {
 		Scheduler.init();
 		Packet.init();
 		VKBot.start();
-		Map<String, String> read = DataIO.readConfig("config");
 		PrivateConnector.init(Coder.toInt(FileIO.read("/Minecraft/_GLOBAL/config.txt").split("\n")[0]));
 		PublicConnector.enable();
+		Proxy.i().getScheduler().runAsync(this, new StatsThread());
 	}
 
 	private void commands(){

@@ -3,6 +3,7 @@ package pro.delfik.proxy.stats;
 import implario.net.packet.PacketTopUpdate;
 import implario.util.ArrayUtils;
 import implario.util.Byteable;
+import implario.util.ServerType;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.User;
 import pro.delfik.proxy.data.DataIO;
@@ -16,14 +17,14 @@ public class Top implements Byteable{
     private GameStats objects[];
 
     private final Class<? extends GameStats> clazz;
-    private final String name;
+    private final ServerType type;
 
-    public Top(int size, String name, Class<? extends GameStats> clazz){
+    public Top(int size, ServerType type, Class<? extends GameStats> clazz){
         objects = new GameStats[size];
-        this.name = name;
+        this.type = type;
         this.clazz = clazz;
         Aurum.addUnload(this::unload);
-        tops.put(name, this);
+        tops.put(type, this);
         List<String> list = DataIO.read(getPath());
         if(list == null)return;
         for(String str : list) {
@@ -94,19 +95,23 @@ public class Top implements Byteable{
         return stats;
     }
 
-    public String generateTop(){
-        StringBuilder buffer = new StringBuilder();
-        for(GameStats stats : objects)
-            buffer.append(stats == null ? "null" : stats.toString()).append('\n');
-        return buffer.toString();
+    public ServerType getType() {
+        return type;
+    }
+
+    public String[] generateTop(){
+        String result[] = new String[objects.length];
+        for(int i = 0; i < result.length; i++)
+            result[i] = objects[i].toString();
+        return result;
     }
 
     private String getPath(String nick){
-        return User.getPath(nick) + name + "_top";
+        return User.getPath(nick) + type.name() + "_top";
     }
 
     private String getPath(){
-        return "top/" + name;
+        return "top/" + type.name();
     }
 
     private int indexOf(String indexOf) {
@@ -122,13 +127,17 @@ public class Top implements Byteable{
         objects = (GameStats[]) ArrayUtils.arrayShift(objects, top, player, new GameStats[objects.length]);
     }
 
-    private static Map<String, Top> tops = new HashMap<>();
+    private static Map<ServerType, Top> tops = new HashMap<>();
 
-    public static Top get(String name){
-        return tops.get(name);
+    public static Top get(ServerType type){
+        return tops.get(type);
+    }
+
+    public static Iterable<Top> iterable(){
+        return tops.values();
     }
 
     static{
-        new Top(15, "SF", SFStats.class);
+        new Top(15, ServerType.SF, SFStats.class);
     }
 }

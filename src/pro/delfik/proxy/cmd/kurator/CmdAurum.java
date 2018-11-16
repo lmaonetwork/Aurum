@@ -18,7 +18,7 @@ import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.modules.Ban;
 import pro.delfik.proxy.modules.Chat;
-import pro.delfik.proxy.modules.SfTop;
+import pro.delfik.proxy.stats.StatsThread;
 import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.Random;
 
 import static implario.util.StringUtils.random;
-import static pro.delfik.proxy.modules.SfTop.checkTop;
-import static pro.delfik.proxy.modules.SfTop.getPerson;
 
 public class CmdAurum extends Command {
 	public CmdAurum() {
@@ -53,7 +51,6 @@ public class CmdAurum extends Command {
 		functions.put("allowedips", CmdAurum::allowedips);
 		functions.put("pageattachrequests", CmdAurum::pageAttachRequests);
 		functions.put("vkupdate", CmdAurum::vkupdate);
-		functions.put("sftop", CmdAurum::sftop);
 		functions.put("serverlist", CmdAurum::serverlist);
 		functions.put("gc", CmdAurum::gc);
 		functions.put("memory", CmdAurum::memory);
@@ -68,13 +65,12 @@ public class CmdAurum extends Command {
 		functions.put("history", CmdAurum::history);
 		functions.put("flush", CmdAurum::flush);
 		functions.put("lp", CmdAurum::longpoll);
-		functions.put("mlg", CmdAurum::mlg);
+		functions.put("stats", CmdAurum::stats);
 	}
-	private static String mlg(CommandSender commandSender, Command command, String[] strings) {
-		requireArgs(strings, 5, "[Ник] [Игры] [Победы] [Кровати] [Смерти]");
-		DataIO.writeBytes(User.getPath(strings[0]) + SfTop.path, new ManualByteZip()
-				.add(requireInt(strings[1])).add(requireInt(strings[2])).add(requireInt(strings[3])).add(requireInt(strings[4])).build());
-		return "§aСтатистика §f" + strings[0] + "§a изменена.";
+
+	private static String stats(CommandSender commandSender, Command command, String[] strings) {
+		StatsThread.execute();
+		return "шота исполнил";
 	}
 
 	private static String longpoll(CommandSender commandSender, Command command, String[] strings) {
@@ -192,12 +188,6 @@ public class CmdAurum extends Command {
 
 	private static String serverlist(CommandSender sender, Command command, String[] strings) {
 		return Converter.merge(Server.getServers(), Server::getServer, "§e, §f");
-	}
-
-	private static String sftop(CommandSender sender, Command command, String[] strings) {
-		requireArgs(strings, 1, "[Игрок]");
-		checkTop(getPerson(strings[0]));
-		return "§aПроверка отправлена.";
 	}
 
 	private static String vkupdate(CommandSender sender, Command command, String[] strings) {
