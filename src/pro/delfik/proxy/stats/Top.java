@@ -102,7 +102,7 @@ public class Top implements Byteable{
     public String[] generateTop(){
         String result[] = new String[objects.length];
         for(int i = 0; i < result.length; i++)
-            result[i] = objects[i].toString();
+            result[i] = objects[i] + "";
         return result;
     }
 
