@@ -308,7 +308,6 @@ public class User implements Byteable {
 		Server server = server();
 		if (server != null) {
 			PacketAuth packet = new PacketAuth(name);
-			System.out.println(Coder.toString(packet.zip()));
 			server.send(packet);
 		}
 		else throw new IllegalStateException("Игрок " + name + " не смог авторизоваться на null-сервере " + server);

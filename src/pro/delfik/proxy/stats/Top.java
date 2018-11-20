@@ -139,5 +139,6 @@ public class Top implements Byteable{
 
     static{
         new Top(15, ServerType.SF, SFStats.class);
+		new Top(15, ServerType.SPLEEF, SpleefStats.class);
     }
 }
