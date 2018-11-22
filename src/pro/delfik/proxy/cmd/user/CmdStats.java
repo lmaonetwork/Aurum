@@ -22,9 +22,9 @@ public class CmdStats extends Command{
 			return;
 		}
 		Top top = Top.get(ServerType.getType(args[0].toUpperCase()));
-		if(top == null)throw new ExCustom("Игра не найдена");
+		if(top == null)throw new ExCustom("§cИгра не найдена");
 		GameStats stats = top.read(user.getName());
-		if(stats == null)throw new ExCustom("Статистика не найдена");
+		if(stats == null)throw new ExCustom("§cТы ещё не играл на этой игре");
 		for(String line : stats.toReadableString())
 			user.msg(line);
 	}
