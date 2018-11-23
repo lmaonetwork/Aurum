@@ -85,7 +85,7 @@ public class CmdAurum extends Command {
 	}
 
 	private static String history(CommandSender sender, Command command, String[] args){
-		requireRank(sender, Rank.ADMIN);
+		requireRank(sender, Rank.KURATOR);
 		requireArgs(args, 2, "[Игрок] [Тип]");
 		List<String> lines = DataIO.read("log");
 		args[0] = args[0].toLowerCase();
