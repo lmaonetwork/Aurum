@@ -23,6 +23,7 @@ public class LongPoll {
 			System.out.println("[VKBot] Сервер LongPoll успешно обновлён.");
 		} catch (Exception ex) {
 			System.out.println("[VKBot] Во время обновления сервера LongPoll произошла ошибка.");
+			System.out.println(data);
 			ex.printStackTrace();
 		}
 	}
