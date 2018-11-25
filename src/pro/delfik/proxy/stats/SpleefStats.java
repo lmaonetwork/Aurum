@@ -56,6 +56,6 @@ public class SpleefStats implements GameStats{
 
     @Override
     public int criteria() {
-        return games;
+        return wins;
     }
 }
