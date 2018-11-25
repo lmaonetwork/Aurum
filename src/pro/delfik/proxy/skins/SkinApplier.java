@@ -11,8 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
 public class SkinApplier {
-	private static Class<?> loginresul;
-	
 	public static void applySkin(ProxiedPlayer p) {
 		Scheduler.runThr(() -> {
 			try {
@@ -40,12 +38,6 @@ public class SkinApplier {
 	public static void applySkin(String pname) {
 		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(pname);
 		if (p != null) applySkin(p);
-	}
-	
-	public static void init() {
-		try {
-			loginresul = ReflectionUtil.getBungeeClass("connection", "loginresul");
-		} catch (Exception ignored) {}
 	}
 	
 	private static void sendUpdateRequest(ProxiedPlayer p, LoginResult.Property textures) {

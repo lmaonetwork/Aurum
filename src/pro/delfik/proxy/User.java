@@ -13,7 +13,7 @@ import net.md_5.bungee.protocol.packet.PlayerListItem;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
-import pro.delfik.proxy.modules.Mute;
+import pro.delfik.proxy.user.Mute;
 import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;

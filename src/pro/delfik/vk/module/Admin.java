@@ -3,11 +3,13 @@ package pro.delfik.vk.module;
 import implario.util.ByteUnzip;
 import implario.util.ByteZip;
 import pro.delfik.proxy.data.DataIO;
+import pro.delfik.proxy.module.Registeable;
+import pro.delfik.proxy.module.Unloadable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Admin implements Registeable, Unloadable{
+public class Admin implements Registeable, Unloadable {
     private static List<Integer> ids = new ArrayList<>();
 
     public static boolean is(int id){

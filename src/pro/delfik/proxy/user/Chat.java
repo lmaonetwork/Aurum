@@ -1,33 +1,21 @@
-package pro.delfik.proxy.modules;
+package pro.delfik.proxy.user;
 
-import implario.util.ByteUnzip;
-import implario.util.ByteZip;
-import implario.util.Coder;
 import implario.util.StringUtils;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.data.DataIO;
+import pro.delfik.proxy.module.Registeable;
+import pro.delfik.proxy.module.Unloadable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class Chat {
-	private static final Pattern uncorrectChars = Pattern.compile
-			("[^A-Za-z0-9А-я\"'!?.,()@#№$%:\\^\\*\\&\\-\\_=+~`\\[\\]\\{\\}\\|\\/<>;Ёё]");
-
-	private static final String[] nya = new String[]{"мяу", "meow", "меов", "ня", "nya", "капибара", "шмыг", "апчхи", "кхе"};
-
-	private static final char[] unMatChars = "\"'!?.,()@#№$%:^*&123457890-_=+~`[]{}\\|/<".toCharArray();
-
-	private static final HashMap<Character, Character> map = new HashMap<>();
-
-	private static final List<String> mat = new ArrayList<>();
-
-	static {
+public class Chat implements Registeable, Unloadable {
+	@Override
+	public void register() {
 		List<String> mats = DataIO.read("info/mat");
 		if(mats != null) mat.addAll(mats);
-		Aurum.addUnload(() -> DataIO.write("info/mat", mat));
 		map.put('6', 'б');
 		map.put('k', 'к');
 		map.put('a', 'а');
@@ -47,6 +35,25 @@ public class Chat {
 		map.put('x', 'х');
 		map.put('l', 'л');
 		map.put('n', 'п');
+	}
+
+	@Override
+	public void unload() {
+		DataIO.write("info/mat", mat);
+	}
+
+	private static final Pattern uncorrectChars = Pattern.compile
+			("[^A-Za-z0-9А-я\"'!?.,()@#№$%:\\^\\*\\&\\-\\_=+~`\\[\\]\\{\\}\\|\\/<>;Ёё]");
+
+	private static final String[] nya = new String[]{"мяу", "meow", "меов", "ня", "nya", "капибара", "шмыг", "апчхи", "кхе"};
+
+	private static final char[] unMatChars = "\"'!?.,()@#№$%:^*&123457890-_=+~`[]{}\\|/<".toCharArray();
+
+	private static final HashMap<Character, Character> map = new HashMap<>();
+
+	private static final List<String> mat = new ArrayList<>();
+
+	static {
 	}
 
 	public static void addMat(String mat){

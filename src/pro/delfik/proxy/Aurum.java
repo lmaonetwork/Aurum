@@ -5,6 +5,7 @@ import implario.net.Packet;
 import implario.util.*;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import pro.delfik.proxy.cmd.Command;
@@ -17,7 +18,9 @@ import pro.delfik.proxy.cmd.user.*;
 import pro.delfik.proxy.data.PrivateConnector;
 import pro.delfik.proxy.data.PublicConnector;
 import pro.delfik.proxy.ev.*;
-import pro.delfik.proxy.modules.Chat;
+import pro.delfik.proxy.module.Obj;
+import pro.delfik.proxy.module.Registeable;
+import pro.delfik.proxy.user.Chat;
 import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
 import pro.delfik.proxy.stats.StatsThread;
@@ -29,14 +32,13 @@ import pro.delfik.vk.LongPoll;
 import pro.delfik.vk.MessageHandler;
 import pro.delfik.vk.VK;
 import pro.delfik.vk.VKBot;
+import pro.delfik.proxy.module.Unloadable;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Aurum extends Plugin {
-	private static final List<Runnable> unload = new ArrayList<>();
-
 	public static Aurum instance;
 	
 	private static void classLoader() {
@@ -65,21 +67,12 @@ public class Aurum extends Plugin {
 	public void onLoad() {
 		instance = this;
 		classLoader();
-		events();
-		commands();
-		SkinApplier.init();
-		SkinStorage.init(new File("Core/SkinsHandler"));
-		Scheduler.init();
-		Packet.init();
-		VKBot.start();
-		PrivateConnector.init(Coder.toInt(FileIO.read("/Minecraft/_GLOBAL/config.txt").split("\n")[0]));
-		PublicConnector.enable();
-		Proxy.i().getScheduler().runAsync(this, new StatsThread());
+		register();
 	}
 
-	private void commands(){
-		for(Command command : new Command[]{
-				new CmdOnline(), new CmdLogin(), new CmdRegister(),
+	private void register(){
+		for(Object object : new Object[]{
+				Registeable.get(Packet::init), new CmdOnline(), new CmdLogin(), new CmdRegister(),
 				new CmdFM("osk", "Быстрый мут за оскорбление"),
 				new CmdFM("flood", "Быстрый мут за флуд"),
 				new CmdFM("mt", "Быстрый мут за мат"),
@@ -91,30 +84,26 @@ public class Aurum extends Plugin {
 				new CmdEnd(), new CmdKick(), new CmdMute(), new CmdUnmute(),
 				new CmdUpdate(), new CmdPing(), new CmdStats(), new CmdHub(),
 				new CmdSkin(), new CmdPassChange(), new CmdAttachIP(), new CmdIgnore(),
-				new CmdBan(), new CmdUnban(), new CmdTheme(), new CmdStats()
-		}) Proxy.registerCommand(command);
-	}
-
-	private void events(){
-		PluginManager manager = BungeeCord.getInstance().pluginManager;
-		manager.registerListener(this, new EvChat());
-		manager.registerListener(this, new EvJoin());
-		manager.registerListener(this, new EvPacket());
-		manager.registerListener(this, new EvQuit());
-		manager.registerListener(this, new EvReconnect());
-	}
-
-	public static void addUnload(Runnable runnable){
-		unload.add(runnable);
+				new CmdBan(), new CmdUnban(), new CmdTheme(), new CmdStats(),
+				new EvChat(), new EvJoin(), new EvPacket(), new EvQuit(),
+				new EvReconnect(), new Chat(), new PublicConnector(),
+				new Logger(), new Obj(PrivateConnector::init, PrivateConnector::close),
+				new Obj(Scheduler::init, Scheduler::kill), new VKBot(), new SkinStorage(),
+				Registeable.get(Top::init), new StatsThread()
+		}) register(object);
 	}
 	
 	@Override
 	public void onDisable() {
-		unload.forEach(Runnable::run);
-		Scheduler.kill();
-		PublicConnector.disable();
-		Logger.close();
-		VKBot.stop();
-		PrivateConnector.close();
+		unload.forEach(Unloadable::unload);
+	}
+
+	private static final List<Unloadable> unload = new ArrayList<>();
+
+	public static void register(Object object){
+		if(object instanceof Unloadable)unload.add((Unloadable)object);
+		if(object instanceof Registeable)((Registeable)object).register();
+		if(object instanceof Listener)BungeeCord.getInstance().pluginManager.registerListener(instance, (Listener)object);
+		if(object instanceof Command)Proxy.registerCommand((Command)object);
 	}
 }

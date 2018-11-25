@@ -7,13 +7,14 @@ import implario.util.ServerType;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.User;
 import pro.delfik.proxy.data.DataIO;
+import pro.delfik.proxy.module.Unloadable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Top implements Byteable{
+public class Top implements Byteable, Unloadable {
     private GameStats objects[];
 
     private final Class<? extends GameStats> clazz;
@@ -23,7 +24,7 @@ public class Top implements Byteable{
         objects = new GameStats[size];
         this.type = type;
         this.clazz = clazz;
-        Aurum.addUnload(this::unload);
+        Aurum.register(this);
         tops.put(type, this);
         List<String> list = DataIO.read(getPath());
         if(list == null)return;
@@ -81,6 +82,7 @@ public class Top implements Byteable{
         DataIO.writeByteable(getPath(object.getName()), object);
     }
 
+    @Override
     public void unload(){
         List<String> list = new ArrayList<>();
         for(GameStats object : objects)
@@ -137,7 +139,7 @@ public class Top implements Byteable{
         return tops.values();
     }
 
-    static{
+    public static void init(){
         new Top(15, ServerType.SF, SFStats.class);
 		new Top(15, ServerType.SPLEEF, SpleefStats.class);
     }

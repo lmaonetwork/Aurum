@@ -13,9 +13,9 @@ import pro.delfik.proxy.User;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.ev.added.PacketEvent;
-import pro.delfik.proxy.modules.Ban;
-import pro.delfik.proxy.modules.Kick;
-import pro.delfik.proxy.modules.Mute;
+import pro.delfik.proxy.user.Ban;
+import pro.delfik.proxy.user.Kick;
+import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.stats.Top;
 
 import java.io.File;

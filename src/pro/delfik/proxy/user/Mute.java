@@ -1,4 +1,4 @@
-package pro.delfik.proxy.modules;
+package pro.delfik.proxy.user;
 
 import implario.util.*;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

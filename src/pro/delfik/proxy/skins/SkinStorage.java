@@ -2,6 +2,7 @@ package pro.delfik.proxy.skins;
 
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import implario.util.ReflectionUtil;
+import pro.delfik.proxy.module.Registeable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,24 +15,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class SkinStorage {
+public class SkinStorage implements Registeable {
 	private static Class<?> property;
 	private static File folder;
 	private static ExecutorService exe;
-	private static boolean isBungee = true;
-	
-	static {
-		try {
-			exe = Executors.newCachedThreadPool();
-			property = Class.forName("com.mojang.authlib.properties.Property");
-		} catch (Exception e) {
-			try {
-				property = Class.forName("net.md_5.bungee.connection.LoginResult$Property");
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
 	
 	public static Object createProperty(String name, String value, String signature) {
 		try {
@@ -157,9 +144,20 @@ public class SkinStorage {
 	public static boolean isOld(long timestamp) {
 		return timestamp + TimeUnit.MINUTES.toMillis(1584) <= System.currentTimeMillis();
 	}
-	
-	public static void init(File pluginFolder) {
-		folder = pluginFolder;
+
+	@Override
+	public void register() {
+		try {
+			exe = Executors.newCachedThreadPool();
+			property = Class.forName("com.mojang.authlib.properties.Property");
+		} catch (Exception e) {
+			try {
+				property = Class.forName("net.md_5.bungee.connection.LoginResult$Property");
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			}
+		}
+		folder = new File("Core/SkinsHandler");
 		File tempFolder = new File(folder.getAbsolutePath() + File.separator + "Skins" + File.separator);
 		tempFolder.mkdirs();
 		tempFolder = new File(folder.getAbsolutePath() + File.separator + "Players" + File.separator);

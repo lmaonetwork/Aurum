@@ -2,10 +2,9 @@ package pro.delfik.vk.cmd;
 
 import implario.util.Rank;
 import implario.util.UserInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import pro.delfik.proxy.User;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.modules.Chat;
+import pro.delfik.proxy.user.Chat;
 import pro.delfik.util.Logger;
 import pro.delfik.vk.module.Admin;
 

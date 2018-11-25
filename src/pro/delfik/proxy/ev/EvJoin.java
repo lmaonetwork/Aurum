@@ -11,8 +11,8 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.skins.SkinApplier;
-import pro.delfik.proxy.modules.Ban;
-import pro.delfik.proxy.modules.BanIP;
+import pro.delfik.proxy.user.Ban;
+import pro.delfik.proxy.user.BanIP;
 import pro.delfik.proxy.User;
 
 import java.util.concurrent.TimeUnit;

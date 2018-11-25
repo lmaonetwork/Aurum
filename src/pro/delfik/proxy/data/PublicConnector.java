@@ -4,11 +4,14 @@ import __google_.crypt.async.RSA;
 import __google_.crypt.async.SignedRSA;
 import __google_.net.server.Server;
 import __google_.util.Byteable;
+import pro.delfik.proxy.module.Registeable;
+import pro.delfik.proxy.module.Unloadable;
 
-public class PublicConnector{
+public class PublicConnector implements Registeable, Unloadable {
     private static Server server;
 
-    public static void enable(){
+    @Override
+    public void register(){
         server = new Server(1424);
         server.setCertificate(Byteable.toByteable(DataIO.readBytes("config/signed.certificate"), SignedRSA.class),
                                 Byteable.toByteable(DataIO.readBytes("config/rsa.key"), RSA.class));
@@ -17,7 +20,8 @@ public class PublicConnector{
         server.addExec(1, new ExecReg());
     }
 
-    public static void disable(){
+    @Override
+    public void unload(){
         server.close();
     }
 }

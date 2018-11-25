@@ -8,8 +8,8 @@ import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.User;
-import pro.delfik.proxy.modules.Chat;
-import pro.delfik.proxy.modules.Mute;
+import pro.delfik.proxy.user.Chat;
+import pro.delfik.proxy.user.Mute;
 
 import java.util.HashMap;
 

@@ -2,19 +2,23 @@ package pro.delfik.proxy.data;
 
 import __google_.net.Response;
 import __google_.net.server.Server;
+import __google_.util.FileIO;
 import implario.net.Connector;
 import implario.net.NetListener;
 import implario.net.Packet;
 import implario.net.packet.PacketInit;
+import implario.util.Coder;
 import net.md_5.bungee.BungeeCord;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.ev.added.PacketEvent;
 
 public class PrivateConnector implements NetListener {
-    private static __google_.net.server.Server listener;
+    private static Server listener;
 
-    public static void init(int port){
-        listener = new Server(port, null, (socket, a, b) -> new Connector(socket, new PrivateConnector()));
+    public static void init(){
+        listener = new Server(Coder.toInt(FileIO.read("/Minecraft/_GLOBAL/config.txt").split("\n")[0]),
+                null, (socket, a, b) -> new Connector(socket, new PrivateConnector()));
+
     }
 
     public static void close(){

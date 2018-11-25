@@ -3,9 +3,17 @@ package pro.delfik.proxy.stats;
 import implario.net.Packet;
 import implario.net.packet.PacketCreateTop;
 import implario.util.Scheduler;
+import pro.delfik.proxy.Aurum;
+import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.Server;
+import pro.delfik.proxy.module.Registeable;
 
-public class StatsThread implements Runnable{
+public class StatsThread implements Runnable, Registeable {
+    @Override
+    public void register() {
+        Proxy.i().getScheduler().runAsync(Aurum.instance, this);
+    }
+
     @Override
     public void run(){
         while (true){
