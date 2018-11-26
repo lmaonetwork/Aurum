@@ -1,18 +1,16 @@
 package pro.delfik.proxy;
 
-import __google_.util.FileIO;
 import implario.net.Packet;
 import implario.util.*;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.api.plugin.PluginManager;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.admin.CmdEnd;
 import pro.delfik.proxy.cmd.admin.CmdUpdate;
 import pro.delfik.proxy.cmd.kurator.CmdAlert;
-import pro.delfik.proxy.cmd.kurator.CmdAurum;
+import pro.delfik.proxy.cmd.admin.CmdAurum;
 import pro.delfik.proxy.cmd.moder.*;
 import pro.delfik.proxy.cmd.user.*;
 import pro.delfik.proxy.data.PrivateConnector;
@@ -21,7 +19,6 @@ import pro.delfik.proxy.ev.*;
 import pro.delfik.proxy.module.Obj;
 import pro.delfik.proxy.module.Registeable;
 import pro.delfik.proxy.user.Chat;
-import pro.delfik.proxy.skins.SkinApplier;
 import pro.delfik.proxy.skins.SkinStorage;
 import pro.delfik.proxy.stats.StatsThread;
 import pro.delfik.proxy.stats.Top;
@@ -34,7 +31,6 @@ import pro.delfik.vk.VK;
 import pro.delfik.vk.VKBot;
 import pro.delfik.proxy.module.Unloadable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

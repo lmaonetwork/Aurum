@@ -1,4 +1,4 @@
-package pro.delfik.proxy.cmd.kurator;
+package pro.delfik.proxy.cmd.admin;
 
 import implario.net.packet.PacketGC;
 import implario.util.*;
@@ -32,7 +32,7 @@ import static implario.util.StringUtils.random;
 
 public class CmdAurum extends Command {
 	public CmdAurum() {
-		super("aurum", Rank.KURATOR, "Ты няшка ^^");
+		super("aurum", Rank.ADMIN, "Ты няшка ^^");
 	}
 
 
