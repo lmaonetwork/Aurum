@@ -27,7 +27,9 @@ public class EvReconnect implements Listener{
 		if (p == null) return;
 		if (!e.getServer().getInfo().getName().equals("LOBBY_1"))
 			Server.get("LOBBY_1").send(new PacketSSU(e.getServer().getInfo().getName(), e.getServer().getInfo().getPlayers().size()));
-		e.getPlayer().setTabHeader(new TextComponent(
+		if (e.getServer().getInfo().getName().equals("BW_2")) {
+			e.getPlayer().setTabHeader(new TextComponent("Игроков онлайн: §e8648 §fиз §e20000"), new TextComponent("§eVimeWorld.ru"));
+		} else e.getPlayer().setTabHeader(new TextComponent(
 						"§a Вы находитесь в кластере §eLMAO/" + p.getServer() + " §a §a"),
 				new TextComponent("§aФорум сервера: §elmaonetwork.ru\n§aГруппа сервера: §evk.com/lmaonetwork"));
 		p.updateTab(e.getPlayer());
