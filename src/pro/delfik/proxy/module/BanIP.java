@@ -1,4 +1,4 @@
-package pro.delfik.proxy.user;
+package pro.delfik.proxy.module;
 
 import implario.util.*;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -6,7 +6,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.user.UserConnection;
 import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 
@@ -64,7 +65,8 @@ public class BanIP implements Byteable {
 	
 	public static BanIP getByName(String playername) {
 		User u = User.get(playername);
-		if (u == null) u = User.load(playername);
+		if (u == null) u = UserConnection.load(playername);
+		if(u == null)return null;
 		return get(u.getLastIP());
 	}
 

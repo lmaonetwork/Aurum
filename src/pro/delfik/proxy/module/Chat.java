@@ -1,10 +1,7 @@
-package pro.delfik.proxy.user;
+package pro.delfik.proxy.module;
 
 import implario.util.StringUtils;
-import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.proxy.module.Registeable;
-import pro.delfik.proxy.module.Unloadable;
 
 import java.util.ArrayList;
 import java.util.HashMap;

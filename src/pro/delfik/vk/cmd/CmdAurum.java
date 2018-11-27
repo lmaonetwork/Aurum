@@ -2,11 +2,11 @@ package pro.delfik.vk.cmd;
 
 import implario.util.Rank;
 import implario.util.UserInfo;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.user.Chat;
+import pro.delfik.proxy.module.Chat;
 import pro.delfik.util.Logger;
-import pro.delfik.vk.module.Admin;
+import pro.delfik.proxy.module.Admin;
 
 public class CmdAurum extends Cmd{
     @Override

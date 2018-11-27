@@ -2,8 +2,8 @@ package pro.delfik.proxy.cmd.moder;
 
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.user.Mute;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.module.Mute;
+import pro.delfik.proxy.user.User;
 import implario.util.Rank;
 
 import java.util.HashMap;

@@ -8,17 +8,17 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Title;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.CommandProcessor;
 import pro.delfik.proxy.cmd.ex.ExCustom;
 import pro.delfik.proxy.cmd.ex.ExNotEnoughArguments;
-import pro.delfik.proxy.cmd.user.CmdVK;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
-import pro.delfik.proxy.user.Ban;
-import pro.delfik.proxy.user.Chat;
+import pro.delfik.proxy.module.Ban;
+import pro.delfik.proxy.module.Chat;
 import pro.delfik.proxy.stats.StatsThread;
+import pro.delfik.proxy.user.UserConnection;
 import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 import pro.delfik.vk.LongPoll;
@@ -49,7 +49,6 @@ public class CmdAurum extends Command {
 		functions.put("vk", CmdAurum::vk);
 		functions.put("title", CmdAurum::title);
 		functions.put("allowedips", CmdAurum::allowedips);
-		functions.put("pageattachrequests", CmdAurum::pageAttachRequests);
 		functions.put("vkupdate", CmdAurum::vkupdate);
 		functions.put("serverlist", CmdAurum::serverlist);
 		functions.put("gc", CmdAurum::gc);
@@ -159,7 +158,7 @@ public class CmdAurum extends Command {
 		requireArgs(args, 1, "[Игрок]");
 		User p = User.loadOffline(args[0]);
 		p.setIPBound(false);
-		User.unload(args[0]);
+		p.unload();
 		return "§aС игрока §f" + args[0] + "§a снята привязка IP-адреса.";
 	}
 
@@ -169,7 +168,7 @@ public class CmdAurum extends Command {
 		String s = "§a[§f" + u.getName() + "§a: §f" + u.getRank() + "§a-§f" + u.getOnline() +
 						   "§a]\n§a[pass=§f" + u.getPassword().substring(0, 30) +
 						   "...§a]\n§a[ignore=§f" + Converter.merge(u.getIgnoredPlayers(), (st) -> st, "§a-§f") + "§a]";
-		User.unload(strings[0]);
+		User.get(strings[0]).unload();
 		return s;
 	}
 
@@ -200,14 +199,9 @@ public class CmdAurum extends Command {
 	}
 
 	private static String allowedips(CommandSender sender, Command command, String[] strings) {
-		if (strings.length == 1) return "§aВход для §f" + strings[0] + "§a разрешён. (§f" + User.allowedIP.add(strings[0].toLowerCase()) + "§a).";
-		return "§e" + Converter.merge(User.allowedIP, s -> s, "§f, §e");
+		if (strings.length == 1) return "§aВход для §f" + strings[0] + "§a разрешён. (§f" + UserConnection.allowedIP.add(strings[0].toLowerCase()) + "§a).";
+		return "§e" + Converter.merge(UserConnection.allowedIP, s -> s, "§f, §e");
 	}
-	private static String pageAttachRequests(CommandSender sender, Command command, String[] strings) {
-		return "§e" + Converter.merge(CmdVK.PageAttachRequest.byCode.values(),
-				s -> s.getPlayer() + "-" + s.getPageID() + " (§7" + s.getCode() + "§e)", "§f, §e");
-	}
-
 
 	private static String title(CommandSender sender, Command command, String[] args) {
 		Title title = new Title();

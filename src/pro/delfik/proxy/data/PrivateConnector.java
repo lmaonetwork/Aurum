@@ -18,7 +18,6 @@ public class PrivateConnector implements NetListener {
     public static void init(){
         listener = new Server(Coder.toInt(FileIO.read("/Minecraft/_GLOBAL/config.txt").split("\n")[0]),
                 null, (socket, a, b) -> new Connector(socket, new PrivateConnector()));
-
     }
 
     public static void close(){

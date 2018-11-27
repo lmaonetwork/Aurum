@@ -7,9 +7,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import pro.delfik.proxy.User;
-import pro.delfik.proxy.user.Chat;
-import pro.delfik.proxy.user.Mute;
+import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.module.Chat;
+import pro.delfik.proxy.module.Mute;
 
 import java.util.HashMap;
 
@@ -48,7 +48,7 @@ public class EvChat implements Listener {
 	private boolean adminChat(ChatEvent event, User user) {
 		if (user.hasRank(Rank.BUILDER) && event.getMessage().startsWith("%")) {
 			event.setCancelled(true);
-			String message = "§c§o%staff" + user.getRank().getNameColor() + " " + user.name + "§7§o: §f§o" + event.getMessage().substring(1);
+			String message = "§c§o%staff" + user.getRank().getNameColor() + " " + user.getName() + "§7§o: §f§o" + event.getMessage().substring(1);
 			for (User receiver : User.getAll())
 				if (receiver.hasRank(Rank.BUILDER)) receiver.msg(message);
 			return true;
@@ -77,7 +77,7 @@ public class EvChat implements Listener {
 		Mute mute = user.getActiveMute();
 		if (mute != null) {
 			if (mute.getUntil() < System.currentTimeMillis()) {
-				Mute.clear(user.name);
+				Mute.clear(user.getName());
 				return false;
 			}
 			event.setCancelled(true);

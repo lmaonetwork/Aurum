@@ -9,13 +9,13 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.module.Ban;
+import pro.delfik.proxy.module.Kick;
+import pro.delfik.proxy.module.Mute;
+import pro.delfik.proxy.user.*;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.ev.added.PacketEvent;
-import pro.delfik.proxy.user.Ban;
-import pro.delfik.proxy.user.Kick;
-import pro.delfik.proxy.user.Mute;
 import pro.delfik.proxy.stats.Top;
 
 import java.io.File;
@@ -67,7 +67,7 @@ public class EvPacket implements Listener {
 			if (write == null) return;
 			Server.get(event.getServer()).send(new PacketWrite(read.getWrite(), write));
 		} else if (packet instanceof PacketOutAuth) {
-			User.outAuth.put(((PacketOutAuth) packet).getNick(), ((PacketOutAuth) packet).getIp());
+			UserConnection.outAuth.put(((PacketOutAuth) packet).getNick(), ((PacketOutAuth) packet).getIp());
 		} else if (packet instanceof PacketCheckUpdate) {
 			File f = DataIO.getFile("Core/plugins/" + ((PacketCheckUpdate) packet).getPlugin());
 			if (!f.exists()) return;

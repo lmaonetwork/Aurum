@@ -1,9 +1,6 @@
 package pro.delfik.vk;
 
-import pro.delfik.vk.cmd.CmdAdmin;
-import pro.delfik.vk.cmd.CmdAurum;
-import pro.delfik.vk.cmd.CmdOnline;
-import pro.delfik.vk.cmd.Command;
+import pro.delfik.vk.cmd.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +14,7 @@ public class MessageHandler {
 		cmds.put("!admin", new CmdAdmin());
 		cmds.put("!id", (args, id) -> "Your id " + id);
 		cmds.put("!aurum", new CmdAurum());
+		cmds.put("!exec", new CmdExec());
 	}
 
 	public static String handle(String text, int from_id, long peer_id) {

@@ -1,4 +1,4 @@
-package pro.delfik.proxy.user;
+package pro.delfik.proxy.module;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;

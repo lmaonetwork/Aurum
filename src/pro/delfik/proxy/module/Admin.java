@@ -1,4 +1,4 @@
-package pro.delfik.vk.module;
+package pro.delfik.proxy.module;
 
 import implario.util.ByteUnzip;
 import implario.util.ByteZip;

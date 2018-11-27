@@ -11,9 +11,10 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.skins.SkinApplier;
-import pro.delfik.proxy.user.Ban;
-import pro.delfik.proxy.user.BanIP;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.module.Ban;
+import pro.delfik.proxy.module.BanIP;
+import pro.delfik.proxy.user.User;
+import pro.delfik.proxy.user.UserConnection;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +32,7 @@ public class EvJoin implements Listener{
 		if(checkNick(event, nick))return;
 		if(checkBanIP(event))return;
 		if(checkBan(event, nick))return;
-		User.load(nick);
+		UserConnection.load(nick);
 	}
 
 	private boolean checkDDOS(LoginEvent event){
@@ -83,13 +84,17 @@ public class EvJoin implements Listener{
 		ProxyServer.getInstance().getScheduler().runAsync(Aurum.instance, () ->
 				BungeeCord.getInstance().getScheduler().schedule(Aurum.instance, () -> SkinApplier.applySkin(e.getPlayer()), 10L, TimeUnit.MILLISECONDS));
 		User u = User.get(e.getPlayer());
-		if (u.getLastIP() == null || u.getLastIP().length() == 0) return;
+		if (u.getLastIP() == null || u.getLastIP().length() == 0) {
+			u.msg(u.getPassword().length() == 0 ? //TODO: Сменить стиль сообщений
+					"§6Зарегистрируйтесь командой /reg [Пароль]" :
+					"§6Авторизируйтесь командой /login [Пароль]");
+			return;
+		}
 		if (u.getLastIP().equals(e.getPlayer().getAddress().getAddress().getHostAddress())) {
 			u.msg("§aМагическое заклинание сработало. Пароль вводить не нужно.");
 			u.authorize();
 		} else {
 			u.msg("§6Ваш IP-адрес изменился. Введите пароль для подтверждения личности.");
 		}
-
 	}
 }

@@ -16,9 +16,7 @@ import pro.delfik.proxy.cmd.user.*;
 import pro.delfik.proxy.data.PrivateConnector;
 import pro.delfik.proxy.data.PublicConnector;
 import pro.delfik.proxy.ev.*;
-import pro.delfik.proxy.module.Obj;
-import pro.delfik.proxy.module.Registeable;
-import pro.delfik.proxy.user.Chat;
+import pro.delfik.proxy.module.*;
 import pro.delfik.proxy.skins.SkinStorage;
 import pro.delfik.proxy.stats.StatsThread;
 import pro.delfik.proxy.stats.Top;
@@ -29,12 +27,15 @@ import pro.delfik.vk.LongPoll;
 import pro.delfik.vk.MessageHandler;
 import pro.delfik.vk.VK;
 import pro.delfik.vk.VKBot;
-import pro.delfik.proxy.module.Unloadable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Aurum extends Plugin {
+    public static void main(String args[]){
+        System.out.println(MessageHandler.handle("!exec 123 lol", 1, 1));
+    }
+
 	public static Aurum instance;
 	
 	private static void classLoader() {
@@ -68,25 +69,38 @@ public class Aurum extends Plugin {
 
 	private void register(){
 		for(Object object : new Object[]{
-				Registeable.get(Packet::init), new CmdOnline(), new CmdLogin(), new CmdRegister(),
+				Registeable.get(Packet::init), new Chat(), new PublicConnector(),
+				new Logger(), new Obj(PrivateConnector::init, PrivateConnector::close),
+				new Obj(Scheduler::init, Scheduler::kill), new VKBot(), new SkinStorage(),
+				Registeable.get(Top::init), new StatsThread(), new Admin()
+		}) register(object);
+		events();
+		commands();
+	}
+
+	private void commands(){
+		for(Command command : new Command[]{
 				new CmdFM("osk", "Быстрый мут за оскорбление"),
 				new CmdFM("flood", "Быстрый мут за флуд"),
 				new CmdFM("mt", "Быстрый мут за мат"),
 				new CmdFM("caps", "Быстрый мут за капс"),
 				new CmdFM("amoral", "Быстрый мут за аморальное поведение"),
-				new CommandGuide(), new CmdVK(), new CmdAurum(),
+				new CommandGuide(), new CmdAurum(),
 				new CmdTell(), new CmdReply(), new CmdStp(),
 				new CmdBanIP(), new CmdUnbanIP(), new CmdAlert(),
 				new CmdEnd(), new CmdKick(), new CmdMute(), new CmdUnmute(),
 				new CmdUpdate(), new CmdPing(), new CmdStats(), new CmdHub(),
-				new CmdSkin(), new CmdPassChange(), new CmdAttachIP(), new CmdIgnore(),
+				new CmdSkin(), new CmdPassChange(), new CmdIgnore(),
 				new CmdBan(), new CmdUnban(), new CmdTheme(), new CmdStats(),
+				new CmdOnline(), new CmdLogin(), new CmdRegister()
+		})register(command);
+	}
+
+	private void events(){
+		for(Listener listener : new Listener[]{
 				new EvChat(), new EvJoin(), new EvPacket(), new EvQuit(),
-				new EvReconnect(), new Chat(), new PublicConnector(),
-				new Logger(), new Obj(PrivateConnector::init, PrivateConnector::close),
-				new Obj(Scheduler::init, Scheduler::kill), new VKBot(), new SkinStorage(),
-				Registeable.get(Top::init), new StatsThread()
-		}) register(object);
+				new EvReconnect()
+		})register(listener);
 	}
 	
 	@Override
@@ -97,9 +111,25 @@ public class Aurum extends Plugin {
 	private static final List<Unloadable> unload = new ArrayList<>();
 
 	public static void register(Object object){
-		if(object instanceof Unloadable)unload.add((Unloadable)object);
-		if(object instanceof Registeable)((Registeable)object).register();
-		if(object instanceof Listener)BungeeCord.getInstance().pluginManager.registerListener(instance, (Listener)object);
-		if(object instanceof Command)Proxy.registerCommand((Command)object);
+		if(object instanceof Unloadable)register((Unloadable)object);
+		if(object instanceof Registeable)register((Registeable)object);
+		if(object instanceof Listener)register((Listener)object);
+		if(object instanceof Command)register((Command)object);
+	}
+
+	private static void register(Registeable registeable){
+		registeable.register();
+	}
+
+	private static void register(Unloadable unloadable){
+		unload.add(unloadable);
+	}
+
+	private static void register(Listener listener){
+		BungeeCord.getInstance().pluginManager.registerListener(instance, listener);
+	}
+
+	private static void register(Command command){
+		Proxy.registerCommand(command);
 	}
 }

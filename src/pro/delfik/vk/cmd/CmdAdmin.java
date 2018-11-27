@@ -1,7 +1,7 @@
 package pro.delfik.vk.cmd;
 
 import pro.delfik.vk.VK;
-import pro.delfik.vk.module.Admin;
+import pro.delfik.proxy.module.Admin;
 
 public class CmdAdmin extends Cmd {
     @Override

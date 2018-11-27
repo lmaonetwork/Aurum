@@ -2,7 +2,7 @@ package pro.delfik.proxy.cmd.user;
 
 import pro.delfik.proxy.cmd.Cmd;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 import implario.util.Rank;
 
 @Cmd(args = 1, help = "[a]")

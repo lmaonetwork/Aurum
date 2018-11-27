@@ -8,7 +8,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 
 import java.util.function.Function;
 
@@ -123,7 +123,7 @@ public class U {
 		});
 	}
 	private static ClickEvent getClick(User p) {
-		return new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/player " + p.name);
+		return new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/player " + p.getName());
 	}
 	
 	private static HoverEvent getHover(User p) {

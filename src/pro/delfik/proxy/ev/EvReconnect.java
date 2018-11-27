@@ -8,7 +8,7 @@ import net.md_5.bungee.event.EventHandler;
 import implario.net.packet.PacketSSU;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.Server;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 
 public class EvReconnect implements Listener{
 	@EventHandler

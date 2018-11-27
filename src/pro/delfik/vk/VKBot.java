@@ -2,9 +2,8 @@ package pro.delfik.vk;
 
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.data.DataIO;
-import pro.delfik.vk.module.Admin;
+import pro.delfik.proxy.module.Admin;
 import pro.delfik.proxy.module.Registeable;
-import pro.delfik.proxy.module.Unloadable;
 
 public class VKBot implements Registeable{
 	protected static String token;

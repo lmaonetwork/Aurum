@@ -5,7 +5,7 @@ import implario.util.ArrayUtils;
 import implario.util.Byteable;
 import implario.util.ServerType;
 import pro.delfik.proxy.Aurum;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.module.Unloadable;
 

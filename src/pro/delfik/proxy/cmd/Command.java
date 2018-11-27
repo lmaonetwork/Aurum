@@ -10,7 +10,7 @@ import pro.delfik.proxy.cmd.ex.ExNotEnoughArguments;
 import pro.delfik.proxy.cmd.ex.ExNotEnoughPermissions;
 import pro.delfik.proxy.cmd.ex.ExUserNotFound;
 import pro.delfik.proxy.cmd.ex.ExServerNotFound;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 import implario.util.Rank;
 import implario.util.Converter;
 import pro.delfik.util.U;

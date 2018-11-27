@@ -7,7 +7,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import implario.net.Packet;
 import implario.net.packet.PacketUser;
 import pro.delfik.proxy.Proxy;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package pro.delfik.proxy.user;
+package pro.delfik.proxy.module;
 
 import implario.util.ByteUnzip;
 import implario.util.ByteZip;
@@ -9,7 +9,7 @@ import net.md_5.bungee.api.connection.Server;
 import pro.delfik.proxy.Proxy;
 import pro.delfik.proxy.data.DataIO;
 import implario.util.Converter;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 import pro.delfik.util.Logger;
 import pro.delfik.util.U;
 

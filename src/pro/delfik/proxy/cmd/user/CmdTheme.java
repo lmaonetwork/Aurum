@@ -2,7 +2,7 @@ package pro.delfik.proxy.cmd.user;
 
 import implario.util.Rank;
 import pro.delfik.proxy.cmd.Command;
-import pro.delfik.proxy.User;
+import pro.delfik.proxy.user.User;
 
 public class CmdTheme extends Command {
 	public CmdTheme() {
@@ -11,6 +11,6 @@ public class CmdTheme extends Command {
 
 	@Override
 	protected void run(User user, String[] args) {
-		msg(user.getSender(), user.toggleDarkTheme());
+		user.msg(user.toggleDarkTheme());
 	}
 }
