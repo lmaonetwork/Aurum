@@ -8,12 +8,15 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
 import pro.delfik.proxy.data.Server;
 import pro.delfik.proxy.module.Mute;
+import pro.delfik.util.U;
 
 import java.util.List;
 
 public abstract class AUser implements User{
     @Override
-    public void msg(Object... o) {}
+    public void msg(Object... o) {
+        U.msg(getSender(), o);
+    }
 
     @Override
     public void kick(String reason) {}
@@ -31,12 +34,12 @@ public abstract class AUser implements User{
 
     @Override
     public String getIP() {
-        return null;
+        return "";
     }
 
     @Override
     public String getLastIP() {
-        return null;
+        return "";
     }
 
     @Override
@@ -51,7 +54,7 @@ public abstract class AUser implements User{
 
     @Override
     public boolean isAuthorized() {
-        return false;
+        return true;
     }
 
     @Override
@@ -62,7 +65,7 @@ public abstract class AUser implements User{
 
     @Override
     public Rank getRank() {
-        return Rank.PLAYER;
+        return Rank.DEV;
     }
 
     @Override
@@ -217,7 +220,7 @@ public abstract class AUser implements User{
 
     @Override
     public void unload() {
-
+        User.remove(getName());
     }
 
     @Override

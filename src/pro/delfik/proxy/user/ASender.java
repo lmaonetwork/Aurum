@@ -13,14 +13,13 @@ public abstract class ASender implements CommandSender {
     }
 
     @Override
-    public void sendMessage(BaseComponent... baseComponents) {
-        for(BaseComponent component : baseComponents)
-            sendMessage(component);
+    public void sendMessage(BaseComponent... message) {
+        sendMessage(BaseComponent.toLegacyText(message));
     }
 
     @Override
-    public void sendMessage(BaseComponent baseComponent) {
-        sendMessage(baseComponent.toString());
+    public void sendMessage(BaseComponent message) {
+        sendMessage(message.toLegacyText());
     }
 
     @Override

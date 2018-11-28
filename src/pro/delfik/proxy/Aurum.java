@@ -20,6 +20,7 @@ import pro.delfik.proxy.module.*;
 import pro.delfik.proxy.skins.SkinStorage;
 import pro.delfik.proxy.stats.StatsThread;
 import pro.delfik.proxy.stats.Top;
+import pro.delfik.proxy.user.ConsoleUser;
 import pro.delfik.util.Logger;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
@@ -33,7 +34,6 @@ import java.util.List;
 
 public class Aurum extends Plugin {
     public static void main(String args[]){
-        System.out.println(MessageHandler.handle("!exec 123 lol", 1, 1));
     }
 
 	public static Aurum instance;
@@ -72,7 +72,7 @@ public class Aurum extends Plugin {
 				Registeable.get(Packet::init), new Chat(), new PublicConnector(),
 				new Logger(), new Obj(PrivateConnector::init, PrivateConnector::close),
 				new Obj(Scheduler::init, Scheduler::kill), new VKBot(), new SkinStorage(),
-				Registeable.get(Top::init), new StatsThread(), new Admin()
+				Registeable.get(Top::init), new StatsThread(), new Admin(), new ConsoleUser()
 		}) register(object);
 		events();
 		commands();

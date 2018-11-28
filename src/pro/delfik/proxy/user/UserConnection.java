@@ -9,6 +9,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.command.ConsoleCommandSender;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
@@ -27,10 +28,6 @@ import java.util.concurrent.TimeUnit;
 public class UserConnection extends AUser{
     public static final TimedHashMap<String, String> outAuth = new TimedHashMap<>(60);
     public static final TimedList<String> allowedIP = new TimedList<>(60);
-
-    static {
-        User.put("CONSOLE", new UserConnection("CONSOLE", Rank.DEV, true));
-    }
 
     /**
      * Прогрузка пользователя только для модификации, когда игрок находится в оффлайне.
@@ -84,7 +81,7 @@ public class UserConnection extends AUser{
     private final int connectedAt; 							// Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
     private final int online; 								// Онлайн до захода на сервер
     private Rank rank;								 		// Ранг игрока
-    private final List<String> friends;						// Список друзей
+    private List<String> friends;						    // Список друзей
     private final List<String> ignoredPlayers;				// Чёрный список
     private boolean authorized 			= false; 			// Авторизован ли игрок
     private String password 			= ""; 				// Hash пароля
@@ -134,7 +131,7 @@ public class UserConnection extends AUser{
         lastIP = info.lastIP;
         darkTheme = info.darkTheme;
         mute = Mute.get(name);
-        list.put(Converter.smartLowercase(name), this);
+        User.put(name, this);
         if (allowedIP.contains(name.toLowerCase())) {
             allowedIP.remove(name.toLowerCase());
             authorize();
@@ -151,10 +148,14 @@ public class UserConnection extends AUser{
         ipbound = unzip.getBoolean();
         pmDisabled = unzip.getBoolean();
         ignoredPlayers = unzip.getList();
-        friends = unzip.getList();
+        try {
+            friends = unzip.getList();
+        }catch (Exception ex){
+            friends = new ArrayList<>();
+        }
 
         connectedAt = (int) (System.currentTimeMillis() / 60000);
-        list.put(Converter.smartLowercase(name), this);
+        User.put(name, this);
         mute = Mute.get(name);
 
         msg("§aВаши данные обновлены до версии §dUserInfo-V1");
@@ -198,9 +199,6 @@ public class UserConnection extends AUser{
 
 
     // Implementation
-    public void msg(Object... o) {
-        U.msg(getSender(), o);}
-
     public void kick(String reason) {getHandle().disconnect(new TextComponent(reason));}
 
     public void updateTab(ProxiedPlayer handle) {
@@ -239,12 +237,12 @@ public class UserConnection extends AUser{
 
 
     public CommandSender getSender() {
-        return name.equals("CONSOLE") ? Proxy.getConsole() : getHandle();
+        return getHandle();
     }
 
     public String getIP() {
         ProxiedPlayer p = getHandle();
-        return p == null ? "" : p.getAddress().getAddress().getHostAddress();
+        return p.getAddress().getAddress().getHostAddress();
     }
 
     public String getLastIP() {
@@ -410,9 +408,5 @@ public class UserConnection extends AUser{
         darkTheme = !darkTheme;
         server().send(new PacketChangeTheme(darkTheme, name));
         return darkTheme ? "§fТёмная тема включена." : "§7Тёмная тема выключена.";
-    }
-
-    public String getLastPenPal() {
-        return lastPenPal;
     }
 }

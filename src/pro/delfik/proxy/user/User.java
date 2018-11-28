@@ -116,7 +116,7 @@ public interface User extends Byteable {
 	}
 
     static void put(String name, User user){
-        list.put(name, user);
+        list.put(Converter.smartLowercase(name), user);
     }
 
 	static String getPath(String nick) {
