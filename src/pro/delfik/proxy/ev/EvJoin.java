@@ -87,7 +87,7 @@ public class EvJoin implements Listener{
 		if (u.getLastIP() == null || u.getLastIP().length() == 0) {
 			u.msg(u.getPassword().length() == 0 ? //TODO: Сменить стиль сообщений
 					"§6Зарегистрируйтесь командой /reg [Пароль]" :
-					"§6Авторизируйтесь командой /login [Пароль]");
+					"§6Авторизуйтесь командой /login [Пароль]");
 			return;
 		}
 		if (u.getLastIP().equals(e.getPlayer().getAddress().getAddress().getHostAddress())) {

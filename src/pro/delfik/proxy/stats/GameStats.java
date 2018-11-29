@@ -10,4 +10,6 @@ public interface GameStats extends Stats{
     void setName(String name);
 
     int criteria();
+
+    int earnedCoins();
 }

@@ -5,11 +5,11 @@ import implario.net.packet.PacketChangeTheme;
 import implario.net.packet.PacketPex;
 import implario.net.packet.PacketUser;
 import implario.util.*;
+import implario.util.debug.UserInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.command.ConsoleCommandSender;
 import net.md_5.bungee.protocol.packet.PlayerListItem;
 import pro.delfik.proxy.Aurum;
 import pro.delfik.proxy.Proxy;
@@ -21,6 +21,7 @@ import pro.delfik.util.TimedHashMap;
 import pro.delfik.util.TimedList;
 import pro.delfik.util.U;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -75,9 +76,30 @@ public class UserConnection extends AUser{
         if (!isAuthorized()) return;
         if (getActiveMute() != null)getActiveMute().write(name);
         save(getInfo());
+        if (hasRank(Rank.TESTER)) logOnline();
     }
 
-    public final String name; 								// Ник игрока
+	private void logOnline() {
+		int leftAt = (int) (System.currentTimeMillis() / 60000);
+		if (leftAt - connectedAt < 4) return;
+		String path = User.getPath(name) + "online.txt";
+
+		byte[] bytes = DataIO.readBytes(path);
+		byte[] n = new byte[152];
+		if (bytes != null) System.arraycopy(bytes, 0, n, 0, bytes.length > 152 ? 152 : bytes.length);
+
+
+		ByteBuffer buffer = ByteBuffer.allocate(160);
+
+		buffer.put(Coder.toBytes(connectedAt)).put(Coder.toBytes(leftAt)).put(n);
+
+		byte[] c = buffer.array();
+
+		DataIO.writeBytes(path, c);
+
+	}
+
+	public final String name; 								// Ник игрока
     private final int connectedAt; 							// Время, в которое игрок зашёл на сервер (Нужно для подсчёта онлайна)
     private final int online; 								// Онлайн до захода на сервер
     private Rank rank;								 		// Ранг игрока
@@ -164,20 +186,6 @@ public class UserConnection extends AUser{
             authorize();
         }
 
-//		if (!allowedIP.contains(name.toLowerCase()))
-//		if (lastSeenIP != null && lastSeenIP.length() != 0 && ipbound) {
-//			ProxiedPlayer p = Proxy.getPlayer(name);
-//			String playerIP = p.getAddress().getAddress().getHostAddress();
-//			String outAuthIP = outAuth.get(name);
-//			if (outAuthIP != null && outAuthIP.equals(p.getAddress().getHostName())) {
-//				outAuth.remove(name);
-//				lastSeenIP = playerIP;
-//			}
-//			if (lastSeenIP.equals(playerIP)) {
-//				authorize();
-//				U.msg(p, "§aАвтоматическая авторизация прошла успешно.");
-//			}
-//		}
         checkForImplario();
     }
 
@@ -313,11 +321,6 @@ public class UserConnection extends AUser{
         this.money += money;
     }
 
-    public void disburse(int money) {
-        this.money -= money;
-    }
-
-
     public long getMoney() {
         return money;
     }
@@ -409,4 +412,10 @@ public class UserConnection extends AUser{
         server().send(new PacketChangeTheme(darkTheme, name));
         return darkTheme ? "§fТёмная тема включена." : "§7Тёмная тема выключена.";
     }
+
+	@Override
+	public String getLastPenPal() {
+		return lastPenPal;
+	}
+
 }

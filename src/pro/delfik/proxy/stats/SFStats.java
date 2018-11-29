@@ -63,4 +63,11 @@ public class SFStats implements GameStats{
     public int criteria() {
         return wins;
     }
+
+	@Override
+	public int earnedCoins() {
+		int i = wins * 200 + games * 35 + beds * 7 - deaths;
+		return i < 0 ? 0 : i;
+	}
+
 }

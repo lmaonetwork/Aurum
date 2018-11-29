@@ -1,7 +1,7 @@
 package pro.delfik.vk.cmd;
 
 import implario.util.Rank;
-import implario.util.UserInfo;
+import implario.util.debug.UserInfo;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.module.Chat;

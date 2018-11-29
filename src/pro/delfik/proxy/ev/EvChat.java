@@ -18,7 +18,7 @@ public class EvChat implements Listener {
 	private static volatile HashMap<String, Integer> messages = new HashMap<>();
 	public static final String[] wittyComments = {
 			"Во имя правосудия!", "Слава Арстоцке!", "Орбистан превыше всего.", "#implario.", "Один, два, три.", "Lorem ipsum dolor sit amet",
-			"&7&oСообщение удалено.", "42", "66§f6", "Сто двадцать три", "CXXI§fII", "3 * 41", "Десятое число Лукаса.", "2^7 - 5", "0x7b", "0o173", "0b011§f11011",
+			"&7&oСообщение удалено.", "42", "66&f6", "Сто двадцать три", "CXXI&fII", "3 * 41", "Десятое число Лукаса.", "2^7 - 5", "0x7b", "0o173", "0b011&f11011",
 			"(int) '{'", "Я был 1, только 2 капитана, 3 мушкетёра...", "Ein zwei drei", "Uno dos tres", "One two three", "Раз два три", "Связь", "Арарарарарар",
 			"Адзін два тры", "Illuminati confirmed!"
 	};

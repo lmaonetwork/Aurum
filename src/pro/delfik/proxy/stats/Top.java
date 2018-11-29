@@ -40,7 +40,13 @@ public class Top implements Byteable, Unloadable {
         GameStats stats = Byteable.toByteable(update.getUpdate(), clazz);
         stats.setName(update.getNick());
         GameStats read = read(update.getNick());
-        if(read != null)stats.add(read);
+        User u = User.get(stats.getName());
+        if (u != null) {
+        	int earned = stats.earnedCoins();
+        	u.earn(earned);
+        	u.msg("§eЗачислено §f" + earned + "§e соларита.");
+		}
+        if(read != null) stats.add(read);
         save(stats);
         updateTop(stats);
     }

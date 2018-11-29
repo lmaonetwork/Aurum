@@ -1,7 +1,7 @@
 package pro.delfik.proxy.user;
 
 import implario.util.Rank;
-import implario.util.UserInfo;
+import implario.util.debug.UserInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -108,12 +108,7 @@ public abstract class AUser implements User{
 
     }
 
-    @Override
-    public void disburse(int money) {
-
-    }
-
-    @Override
+	@Override
     public long getMoney() {
         return 0;
     }

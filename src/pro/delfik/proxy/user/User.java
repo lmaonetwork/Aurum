@@ -1,6 +1,9 @@
 package pro.delfik.proxy.user;
 
-import implario.util.*;
+import implario.util.Byteable;
+import implario.util.Converter;
+import implario.util.Rank;
+import implario.util.debug.UserInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -56,8 +59,6 @@ public interface User extends Byteable {
 	void setServer(String server);
 
 	void earn(int money);
-
-	void disburse(int money);
 
 	long getMoney();
 
