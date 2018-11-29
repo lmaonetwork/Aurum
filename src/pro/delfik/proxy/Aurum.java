@@ -105,7 +105,10 @@ public class Aurum extends Plugin {
 	
 	@Override
 	public void onDisable() {
-		unload.forEach(Unloadable::unload);
+//		unload.forEach(Unloadable::unload);
+		for (Unloadable u : unload) {
+			u.unload();
+		}
 	}
 
 	private static final List<Unloadable> unload = new ArrayList<>();

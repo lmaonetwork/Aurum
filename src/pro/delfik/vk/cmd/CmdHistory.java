@@ -6,9 +6,9 @@ import pro.delfik.proxy.user.User;
 
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 public class CmdHistory extends Cmd {
@@ -22,13 +22,14 @@ public class CmdHistory extends Cmd {
 		try {
 			byte[] ba = DataIO.readBytes(User.getPath(args[0].toLowerCase()) + "online.txt");
 			ByteBuffer b = ByteBuffer.wrap(ba);
-			List<String> list = new LinkedList<>();
-			Date now = new Date();
-			for (int i = 0; i < 20; i += 8) {
+			List<String> list = new ArrayList<>(20);
+			Date now = new Date(System.currentTimeMillis() + 7200000);
+			for (int i = 0; i < 160; i += 8) {
 				long a = (long) b.getInt(i) * 60000;
 				long c = (long) b.getInt(i + 4) * 60000;
-				Date join = new Date(a);
-				list.add(0, "\uD83D\uDCDC " + date(now, join) + ": " + minutes(c - a));
+				if (a == 0 || c == 0) continue;
+				Date join = new Date(a + 7200000);
+				list.add("\uD83D\uDCDC " + date(now, join) + ": " + minutes(c - a));
 			}
 			return "Последние 20 заходов на сервер:\n" + String.join("\n", list);
 		} catch (Throwable t) {
