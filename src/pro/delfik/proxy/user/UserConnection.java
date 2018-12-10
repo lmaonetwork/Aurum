@@ -337,6 +337,7 @@ public class UserConnection extends AUser{
         return (int) (System.currentTimeMillis() / 60000) - connectedAt + online;
     }
 
+    @Override
     public UserInfo getInfo() {
         return new UserInfo(name, password, rank, getOnline(), getIP(), money, ipbound, pmDisabled, ignoredPlayers, friends, darkTheme);
     }
@@ -417,10 +418,4 @@ public class UserConnection extends AUser{
         server().send(new PacketChangeTheme(darkTheme, name));
         return darkTheme ? "§fТёмная тема включена." : "§7Тёмная тема выключена.";
     }
-
-	@Override
-	public String getLastPenPal() {
-		return lastPenPal;
-	}
-
 }
