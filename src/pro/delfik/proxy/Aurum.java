@@ -1,5 +1,6 @@
 package pro.delfik.proxy;
 
+import __google_.util.FileIO;
 import implario.net.Packet;
 import implario.util.*;
 import net.md_5.bungee.BungeeCord;
@@ -29,11 +30,20 @@ import pro.delfik.vk.MessageHandler;
 import pro.delfik.vk.VK;
 import pro.delfik.vk.VKBot;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Aurum extends Plugin {
     public static void main(String args[]){
+		String strings[] = FileIO.read(new File("./a.txt")).split("\n");
+		List<String> list = new ArrayList<>(strings.length);
+		for(String str : strings)
+			if(str.contains("RU"))list.add(str);
+		System.out.println(strings.length);
+		System.out.println(list.size());
+		for(int i = 10; i < 20; i++)
+		System.out.println(list.get(i));
     }
 
 	public static Aurum instance;

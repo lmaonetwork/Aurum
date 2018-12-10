@@ -396,6 +396,11 @@ public class UserConnection extends AUser{
     }
 
     @Override
+    public String getLastPenPal() {
+        return lastPenPal;
+    }
+
+    @Override
     public boolean isPmDisabled(){
         return pmDisabled;
     }

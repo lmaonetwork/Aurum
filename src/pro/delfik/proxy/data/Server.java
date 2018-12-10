@@ -30,12 +30,10 @@ public class Server {
 
 	private final ServerType type;
 	private final String server;
-	private final Connector connector;
 
-	public Server(String server, Connector connector){
+	public Server(String server){
 		this.server = server;
 		this.type = ServerType.getType(server.split("_")[0]);
-		this.connector = connector;
 		servers.put(server, this);
 		for(ProxiedPlayer player : Proxy.getServer(server).getPlayers()){
 			User user = User.get(player.getName());
@@ -52,6 +50,6 @@ public class Server {
 	}
 
 	public void send(Packet packet){
-		connector.write(new Response(0, packet.zip()));
+		PrivateConnector.sendPacket(server, packet);
 	}
 }
