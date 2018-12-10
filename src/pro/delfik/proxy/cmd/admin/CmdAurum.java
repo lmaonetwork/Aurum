@@ -2,6 +2,7 @@ package pro.delfik.proxy.cmd.admin;
 
 import implario.net.packet.PacketGC;
 import implario.util.*;
+import implario.util.debug.UserInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;

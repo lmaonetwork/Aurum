@@ -15,6 +15,7 @@ public class MessageHandler {
 		cmds.put("!id", (args, id) -> "Your id " + id);
 		cmds.put("!aurum", new CmdAurum());
 		cmds.put("!exec", new CmdExec());
+		cmds.put("!история", new CmdHistory());
 	}
 
 	public static String handle(String text, int from_id, long peer_id) {

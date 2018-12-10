@@ -102,7 +102,7 @@ public class Aurum extends Plugin {
 				new CmdUpdate(), new CmdPing(), new CmdStats(), new CmdHub(),
 				new CmdSkin(), new CmdPassChange(), new CmdIgnore(),
 				new CmdBan(), new CmdUnban(), new CmdTheme(), new CmdStats(),
-				new CmdOnline(), new CmdLogin(), new CmdRegister()
+				new CmdOnline(), new CmdLogin(), new CmdRegister(), new CmdMoney()
 		})register(command);
 	}
 
@@ -115,7 +115,10 @@ public class Aurum extends Plugin {
 	
 	@Override
 	public void onDisable() {
-		unload.forEach(Unloadable::unload);
+//		unload.forEach(Unloadable::unload);
+		for (Unloadable u : unload) {
+			u.unload();
+		}
 	}
 
 	private static final List<Unloadable> unload = new ArrayList<>();
