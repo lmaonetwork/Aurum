@@ -11,7 +11,7 @@ import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.admin.CmdEnd;
 import pro.delfik.proxy.cmd.admin.CmdUpdate;
 import pro.delfik.proxy.cmd.kurator.CmdAlert;
-import pro.delfik.proxy.cmd.admin.CmdAurum;
+import pro.delfik.proxy.cmd.kurator.CmdAurum;
 import pro.delfik.proxy.cmd.moder.*;
 import pro.delfik.proxy.cmd.user.*;
 import pro.delfik.proxy.data.PrivateConnector;

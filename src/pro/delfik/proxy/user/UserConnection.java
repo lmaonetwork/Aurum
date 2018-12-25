@@ -117,6 +117,7 @@ public class UserConnection extends AUser{
     private String last = "", lastLast  = null;				// Последние сообщения игрока
     private volatile String forcedIP	= null;				// IP, который будет принудительно сохранён при выходе с сервера.
     private boolean darkTheme			= false;			// ТЁМНАЯ ТЕМА!!!111 АААААааааААААА
+    private long items = 0; //Items write on bit
 
     public UserConnection(String nick, Rank rank, boolean auth) {
         this.name = nick;
@@ -153,6 +154,7 @@ public class UserConnection extends AUser{
         lastIP = info.lastIP;
         darkTheme = info.darkTheme;
         mute = Mute.get(name);
+        items = info.items;
         User.put(name, this);
         if (allowedIP.contains(name.toLowerCase())) {
             allowedIP.remove(name.toLowerCase());
@@ -170,6 +172,7 @@ public class UserConnection extends AUser{
         ipbound = unzip.getBoolean();
         pmDisabled = unzip.getBoolean();
         ignoredPlayers = unzip.getList();
+        items = unzip.getLong();
         try {
             friends = unzip.getList();
         }catch (Exception ex){
@@ -202,7 +205,8 @@ public class UserConnection extends AUser{
                 .add(ipbound)
                 .add(pmDisabled)
                 .add(ignoredPlayers)
-                .add(friends);
+                .add(friends)
+                .add(items);
     }
 
 
@@ -339,7 +343,7 @@ public class UserConnection extends AUser{
 
     @Override
     public UserInfo getInfo() {
-        return new UserInfo(name, password, rank, getOnline(), getIP(), money, ipbound, pmDisabled, ignoredPlayers, friends, darkTheme);
+        return new UserInfo(name, password, rank, getOnline(), getIP(), money, ipbound, pmDisabled, ignoredPlayers, friends, darkTheme, items);
     }
 
     public Mute getActiveMute() {

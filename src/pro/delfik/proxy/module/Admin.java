@@ -5,6 +5,7 @@ import implario.util.ByteZip;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.module.Registeable;
 import pro.delfik.proxy.module.Unloadable;
+import pro.delfik.vk.VK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +31,7 @@ public class Admin implements Registeable, Unloadable {
 
     @Override
     public void register() {
-        byte read[] = DataIO.readBytes("config/vk_admins");
-        if(read == null)return;
-        ByteUnzip unzip = new ByteUnzip(read);
-        int admins = unzip.getInt();
-        for(int i = 0; i < admins; i++)
-            ids.add(unzip.getInt());
+        add(VK.getID("6ooogle"));
     }
 
     @Override

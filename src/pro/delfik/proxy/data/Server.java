@@ -30,8 +30,10 @@ public class Server {
 
 	private final ServerType type;
 	private final String server;
+	private final Connector connector;
 
-	public Server(String server){
+	public Server(String server, Connector connector){
+		this.connector = connector;
 		this.server = server;
 		this.type = ServerType.getType(server.split("_")[0]);
 		servers.put(server, this);
@@ -50,6 +52,6 @@ public class Server {
 	}
 
 	public void send(Packet packet){
-		PrivateConnector.sendPacket(server, packet);
+		connector.write(new Response(0, packet.zip()));
 	}
 }

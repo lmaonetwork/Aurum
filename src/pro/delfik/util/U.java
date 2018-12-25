@@ -13,23 +13,6 @@ import pro.delfik.proxy.user.User;
 import java.util.function.Function;
 
 public class U {
-	
-	// -------------------------------------------- Запустить код, игнорируя исключение
-	// ignoreEx(() -> doUnsafeShit());
-	
-	public static boolean ignoreEx(RunnableExc r) {
-		try {
-			r.run(); return true;
-		} catch (Exception ignored) {
-			return false;
-		}
-	}
-	
-	@FunctionalInterface
-	public interface RunnableExc {
-		void run() throws Exception;
-	}
-
 	// -------------------------------------------- Работа с чатом
 	
 	public static final char[] COLOR_CHARS = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a',

@@ -1,4 +1,4 @@
-package pro.delfik.proxy.cmd.admin;
+package pro.delfik.proxy.cmd.kurator;
 
 import implario.net.packet.PacketGC;
 import implario.util.*;
@@ -33,7 +33,7 @@ import static implario.util.StringUtils.random;
 
 public class CmdAurum extends Command {
 	public CmdAurum() {
-		super("aurum", Rank.ADMIN, "Ты няшка ^^");
+		super("aurum", Rank.KURATOR, "Ты няшка ^^");
 	}
 
 
@@ -125,7 +125,7 @@ public class CmdAurum extends Command {
 		Random r = new Random();
 		UserInfo i = new UserInfo(args[0], CryptoUtils.getHash(random(10)), Rank.random(), Math.abs(r.nextInt()),
 				"54.32.40.112", Math.abs(r.nextInt()), false, false, Converter.asList(random(8), random(8)),
-				Converter.asList(random(8), random(8)), r.nextBoolean());
+				Converter.asList(random(8), random(8)), r.nextBoolean(), 0);
 		User.save(i);
 		msg(sender, "§7UserInfo§d" + UserInfo.Version.values()[i.version] + "§7-§e" + i.name + "§7-§e" + i.rank.getNameColor() + i.rank.getName().charAt(0));
 		msg(sender, "§7Passwd: '§e" + i.passhash.substring(0, 20) + "§7...'");

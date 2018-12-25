@@ -1,7 +1,12 @@
 package pro.delfik.vk.cmd;
 
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import pro.delfik.vk.VK;
 import pro.delfik.proxy.module.Admin;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 public class CmdAdmin extends Cmd {
     @Override
@@ -24,11 +29,9 @@ public class CmdAdmin extends Cmd {
             if(admin == -1)return "Incorrect arg";
             return Admin.is(admin) ? "True" : "False";
         }else if(key.equalsIgnoreCase("list")){
-            String result = "";
-            for(int i : Admin.iterable())
-                result = result + ", " + i;
-            result = result.substring(2);
-            return result;
+            StringBuilder builder = new StringBuilder();
+            Admin.iterable().forEach((i) -> builder.append(i).append(", "));
+            return builder.substring(0, builder.length() - 2) + " Lol";
         }
         return "Subcommand not found";
     }

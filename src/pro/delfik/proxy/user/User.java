@@ -143,4 +143,13 @@ public interface User extends Byteable {
 	static void remove(String name){
     	list.remove(name);
 	}
+
+	static User getUserHost(String host){
+    	for(User user : getAll()){
+    		ProxiedPlayer player = user.getHandle();
+    		if(player == null)continue;
+    		if(player.getAddress().getAddress().getHostAddress().equals(host))return user;
+		}
+		return null;
+	}
 }

@@ -42,6 +42,11 @@ public class EvJoin implements Listener{
 			event.setCancelled(true);
 			return true;
 		}
+		if(User.getUserHost(event.getConnection().getVirtualHost().getHostName()) != null){
+			event.setCancelReason(new TextComponent("Ip " + event.getConnection().getAddress().getAddress().getHostAddress() + " already connected"));
+			event.setCancelled(true);
+			return true;
+		}
 		return false;
 	}
 
