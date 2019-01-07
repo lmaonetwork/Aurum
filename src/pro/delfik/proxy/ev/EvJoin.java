@@ -16,6 +16,7 @@ import pro.delfik.proxy.module.BanIP;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.user.UserConnection;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.concurrent.TimeUnit;
 
 public class EvJoin implements Listener{
@@ -33,6 +34,16 @@ public class EvJoin implements Listener{
 		if(checkBanIP(event))return;
 		if(checkBan(event, nick))return;
 		UserConnection.load(nick);
+	}
+
+	private boolean checkAlreadyConnected(LoginEvent event) {
+		User user = User.getUserHost(event.getConnection().getVirtualHost().getAddress().getHostAddress());
+		if(user != null){
+			event.setCancelReason(new TextComponent("С двух акков? Круто"));
+			event.setCancelled(true);
+			return true;
+		}
+		return false;
 	}
 
 	private boolean checkDDOS(LoginEvent event){
