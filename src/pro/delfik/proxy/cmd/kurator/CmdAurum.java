@@ -102,7 +102,7 @@ public class CmdAurum extends Command {
 	}
 
 	private static String sudo(CommandSender sender, Command command, String[] args) {
-		requireRank(sender, Rank.CEKPET);
+		requireRank(sender, Rank.DEV);
 		requireArgs(args, 2, "[Игрок] [Сообщение]");
 		User u = requirePerson(args[0]);
 		String message = Converter.mergeArray(args, 1, " ");
