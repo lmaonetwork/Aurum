@@ -7,6 +7,7 @@ import java.util.Collection;
 
 public abstract class ASender implements CommandSender {
     @Override
+    @SuppressWarnings("deptecated")
     public void sendMessages(String... strings) {
         for(String str : strings)
             sendMessage(str);
@@ -18,6 +19,7 @@ public abstract class ASender implements CommandSender {
     }
 
     @Override
+    @SuppressWarnings("deptecated")
     public void sendMessage(BaseComponent message) {
         sendMessage(message.toLegacyText());
     }
@@ -28,14 +30,10 @@ public abstract class ASender implements CommandSender {
     }
 
     @Override
-    public void addGroups(String... strings) {
-
-    }
+    public void addGroups(String... strings) {}
 
     @Override
-    public void removeGroups(String... strings) {
-
-    }
+    public void removeGroups(String... strings) {}
 
     @Override
     public boolean hasPermission(String s) {
@@ -43,9 +41,7 @@ public abstract class ASender implements CommandSender {
     }
 
     @Override
-    public void setPermission(String s, boolean b) {
-
-    }
+    public void setPermission(String s, boolean b) {}
 
     @Override
     public Collection<String> getPermissions() {

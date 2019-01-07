@@ -5,6 +5,7 @@ import implario.util.ArrayUtils;
 import implario.util.Byteable;
 import implario.util.ServerType;
 import pro.delfik.proxy.Aurum;
+import pro.delfik.proxy.module.Registeable;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.data.DataIO;
 import pro.delfik.proxy.module.Unloadable;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Top implements Byteable, Unloadable {
+public class Top implements Byteable, Unloadable, Registeable {
     private GameStats objects[];
 
     private final Class<? extends GameStats> clazz;
@@ -26,14 +27,6 @@ public class Top implements Byteable, Unloadable {
         this.clazz = clazz;
         Aurum.register(this);
         tops.put(type, this);
-        List<String> list = DataIO.read(getPath());
-        if(list == null)return;
-        for(String str : list) {
-            if(str.equals("a"))continue;
-            GameStats stats = read(str);
-            if(stats == null)continue;
-            updateTop(stats);
-        }
     }
 
     public void update(PacketTopUpdate update) {
@@ -96,11 +89,28 @@ public class Top implements Byteable, Unloadable {
         DataIO.write(getPath(), list);
     }
 
+    @Override
+    public void register(){
+        objects = new GameStats[objects.length];
+        List<String> list = DataIO.read(getPath());
+        if(list == null)return;
+        for(String str : list) {
+            if(str.equals("a"))continue;
+            GameStats stats = read(str);
+            if(stats == null)continue;
+            updateTop(stats);
+        }
+    }
+
     public GameStats read(String nick){
         GameStats stats = DataIO.readByteable(getPath(nick), clazz);
         if(stats == null)return null;
         stats.setName(nick);
         return stats;
+    }
+
+    public void remove(String nick){
+        DataIO.remove(getPath(nick));
     }
 
     public ServerType getType() {

@@ -105,7 +105,8 @@ public class LongPoll {
 			} catch (JSONException ignored) {}
 		}
 	}
-	
+
+	@SuppressWarnings("deptecated")
 	public static String msg(String message, long peer) {
 		return VK.query("messages.send", "message=" + URLEncoder.encode(message) + "&" +
 												 (peer > 2000000000 ? "chat_id=" + (peer - 2000000000) : "user_id=" + peer));

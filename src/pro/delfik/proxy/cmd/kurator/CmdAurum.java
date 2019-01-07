@@ -9,6 +9,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.protocol.packet.Title;
 import pro.delfik.proxy.Proxy;
+import pro.delfik.proxy.stats.Top;
 import pro.delfik.proxy.user.User;
 import pro.delfik.proxy.cmd.Command;
 import pro.delfik.proxy.cmd.CommandProcessor;
@@ -66,6 +67,8 @@ public class CmdAurum extends Command {
 		functions.put("flush", CmdAurum::flush);
 		functions.put("lp", CmdAurum::longpoll);
 		functions.put("stats", CmdAurum::stats);
+		functions.put("deletestats", CmdAurum::deleteStats);
+		functions.put("reloadtop", CmdAurum::reloadTop);
 	}
 
 	private static String stats(CommandSender commandSender, Command command, String[] strings) {
@@ -84,6 +87,7 @@ public class CmdAurum extends Command {
 		return "чото записалось";
 	}
 
+	@SuppressWarnings("deptecated")
 	private static String history(CommandSender sender, Command command, String[] args){
 		requireRank(sender, Rank.KURATOR);
 		requireArgs(args, 2, "[Игрок] [Тип]");
@@ -320,6 +324,25 @@ public class CmdAurum extends Command {
 			server.send(gc);
 		Runtime.getRuntime().gc();
 		return "§aНа всех серверах запущена очистка мусора";
+	}
+
+	private static String deleteStats(CommandSender commandSender, Command command, String[] args){
+		requireRank(commandSender, Rank.DEV);
+		requireArgs(args, 2, "[Игра] [Игрок]");
+		ServerType type = ServerType.getType(args[0]);
+		if(type == ServerType.UNKNOWN)throw new ExCustom("ServerType == unknown");
+		Top.get(type).remove(args[1]);
+		return "§cСделяль";
+	}
+
+	private static String reloadTop(CommandSender commandSender, Command command, String[] args){
+		requireRank(commandSender, Rank.DEV);
+		requireArgs(args, 1, "[Игра]");
+		ServerType type = ServerType.getType(args[0]);
+		if(type == ServerType.UNKNOWN)throw new ExCustom("ServerType == unknown");
+		Top top = Top.get(type);
+		top.register();
+		return "§cСделяль";
 	}
 
 	private static String memory(CommandSender commandSender, Command command, String[] args){

@@ -10,8 +10,11 @@ import java.util.HashMap;
 
 @Cmd(args = 1, help = "[Игрок]")
 public class CmdFM extends Command{
+	private final Rule rule;
+
 	public CmdFM(String command, String description, String... aliases){
 		super(command, Rank.MODER, description, aliases);
+		rule = rules.get(command);
 	}
 	
 	private static final HashMap<String, Rule> rules = new HashMap<>();
@@ -26,8 +29,6 @@ public class CmdFM extends Command{
 	
 	@Override
 	protected void run(User user, String args[]) {
-		String command = getCommand();
-		Rule rule = rules.get(command);
 		Mute.mute(args[0], rule.reason, rule.time, user.getName());
 	}
 	
