@@ -13,14 +13,14 @@ public class CmdFM extends Command{
 	private final Rule rule;
 
 	public CmdFM(String command, String description, String... aliases){
-		super(command, Rank.MODER, description, aliases);
+		super(command, Rank.RECRUIT, description, aliases);
 		rule = rules.get(command);
 	}
 	
 	private static final HashMap<String, Rule> rules = new HashMap<>();
 
 	static {
-		rules.put("osk", new Rule("Оскорбление", 240));
+		rules.put("osk", new Rule("Оскорбление", 60));
 		rules.put("flood", new Rule("Флуд", 30));
 		rules.put("mt", new Rule("Мат", 60));
 		rules.put("caps", new Rule("Капс", 30));

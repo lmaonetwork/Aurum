@@ -1,5 +1,6 @@
 package pro.delfik.vk;
 
+import pro.delfik.proxy.module.Admin;
 import pro.delfik.vk.cmd.*;
 
 import java.util.HashMap;
@@ -9,7 +10,8 @@ public class MessageHandler {
 	private static final Map<String, Command> cmds = new HashMap<>();
 
 	static{
-		cmds.put("\uD83C\uDF6A", (args, id) -> "Вкусная печенька, спасибо!");
+		cmds.put("\uD83C\uDF6A", (args, id) -> Admin.is(id) ? "Эта печенька мне? Как мило, спасибки ^^" :
+				"Какая красивая печенька, будет обидно, если она внезапно пропадёт c:");
 		cmds.put("!онлайн", new CmdOnline());
 		cmds.put("!admin", new CmdAdmin());
 		cmds.put("!id", (args, id) -> "Your id " + id);

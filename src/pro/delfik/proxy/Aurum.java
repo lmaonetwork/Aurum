@@ -102,7 +102,7 @@ public class Aurum extends Plugin {
 				new CmdUpdate(), new CmdPing(), new CmdStats(), new CmdHub(),
 				new CmdSkin(), new CmdPassChange(), new CmdIgnore(),
 				new CmdBan(), new CmdUnban(), new CmdTheme(), new CmdStats(),
-				new CmdOnline(), new CmdLogin(), new CmdRegister(), new CmdMoney()
+				new CmdOnline(), new CmdLogin(), new CmdRegister(), new CmdMoney(), new CmdCheater()
 		})register(command);
 	}
 
