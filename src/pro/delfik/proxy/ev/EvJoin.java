@@ -36,16 +36,6 @@ public class EvJoin implements Listener{
 		UserConnection.load(nick);
 	}
 
-	private boolean checkAlreadyConnected(LoginEvent event) {
-		User user = User.getUserHost(event.getConnection().getVirtualHost().getAddress().getHostAddress());
-		if(user != null){
-			event.setCancelReason(new TextComponent("С двух акков? Круто"));
-			event.setCancelled(true);
-			return true;
-		}
-		return false;
-	}
-
 	private boolean checkDDOS(LoginEvent event){
 		connections++;
 		if(connections > 20){
@@ -53,7 +43,7 @@ public class EvJoin implements Listener{
 			event.setCancelled(true);
 			return true;
 		}
-		if(User.getUserHost(event.getConnection().getVirtualHost().getHostName()) != null){
+		if(User.getUserHost(event.getConnection().getAddress().getAddress().getHostAddress()) != null){
 			event.setCancelReason(new TextComponent("Ip " + event.getConnection().getAddress().getAddress().getHostAddress() + " already connected"));
 			event.setCancelled(true);
 			return true;

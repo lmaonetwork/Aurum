@@ -69,6 +69,7 @@ public class CmdAurum extends Command {
 		functions.put("stats", CmdAurum::stats);
 		functions.put("deletestats", CmdAurum::deleteStats);
 		functions.put("reloadtop", CmdAurum::reloadTop);
+		functions.put("test", CmdAurum::test);
 	}
 
 	private static String stats(CommandSender commandSender, Command command, String[] strings) {
@@ -87,7 +88,7 @@ public class CmdAurum extends Command {
 		return "чото записалось";
 	}
 
-	@SuppressWarnings("deptecated")
+	@SuppressWarnings("deprecated")
 	private static String history(CommandSender sender, Command command, String[] args){
 		requireRank(sender, Rank.KURATOR);
 		requireArgs(args, 2, "[Игрок] [Тип]");
@@ -347,6 +348,10 @@ public class CmdAurum extends Command {
 
 	private static String memory(CommandSender commandSender, Command command, String[] args){
 		return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024) + " занятой оперативной памяти";
+	}
+
+	private static String test (CommandSender commandSender, Command command, String[] args){
+		return ((ProxiedPlayer)commandSender).getPendingConnection().getAddress().getAddress().getHostAddress();
 	}
 
 	@Override
